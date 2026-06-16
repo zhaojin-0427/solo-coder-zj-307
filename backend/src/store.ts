@@ -4,7 +4,7 @@ import * as path from 'path';
 import type {
   LensItem, LipstickItem, BlushItem, OutfitItem, MakeupItem,
   LookSuggestion, SavedLook, GeneratedChecklist, ChecklistItem, UsageRecord,
-  Review, LookReviewSummary, ReviewStats
+  Review, LookReviewSummary, ReviewStats, SceneType
 } from './types';
 
 interface DataStore {
@@ -247,10 +247,17 @@ function validateScore(score: number): boolean {
   return Number.isInteger(score) && score >= 1 && score <= 5;
 }
 
+const VALID_SCENES: SceneType[] = ['commute', 'date', 'photo', 'travel'];
+function validateScene(scene: string): scene is SceneType {
+  return VALID_SCENES.includes(scene as SceneType);
+}
+
 export function createReview(data: Omit<Review, 'id' | 'createdAt' | 'updatedAt'>): Review | { error: string } {
   const checklist = getChecklistById(data.checklistId);
   if (!checklist) return { error: '清单不存在' };
   if (!checklist.completedAt) return { error: '未完成的清单不能创建复盘' };
+
+  if (!validateScene(data.scene)) return { error: '场景值非法，必须为 commute/date/photo/travel 之一' };
 
   if (!validateScore(data.comfortScore)) return { error: '佩戴舒适度评分必须为 1-5 分' };
   if (!validateScore(data.makeupDurabilityScore)) return { error: '妆容持久度评分必须为 1-5 分' };
@@ -277,6 +284,16 @@ export function createReview(data: Omit<Review, 'id' | 'createdAt' | 'updatedAt'
 export function updateReview(id: string, data: Partial<Omit<Review, 'id' | 'createdAt' | 'updatedAt'>>): Review | { error: string } {
   const idx = store.reviews.findIndex(r => r.id === id);
   if (idx === -1) return { error: '复盘记录不存在' };
+
+  if (data.scene !== undefined && !validateScene(data.scene)) {
+    return { error: '场景值非法，必须为 commute/date/photo/travel 之一' };
+  }
+
+  if (data.checklistId !== undefined) {
+    const checklist = getChecklistById(data.checklistId);
+    if (!checklist) return { error: '清单不存在' };
+    if (!checklist.completedAt) return { error: '未完成的清单不能关联复盘' };
+  }
 
   if (data.comfortScore !== undefined && !validateScore(data.comfortScore)) {
     return { error: '佩戴舒适度评分必须为 1-5 分' };
