@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import { checklistApi, savedLooksApi, itemsApi, reviewApi } from '../api';
-import type { GeneratedChecklist, ChecklistItem, SceneType, AllItems, SavedLook, Review } from '../types';
-import { SceneLabels } from '../types';
+import { checklistApi, savedLooksApi, itemsApi, reviewApi, AllItemsWithRisk } from '../api';
+import type { GeneratedChecklist, ChecklistItem, SceneType, SavedLook, Review, RiskType, ItemCategory } from '../types';
+import { SceneLabels, CategoryLabels } from '../types';
 
 const CAT_LABEL: Record<string, { name: string; color: string }> = {
   care: { name: '隐形护理', color: 'pink' },
@@ -46,7 +46,7 @@ export default function ChecklistPage() {
   const [checklists, setChecklists] = useState<GeneratedChecklist[]>([]);
   const [templates, setTemplates] = useState<ChecklistItem[]>([]);
   const [looks, setLooks] = useState<SavedLook[]>([]);
-  const [items, setItems] = useState<AllItems | null>(null);
+  const [items, setItems] = useState<AllItemsWithRisk | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [showCreate, setShowCreate] = useState(false);
   const [newScene, setNewScene] = useState<SceneType>('commute');
@@ -75,7 +75,7 @@ export default function ChecklistPage() {
         checklistApi.getAll(),
         checklistApi.getTemplates(),
         savedLooksApi.getAll(),
-        itemsApi.getAll(),
+        itemsApi.getAllWithRisk(),
         reviewApi.getAll(),
       ]);
       setChecklists(c);
@@ -378,6 +378,69 @@ export default function ChecklistPage() {
                       🌸 {findItem(selectedLook.items.blushId, 'blush')?.name || '-'}　
                       👗 {findItem(selectedLook.items.outfitId, 'outfit')?.name || '-'}
                     </div>
+                    {(() => {
+                      const RISK_CONFIG: Record<RiskType, { label: string; color: string; emoji: string }> = {
+                        expired: { label: '已过期', color: '#dc2626', emoji: '⚠️' },
+                        expiring_soon: { label: '即将过期', color: '#d97706', emoji: '⏰' },
+                        low_stock: { label: '库存不足', color: '#ea580c', emoji: '📦' },
+                        long_unused: { label: '长期闲置', color: '#6b7280', emoji: '💤' },
+                      };
+                      const CATEGORY_LABEL: Record<string, string> = { lens: '美瞳', lipstick: '口红', blush: '腮红', outfit: '服饰' };
+                      const warnings: { category: string; name: string; risks: RiskType[]; suggestion: string }[] = [];
+                      const checkItem = (id: string | undefined, category: string) => {
+                        if (!id) return;
+                        const item = findItem(id, category as any);
+                        if (!item) return;
+                        const risks: RiskType[] = item.riskInfo?.risks || [];
+                        const seriousRisks = risks.filter(r => r === 'expired' || r === 'low_stock');
+                        if (seriousRisks.length > 0) {
+                          const isOutStock = risks.includes('low_stock') && (item.stockStatus === 'out_of_stock' || item.remainingQuantity === 0);
+                          warnings.push({
+                            category,
+                            name: item.name,
+                            risks: seriousRisks,
+                            suggestion: isOutStock
+                              ? `${CATEGORY_LABEL[category]}「${item.name}」已缺货，建议更换其他同类单品`
+                              : risks.includes('expired')
+                                ? `${CATEGORY_LABEL[category]}「${item.name}」已过期，请更换新品`
+                                : `${CATEGORY_LABEL[category]}「${item.name}」库存不足（剩${item.remainingQuantity ?? '?'}），建议准备替代品`,
+                          });
+                        }
+                      };
+                      checkItem(selectedLook.items.lensId, 'lens');
+                      checkItem(selectedLook.items.lipstickId, 'lipstick');
+                      checkItem(selectedLook.items.blushId, 'blush');
+                      checkItem(selectedLook.items.outfitId, 'outfit');
+                      if (warnings.length === 0) return null;
+                      return (
+                        <div style={{
+                          marginTop: 10,
+                          padding: '10px 12px',
+                          background: '#fef2f2',
+                          borderRadius: 8,
+                          border: '1px solid #fecaca',
+                        }}>
+                          <div style={{ fontSize: 12, fontWeight: 600, color: '#dc2626', marginBottom: 6 }}>
+                            ⚠️ 搭配物品提醒
+                          </div>
+                          {warnings.map((w, i) => (
+                            <div key={i} style={{ fontSize: 12, color: '#991b1b', lineHeight: 1.8 }}>
+                              {w.suggestion}
+                              <span style={{ marginLeft: 6 }}>
+                                {w.risks.map(r => {
+                                  const cfg = RISK_CONFIG[r];
+                                  return (
+                                    <span key={r} style={{ fontSize: 10, padding: '1px 5px', borderRadius: 6, background: `${cfg.color}15`, color: cfg.color, fontWeight: 600, marginRight: 3 }}>
+                                      {cfg.emoji}{cfg.label}
+                                    </span>
+                                  );
+                                })}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      );
+                    })()}
                   </div>
                 )}
                 {!selected.completedAt && (

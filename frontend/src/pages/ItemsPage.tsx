@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { itemsApi, AllItems } from '../api';
-import type { LensItem, LipstickItem, BlushItem, OutfitItem, ItemCategory, LensType } from '../types';
+import { useEffect, useState, useMemo } from 'react';
+import { itemsApi, AllItemsWithRisk } from '../api';
+import type { LensItem, LipstickItem, BlushItem, OutfitItem, ItemCategory, LensType, RiskType } from '../types';
 import ItemForm from '../components/ItemForm';
 import ItemCard from '../components/ItemCard';
 
@@ -10,16 +10,25 @@ const EMOJI: Record<ItemCategory, string> = {
   lens: '👁️', lipstick: '💄', blush: '🌸', outfit: '👗',
 };
 
+const RISK_FILTER_OPTIONS: { value: RiskType | 'all'; label: string; emoji: string }[] = [
+  { value: 'all', label: '全部', emoji: '📋' },
+  { value: 'expired', label: '已过期', emoji: '⚠️' },
+  { value: 'expiring_soon', label: '即将过期', emoji: '⏰' },
+  { value: 'low_stock', label: '库存不足', emoji: '📦' },
+  { value: 'long_unused', label: '长期闲置', emoji: '💤' },
+];
+
 export default function ItemsPage() {
   const [tab, setTab] = useState<Tab>('lens');
-  const [data, setData] = useState<AllItems | null>(null);
+  const [data, setData] = useState<AllItemsWithRisk | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [editItem, setEditItem] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [riskFilter, setRiskFilter] = useState<RiskType | 'all'>('all');
 
   const load = async () => {
     setLoading(true);
-    try { setData(await itemsApi.getAll()); } finally { setLoading(false); }
+    try { setData(await itemsApi.getAllWithRisk()); } finally { setLoading(false); }
   };
 
   useEffect(() => { load(); }, []);
@@ -46,10 +55,44 @@ export default function ItemsPage() {
   const getList = () => {
     if (!data) return [];
     const map: Record<ItemCategory, any[]> = { lens: data.lenses, lipstick: data.lipsticks, blush: data.blushes, outfit: data.outfits };
-    return map[tab];
+    let list = map[tab];
+    if (riskFilter !== 'all') {
+      list = list.filter(item => item.riskInfo?.risks?.includes(riskFilter));
+    }
+    return list;
   };
 
   const count = data ? { lens: data.lenses.length, lipstick: data.lipsticks.length, blush: data.blushes.length, outfit: data.outfits.length } : null;
+
+  const riskCounts = useMemo(() => {
+    const counts: Record<RiskType | 'all', number> = { all: 0, expired: 0, expiring_soon: 0, low_stock: 0, long_unused: 0 };
+    if (!data) return counts;
+    const allItems = [...data.lenses, ...data.lipsticks, ...data.blushes, ...data.outfits];
+    counts.all = allItems.length;
+    allItems.forEach(item => {
+      const risks = item.riskInfo?.risks || [];
+      if (risks.includes('expired')) counts.expired++;
+      if (risks.includes('expiring_soon')) counts.expiring_soon++;
+      if (risks.includes('low_stock')) counts.low_stock++;
+      if (risks.includes('long_unused')) counts.long_unused++;
+    });
+    return counts;
+  }, [data]);
+
+  const tabRiskCounts = useMemo(() => {
+    if (!data) return { expired: 0, expiring_soon: 0, low_stock: 0, long_unused: 0 };
+    const map: Record<ItemCategory, any[]> = { lens: data.lenses, lipstick: data.lipsticks, blush: data.blushes, outfit: data.outfits };
+    const list = map[tab];
+    const counts = { expired: 0, expiring_soon: 0, low_stock: 0, long_unused: 0 };
+    list.forEach(item => {
+      const risks = item.riskInfo?.risks || [];
+      if (risks.includes('expired')) counts.expired++;
+      if (risks.includes('expiring_soon')) counts.expiring_soon++;
+      if (risks.includes('low_stock')) counts.low_stock++;
+      if (risks.includes('long_unused')) counts.long_unused++;
+    });
+    return counts;
+  }, [data, tab]);
 
   return (
     <div>
@@ -69,12 +112,63 @@ export default function ItemsPage() {
         ))}
       </div>
 
+      <div className="risk-filter-bar" style={{
+        display: 'flex',
+        gap: 8,
+        marginBottom: 20,
+        flexWrap: 'wrap',
+        padding: 12,
+        background: 'white',
+        borderRadius: 12,
+        boxShadow: '0 2px 10px rgba(0,0,0,0.04)',
+      }}>
+        {RISK_FILTER_OPTIONS.map(opt => {
+          const count = opt.value === 'all' ? riskCounts.all : (tabRiskCounts as any)[opt.value];
+          const active = riskFilter === opt.value;
+          return (
+            <div
+              key={opt.value}
+              onClick={() => setRiskFilter(opt.value)}
+              style={{
+                padding: '8px 14px',
+                borderRadius: 10,
+                cursor: 'pointer',
+                fontSize: 13,
+                fontWeight: 500,
+                transition: 'all 0.2s',
+                background: active ? 'linear-gradient(135deg, #db2777, #8b5cf6)' : '#f9fafb',
+                color: active ? 'white' : (count > 0 ? '#374151' : '#9ca3af'),
+                border: active ? 'none' : '1px solid #e5e7eb',
+                boxShadow: active ? '0 2px 10px rgba(219,39,119,0.25)' : 'none',
+              }}
+            >
+              {opt.emoji} {opt.label}
+              <span style={{
+                marginLeft: 6,
+                padding: '1px 8px',
+                borderRadius: 10,
+                fontSize: 11,
+                background: active ? 'rgba(255,255,255,0.25)' : (count > 0 ? '#fee2e2' : '#f3f4f6'),
+                color: active ? 'white' : (count > 0 ? '#dc2626' : '#9ca3af'),
+                fontWeight: 600,
+              }}>
+                {count}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
       {loading && <div className="empty"><div className="emoji">⏳</div><p>加载中...</p></div>}
 
       {!loading && getList().length === 0 && (
         <div className="empty">
-          <div className="emoji">{EMOJI[tab]}</div>
-          <p>还没有添加{tab === 'lens' ? '美瞳' : tab === 'lipstick' ? '口红' : tab === 'blush' ? '腮红' : '服饰'}，点击右上角新增吧~</p>
+          <div className="emoji">{riskFilter !== 'all' ? '🔍' : EMOJI[tab]}</div>
+          <p>
+            {riskFilter !== 'all'
+              ? `当前分类下没有「${RISK_FILTER_OPTIONS.find(o => o.value === riskFilter)?.label}」的单品`
+              : `还没有添加${tab === 'lens' ? '美瞳' : tab === 'lipstick' ? '口红' : tab === 'blush' ? '腮红' : '服饰'}，点击右上角新增吧~`}
+          </p>
         </div>
       )}
 

@@ -4,7 +4,22 @@ export type SceneType = 'commute' | 'date' | 'photo' | 'travel';
 
 export type LensType = 'daily' | 'monthly' | 'yearly';
 
-export interface LensItem {
+export type StockStatus = 'in_stock' | 'low_stock' | 'out_of_stock';
+
+export type RiskType = 'expiring_soon' | 'expired' | 'low_stock' | 'long_unused';
+
+export interface InventoryInfo {
+  stockStatus?: StockStatus;
+  purchaseDate?: string;
+  openDate?: string;
+  shelfLifeDays?: number;
+  remainingQuantity?: number;
+  storageLocation?: string;
+  isEssential?: boolean;
+  lastUsedAt?: string;
+}
+
+export interface LensItem extends InventoryInfo {
   id: string;
   category: 'lens';
   name: string;
@@ -17,7 +32,7 @@ export interface LensItem {
   createdAt: string;
 }
 
-export interface LipstickItem {
+export interface LipstickItem extends InventoryInfo {
   id: string;
   category: 'lipstick';
   name: string;
@@ -29,7 +44,7 @@ export interface LipstickItem {
   createdAt: string;
 }
 
-export interface BlushItem {
+export interface BlushItem extends InventoryInfo {
   id: string;
   category: 'blush';
   name: string;
@@ -41,7 +56,7 @@ export interface BlushItem {
   createdAt: string;
 }
 
-export interface OutfitItem {
+export interface OutfitItem extends InventoryInfo {
   id: string;
   category: 'outfit';
   name: string;
@@ -51,6 +66,13 @@ export interface OutfitItem {
   season: string[];
   notes?: string;
   createdAt: string;
+}
+
+export interface ItemRiskInfo {
+  risks: RiskType[];
+  expiryDate?: string;
+  daysUntilExpiry?: number;
+  daysSinceLastUse?: number;
 }
 
 export type MakeupItem = LensItem | LipstickItem | BlushItem | OutfitItem;
@@ -141,6 +163,31 @@ export interface ReviewStats {
   upcomingReminders: { review: Review; checklist?: GeneratedChecklist; look?: SavedLook }[];
 }
 
+export interface InventoryStats {
+  totalItems: number;
+  inStockCount: number;
+  lowStockCount: number;
+  outOfStockCount: number;
+  expiringSoonCount: number;
+  expiredCount: number;
+  longUnusedCount: number;
+  essentialCount: number;
+  healthScore: number;
+}
+
+export interface RiskItem {
+  id: string;
+  category: ItemCategory;
+  name: string;
+  brand?: string;
+  risks: RiskType[];
+  daysUntilExpiry?: number;
+  expiryDate?: string;
+  remainingQuantity?: number;
+  daysSinceLastUse?: number;
+  priority: number;
+}
+
 export interface Stats {
   topCombinations: { combination: OutfitCombination; count: number }[];
   sceneDistribution: { scene: SceneType; count: number; percentage: number }[];
@@ -149,4 +196,8 @@ export interface Stats {
   totalLooks: number;
   totalChecklists: number;
   reviewStats: ReviewStats;
+  inventoryStats: InventoryStats;
+  expiringSoonItems: RiskItem[];
+  restockPriority: RiskItem[];
+  longUnusedItems: RiskItem[];
 }

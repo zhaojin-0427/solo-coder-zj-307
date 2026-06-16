@@ -2,7 +2,7 @@ import axios from 'axios';
 import type {
   LensItem, LipstickItem, BlushItem, OutfitItem,
   LookSuggestion, SavedLook, ChecklistItem, GeneratedChecklist, Stats, SceneType,
-  Review, LookReviewSummary
+  Review, LookReviewSummary, InventoryStats, RiskItem, ItemRiskInfo
 } from './types';
 
 const api = axios.create({ baseURL: '/api' });
@@ -14,8 +14,16 @@ export interface AllItems {
   outfits: OutfitItem[];
 }
 
+export interface AllItemsWithRisk {
+  lenses: (LensItem & { riskInfo: ItemRiskInfo })[];
+  lipsticks: (LipstickItem & { riskInfo: ItemRiskInfo })[];
+  blushes: (BlushItem & { riskInfo: ItemRiskInfo })[];
+  outfits: (OutfitItem & { riskInfo: ItemRiskInfo })[];
+}
+
 export const itemsApi = {
   getAll: () => api.get<AllItems>('/items').then(r => r.data),
+  getAllWithRisk: () => api.get<AllItemsWithRisk>('/items/with-risk').then(r => r.data),
   addLens: (data: Omit<LensItem, 'id' | 'category' | 'createdAt'>) =>
     api.post<LensItem>('/items/lens', data).then(r => r.data),
   addLipstick: (data: Omit<LipstickItem, 'id' | 'category' | 'createdAt'>) =>
@@ -34,6 +42,14 @@ export const itemsApi = {
     api.put<OutfitItem>(`/items/outfit/${id}`, data).then(r => r.data),
   delete: (category: string, id: string) =>
     api.delete(`/items/${category}/${id}`).then(r => r.data),
+};
+
+export const inventoryApi = {
+  getStats: () => api.get<InventoryStats & {
+    expiringSoonItems: RiskItem[];
+    restockPriority: RiskItem[];
+    longUnusedItems: RiskItem[];
+  }>('/inventory/stats').then(r => r.data),
 };
 
 export const suggestApi = {

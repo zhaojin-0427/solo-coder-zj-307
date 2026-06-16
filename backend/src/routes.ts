@@ -8,15 +8,24 @@ import {
   addUsageRecord, getUsageRecords,
   getReviews, getReviewById, getReviewByChecklistId, getReviewsByLookId, getReviewsByScene,
   createReview, updateReview, deleteReview, getLookReviewSummary, getAllLookReviewSummaries, getReviewStats,
+  getAllItemsWithRisk, getItemRiskInfo, getInventoryStats, updateItemLastUsed,
 } from './store';
 import { generateSuggestions, computeStatsWithLooks } from './recommend';
-import type { SceneType, SavedLook, GeneratedChecklist, Review } from './types';
+import type { SceneType, SavedLook, GeneratedChecklist, Review, OutfitCombination } from './types';
 
 const router = Router();
 
 // Items
 router.get('/items', (_req: Request, res: Response) => {
   res.json(getAllItems());
+});
+
+router.get('/items/with-risk', (_req: Request, res: Response) => {
+  res.json(getAllItemsWithRisk());
+});
+
+router.get('/inventory/stats', (_req: Request, res: Response) => {
+  res.json(getInventoryStats());
 });
 
 router.post('/items/lens', (req: Request, res: Response) => {
@@ -158,15 +167,23 @@ router.post('/checklists/:id/complete', (req: Request, res: Response) => {
 
   // Get the look if present
   let lookStyle: string[] = [];
+  let lookItems = {};
   if (checklist.lookId) {
     const look = getSavedLookById(checklist.lookId);
     if (look) {
       lookStyle = look.style;
+      lookItems = look.items;
       incrementSavedLookUse(checklist.lookId);
     }
   }
 
-  const items = (checklist.lookId ? getSavedLookById(checklist.lookId)?.items : undefined) || {};
+  const items = lookItems as OutfitCombination;
+
+  // Update last used time for items in the look
+  if (items.lensId) updateItemLastUsed('lens', items.lensId);
+  if (items.lipstickId) updateItemLastUsed('lipstick', items.lipstickId);
+  if (items.blushId) updateItemLastUsed('blush', items.blushId);
+  if (items.outfitId) updateItemLastUsed('outfit', items.outfitId);
 
   addUsageRecord({
     lookId: checklist.lookId,
@@ -184,11 +201,28 @@ router.post('/checklists/:id/complete', (req: Request, res: Response) => {
 router.get('/stats', (_req: Request, res: Response) => {
   const records = getUsageRecords();
   const reviewStats = getReviewStats();
+  const inventoryStats = getInventoryStats();
   const stats = computeStatsWithLooks(records, (id) => {
     const look = getSavedLookById(id);
     return look ? { style: look.style } : undefined;
   }, reviewStats);
-  res.json(stats);
+  res.json({
+    ...stats,
+    inventoryStats: {
+      totalItems: inventoryStats.totalItems,
+      inStockCount: inventoryStats.inStockCount,
+      lowStockCount: inventoryStats.lowStockCount,
+      outOfStockCount: inventoryStats.outOfStockCount,
+      expiringSoonCount: inventoryStats.expiringSoonCount,
+      expiredCount: inventoryStats.expiredCount,
+      longUnusedCount: inventoryStats.longUnusedCount,
+      essentialCount: inventoryStats.essentialCount,
+      healthScore: inventoryStats.healthScore,
+    },
+    expiringSoonItems: inventoryStats.expiringSoonItems,
+    restockPriority: inventoryStats.restockPriority,
+    longUnusedItems: inventoryStats.longUnusedItems,
+  });
 });
 
 // Reviews

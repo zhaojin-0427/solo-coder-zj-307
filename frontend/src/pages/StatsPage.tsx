@@ -1,8 +1,8 @@
 import { Component, useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { statsApi, itemsApi, savedLooksApi } from '../api';
-import type { Stats, AllItems, SavedLook, SceneType } from '../types';
-import { SceneLabels } from '../types';
+import { statsApi, itemsApi, savedLooksApi, AllItemsWithRisk } from '../api';
+import type { Stats, SavedLook, SceneType, RiskType, ItemCategory } from '../types';
+import { SceneLabels, CategoryLabels } from '../types';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, LineChart, Line } from 'recharts';
 
 const SCENE_COLORS: Record<SceneType, string> = {
@@ -44,7 +44,7 @@ class PageErrorBoundary extends Component<{ children: React.ReactNode }, { hasEr
 export default function StatsPage() {
   const navigate = useNavigate();
   const [stats, setStats] = useState<Stats | null>(null);
-  const [items, setItems] = useState<AllItems | null>(null);
+  const [items, setItems] = useState<AllItemsWithRisk | null>(null);
   const [looks, setLooks] = useState<SavedLook[]>([]);
   const [loading, setLoading] = useState(false);
   const [errorBoundaryKey, setErrorBoundaryKey] = useState(0);
@@ -53,7 +53,7 @@ export default function StatsPage() {
     setLoading(true);
     setErrorBoundaryKey(k => k + 1);
     try {
-      const [s, i, l] = await Promise.all([statsApi.get(), itemsApi.getAll(), savedLooksApi.getAll()]);
+      const [s, i, l] = await Promise.all([statsApi.get(), itemsApi.getAllWithRisk(), savedLooksApi.getAll()]);
       setStats(s);
       setItems(i);
       setLooks(l);
@@ -86,6 +86,35 @@ export default function StatsPage() {
   }, [stats]);
 
   const totalItems = items ? items.lenses.length + items.lipsticks.length + items.blushes.length + items.outfits.length : 0;
+
+  const RISK_CONFIG: Record<RiskType, { label: string; color: string; emoji: string }> = {
+    expired: { label: '已过期', color: '#dc2626', emoji: '⚠️' },
+    expiring_soon: { label: '即将过期', color: '#d97706', emoji: '⏰' },
+    low_stock: { label: '库存不足', color: '#ea580c', emoji: '📦' },
+    long_unused: { label: '长期闲置', color: '#6b7280', emoji: '💤' },
+  };
+
+  const CATEGORY_EMOJI: Record<ItemCategory, string> = {
+    lens: '👁️', lipstick: '💄', blush: '🌸', outfit: '👗',
+  };
+
+  const inventoryStats = stats?.inventoryStats;
+  const healthScore = inventoryStats?.healthScore ?? 100;
+  const healthColor = healthScore >= 80 ? '#059669' : healthScore >= 60 ? '#d97706' : '#dc2626';
+  const healthLabel = healthScore >= 80 ? '健康' : healthScore >= 60 ? '一般' : '需关注';
+
+  const inventoryOverviewData = useMemo(() => {
+    if (!inventoryStats) return [];
+    return [
+      { name: '库存充足', value: inventoryStats.inStockCount, color: '#059669' },
+      { name: '库存偏低', value: inventoryStats.lowStockCount, color: '#d97706' },
+      { name: '已缺货', value: inventoryStats.outOfStockCount, color: '#dc2626' },
+    ].filter(d => d.value > 0);
+  }, [inventoryStats]);
+
+  const expiringSoonItems = useMemo(() => stats?.expiringSoonItems || [], [stats]);
+  const restockPriority = useMemo(() => stats?.restockPriority || [], [stats]);
+  const longUnusedItems = useMemo(() => stats?.longUnusedItems || [], [stats]);
 
   const safePieLabel = ({ name, percent }: { name?: string; percent?: number }) => {
     try {
@@ -182,7 +211,7 @@ export default function StatsPage() {
             </div>
           </div>
 
-          {(stats?.totalLooks || 0) === 0 && (
+          {(stats?.totalLooks || 0) === 0 && totalItems === 0 && (
             <div className="empty">
               <div className="emoji">📊</div>
               <p>还没有使用数据，完成几次出门清单后就能看到统计啦~</p>
@@ -447,6 +476,214 @@ export default function StatsPage() {
                 )}
               </div>
             </>
+          )}
+
+          {totalItems > 0 && (
+            <div style={{ marginTop: 28 }}>
+              <h2 style={{ fontSize: 18, fontWeight: 700, color: '#111827', marginBottom: 16 }}>📦 库存与效期管理</h2>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr', gap: 12, marginBottom: 20 }}>
+                <div className="stat-card" style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 36, fontWeight: 800, color: healthColor }}>{healthScore}</div>
+                  <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 4 }}>健康评分</div>
+                  <span style={{ fontSize: 11, padding: '2px 10px', borderRadius: 10, background: `${healthColor}15`, color: healthColor, fontWeight: 600 }}>
+                    {healthLabel}
+                  </span>
+                </div>
+                <div className="stat-card" style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 36, fontWeight: 800, color: '#059669' }}>{inventoryStats?.inStockCount || 0}</div>
+                  <div style={{ fontSize: 12, color: '#6b7280' }}>库存充足</div>
+                </div>
+                <div className="stat-card" style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 36, fontWeight: 800, color: '#d97706' }}>{inventoryStats?.lowStockCount || 0}</div>
+                  <div style={{ fontSize: 12, color: '#6b7280' }}>库存偏低</div>
+                </div>
+                <div className="stat-card" style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 36, fontWeight: 800, color: '#dc2626' }}>{inventoryStats?.outOfStockCount || 0}</div>
+                  <div style={{ fontSize: 12, color: '#6b7280' }}>已缺货</div>
+                </div>
+                <div className="stat-card" style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 36, fontWeight: 800, color: '#8b5cf6' }}>{inventoryStats?.essentialCount || 0}</div>
+                  <div style={{ fontSize: 12, color: '#6b7280' }}>常备单品</div>
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 }}>
+                <div className="chart-card">
+                  <h3>📊 库存状态分布</h3>
+                  {inventoryOverviewData.length > 0 ? (
+                    <ResponsiveContainer width="100%" height={220}>
+                      <PieChart>
+                        <Pie
+                          data={inventoryOverviewData}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={50}
+                          outerRadius={80}
+                          dataKey="value"
+                          label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                          labelLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
+                          isAnimationActive={false}
+                        >
+                          {inventoryOverviewData.map((entry, idx) => (
+                            <Cell key={`inv-cell-${idx}`} fill={entry.color} />
+                          ))}
+                        </Pie>
+                        <Tooltip />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div style={{ textAlign: 'center', color: '#9ca3af', padding: 40 }}>暂无库存数据</div>
+                  )}
+                  <div style={{ display: 'flex', justifyContent: 'center', gap: 16, marginTop: 8 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: '#6b7280' }}>
+                      <span style={{ width: 8, height: 8, borderRadius: 4, background: '#dc2626', display: 'inline-block' }}></span>
+                      已过期 {inventoryStats?.expiredCount || 0}
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: '#6b7280' }}>
+                      <span style={{ width: 8, height: 8, borderRadius: 4, background: '#d97706', display: 'inline-block' }}></span>
+                      即将过期 {inventoryStats?.expiringSoonCount || 0}
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: '#6b7280' }}>
+                      <span style={{ width: 8, height: 8, borderRadius: 4, background: '#6b7280', display: 'inline-block' }}></span>
+                      长期闲置 {inventoryStats?.longUnusedCount || 0}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="chart-card">
+                  <h3>⏰ 即将过期单品</h3>
+                  {expiringSoonItems.length > 0 ? (
+                    <div>
+                      {expiringSoonItems.map((item, i) => (
+                        <div key={`exp-${i}-${item.id}`} style={{
+                          padding: '10px 12px',
+                          borderBottom: i < expiringSoonItems.length - 1 ? '1px solid #f3f4f6' : 'none',
+                          borderRadius: 8,
+                        }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                            <div style={{ fontWeight: 600, fontSize: 13 }}>
+                              {CATEGORY_EMOJI[item.category]} {item.name}
+                            </div>
+                            <span style={{
+                              fontSize: 11,
+                              padding: '2px 8px',
+                              borderRadius: 10,
+                              background: item.daysUntilExpiry !== undefined && item.daysUntilExpiry <= 7 ? '#fee2e2' : '#fef3c7',
+                              color: item.daysUntilExpiry !== undefined && item.daysUntilExpiry <= 7 ? '#dc2626' : '#d97706',
+                              fontWeight: 600,
+                            }}>
+                              {item.daysUntilExpiry !== undefined ? (item.daysUntilExpiry <= 0 ? '已过期' : `剩${item.daysUntilExpiry}天`) : '-'}
+                            </span>
+                          </div>
+                          <div style={{ fontSize: 11, color: '#9ca3af' }}>
+                            {CategoryLabels[item.category]}{item.brand ? ` · ${item.brand}` : ''}
+                            {item.expiryDate ? ` · 到期 ${new Date(item.expiryDate).toLocaleDateString('zh-CN')}` : ''}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: 'center', color: '#9ca3af', padding: 40 }}>
+                      <div style={{ fontSize: 32, marginBottom: 8 }}>✅</div>
+                      <div>暂无即将过期的单品</div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+                <div className="chart-card">
+                  <h3>🛒 补货优先级排行</h3>
+                  {restockPriority.length > 0 ? (
+                    <div>
+                      {restockPriority.map((item, i) => (
+                        <div key={`restock-${i}-${item.id}`} style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          padding: '10px 0',
+                          borderBottom: i < restockPriority.length - 1 ? '1px solid #f3f4f6' : 'none',
+                        }}>
+                          <div style={{
+                            width: 28, height: 28, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            fontWeight: 700, fontSize: 13, marginRight: 12, flexShrink: 0,
+                            background: i === 0 ? 'linear-gradient(135deg, #fbbf24, #f59e0b)' : i === 1 ? 'linear-gradient(135deg, #d1d5db, #9ca3af)' : i === 2 ? 'linear-gradient(135deg, #fb923c, #ea580c)' : '#f3f4f6',
+                            color: i < 3 ? 'white' : '#6b7280',
+                          }}>
+                            {i + 1}
+                          </div>
+                          <div style={{ flex: 1 }}>
+                            <div style={{ fontWeight: 600, fontSize: 13 }}>
+                              {CATEGORY_EMOJI[item.category]} {item.name}
+                            </div>
+                            <div style={{ fontSize: 11, color: '#9ca3af' }}>
+                              {CategoryLabels[item.category]}{item.brand ? ` · ${item.brand}` : ''}
+                              {item.remainingQuantity !== undefined ? ` · 剩余${item.remainingQuantity}` : ''}
+                            </div>
+                          </div>
+                          <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                            {item.risks.map(risk => {
+                              const cfg = RISK_CONFIG[risk];
+                              return (
+                                <span key={risk} style={{ fontSize: 10, padding: '1px 6px', borderRadius: 8, background: `${cfg.color}15`, color: cfg.color, fontWeight: 600 }}>
+                                  {cfg.emoji}{cfg.label}
+                                </span>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: 'center', color: '#9ca3af', padding: 40 }}>
+                      <div style={{ fontSize: 32, marginBottom: 8 }}>🎉</div>
+                      <div>暂无需补货的单品</div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="chart-card">
+                  <h3>💤 长期闲置单品排行</h3>
+                  {longUnusedItems.length > 0 ? (
+                    <div>
+                      {longUnusedItems.map((item, i) => (
+                        <div key={`unused-${i}-${item.id}`} style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          padding: '10px 0',
+                          borderBottom: i < longUnusedItems.length - 1 ? '1px solid #f3f4f6' : 'none',
+                        }}>
+                          <div style={{
+                            width: 28, height: 28, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            fontWeight: 700, fontSize: 13, marginRight: 12, flexShrink: 0,
+                            background: i === 0 ? 'linear-gradient(135deg, #6b7280, #4b5563)' : '#f3f4f6',
+                            color: i === 0 ? 'white' : '#6b7280',
+                          }}>
+                            {i + 1}
+                          </div>
+                          <div style={{ flex: 1 }}>
+                            <div style={{ fontWeight: 600, fontSize: 13 }}>
+                              {CATEGORY_EMOJI[item.category]} {item.name}
+                            </div>
+                            <div style={{ fontSize: 11, color: '#9ca3af' }}>
+                              {CategoryLabels[item.category]}{item.brand ? ` · ${item.brand}` : ''}
+                            </div>
+                          </div>
+                          <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 10, background: '#f3f4f6', color: '#6b7280', fontWeight: 600 }}>
+                            {item.daysSinceLastUse !== undefined ? `${item.daysSinceLastUse}天未用` : '-'}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: 'center', color: '#9ca3af', padding: 40 }}>
+                      <div style={{ fontSize: 32, marginBottom: 8 }}>✨</div>
+                      <div>暂无长期闲置单品</div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
           )}
         </PageErrorBoundary>
       )}

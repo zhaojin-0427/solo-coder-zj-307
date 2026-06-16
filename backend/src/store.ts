@@ -4,7 +4,8 @@ import * as path from 'path';
 import type {
   LensItem, LipstickItem, BlushItem, OutfitItem, MakeupItem,
   LookSuggestion, SavedLook, GeneratedChecklist, ChecklistItem, UsageRecord,
-  Review, LookReviewSummary, ReviewStats, SceneType
+  Review, LookReviewSummary, ReviewStats, SceneType,
+  ItemRiskInfo, RiskType, ItemCategory, InventoryStats, RiskItem
 } from './types';
 
 interface DataStore {
@@ -408,4 +409,218 @@ export function getReviewStats(): ReviewStats {
     }));
 
   return { scoreTrend, lowScoreKeywords, upcomingReminders };
+}
+
+const EXPIRING_SOON_DAYS = 30;
+const LONG_UNUSED_DAYS = 90;
+const LOW_STOCK_THRESHOLD = 3;
+
+const LENS_SHELF_LIFE: Record<string, number> = {
+  daily: 1,
+  monthly: 30,
+  yearly: 365,
+};
+
+const COSMETIC_SHELF_LIFE_DAYS = 365;
+
+function getShelfLifeDays(item: MakeupItem): number | undefined {
+  if (item.shelfLifeDays) return item.shelfLifeDays;
+  if (item.category === 'lens') {
+    return LENS_SHELF_LIFE[item.lensType];
+  }
+  if (item.category === 'lipstick' || item.category === 'blush') {
+    return COSMETIC_SHELF_LIFE_DAYS;
+  }
+  return undefined;
+}
+
+export function getItemRiskInfo(item: MakeupItem): ItemRiskInfo {
+  const risks: RiskType[] = [];
+  const now = new Date();
+  let expiryDate: Date | undefined;
+  let daysUntilExpiry: number | undefined;
+  let daysSinceLastUse: number | undefined;
+
+  const shelfLifeDays = getShelfLifeDays(item);
+  const startDate = item.openDate || item.purchaseDate;
+
+  if (startDate && shelfLifeDays) {
+    expiryDate = new Date(startDate);
+    expiryDate.setDate(expiryDate.getDate() + shelfLifeDays);
+    daysUntilExpiry = Math.ceil((expiryDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+
+    if (daysUntilExpiry < 0) {
+      risks.push('expired');
+    } else if (daysUntilExpiry <= EXPIRING_SOON_DAYS) {
+      risks.push('expiring_soon');
+    }
+  }
+
+  if (item.stockStatus === 'low_stock' || item.stockStatus === 'out_of_stock') {
+    risks.push('low_stock');
+  } else if (item.remainingQuantity !== undefined && item.remainingQuantity <= LOW_STOCK_THRESHOLD) {
+    risks.push('low_stock');
+  }
+
+  const lastUsed = item.lastUsedAt || item.createdAt;
+  if (lastUsed) {
+    const lastUsedDate = new Date(lastUsed);
+    daysSinceLastUse = Math.floor((now.getTime() - lastUsedDate.getTime()) / (1000 * 60 * 60 * 24));
+    if (daysSinceLastUse >= LONG_UNUSED_DAYS) {
+      risks.push('long_unused');
+    }
+  }
+
+  return {
+    risks,
+    expiryDate: expiryDate?.toISOString(),
+    daysUntilExpiry,
+    daysSinceLastUse,
+  };
+}
+
+export function getItemWithRisk(item: MakeupItem): MakeupItem & { riskInfo: ItemRiskInfo } {
+  return { ...item, riskInfo: getItemRiskInfo(item) };
+}
+
+export function getAllItemsWithRisk(): {
+  lenses: (LensItem & { riskInfo: ItemRiskInfo })[];
+  lipsticks: (LipstickItem & { riskInfo: ItemRiskInfo })[];
+  blushes: (BlushItem & { riskInfo: ItemRiskInfo })[];
+  outfits: (OutfitItem & { riskInfo: ItemRiskInfo })[];
+} {
+  return {
+    lenses: store.lenses.map(item => getItemWithRisk(item) as LensItem & { riskInfo: ItemRiskInfo }),
+    lipsticks: store.lipsticks.map(item => getItemWithRisk(item) as LipstickItem & { riskInfo: ItemRiskInfo }),
+    blushes: store.blushes.map(item => getItemWithRisk(item) as BlushItem & { riskInfo: ItemRiskInfo }),
+    outfits: store.outfits.map(item => getItemWithRisk(item) as OutfitItem & { riskInfo: ItemRiskInfo }),
+  };
+}
+
+function getAllItemsFlat(): MakeupItem[] {
+  return [
+    ...store.lenses,
+    ...store.lipsticks,
+    ...store.blushes,
+    ...store.outfits,
+  ];
+}
+
+function toRiskItem(item: MakeupItem, riskInfo: ItemRiskInfo): RiskItem {
+  const priority = calculateRiskPriority(riskInfo.risks, riskInfo.daysUntilExpiry, riskInfo.daysSinceLastUse);
+  return {
+    id: item.id,
+    category: item.category,
+    name: item.name,
+    brand: 'brand' in item ? (item as any).brand : undefined,
+    risks: riskInfo.risks,
+    daysUntilExpiry: riskInfo.daysUntilExpiry,
+    expiryDate: riskInfo.expiryDate,
+    remainingQuantity: item.remainingQuantity,
+    daysSinceLastUse: riskInfo.daysSinceLastUse,
+    priority,
+  };
+}
+
+function calculateRiskPriority(risks: RiskType[], daysUntilExpiry?: number, daysSinceLastUse?: number): number {
+  let priority = 0;
+  if (risks.includes('expired')) priority += 100;
+  if (risks.includes('low_stock')) priority += 80;
+  if (risks.includes('expiring_soon')) {
+    priority += 60;
+    if (daysUntilExpiry !== undefined) {
+      priority += Math.max(0, 30 - daysUntilExpiry);
+    }
+  }
+  if (risks.includes('long_unused')) {
+    priority += 40;
+    if (daysSinceLastUse !== undefined) {
+      priority += Math.min(60, daysSinceLastUse - 90);
+    }
+  }
+  return priority;
+}
+
+export function getInventoryStats(): InventoryStats & {
+  expiringSoonItems: RiskItem[];
+  restockPriority: RiskItem[];
+  longUnusedItems: RiskItem[];
+} {
+  const allItems = getAllItemsFlat();
+  let inStockCount = 0;
+  let lowStockCount = 0;
+  let outOfStockCount = 0;
+  let expiringSoonCount = 0;
+  let expiredCount = 0;
+  let longUnusedCount = 0;
+  let essentialCount = 0;
+
+  const expiringSoonList: RiskItem[] = [];
+  const restockList: RiskItem[] = [];
+  const longUnusedList: RiskItem[] = [];
+
+  for (const item of allItems) {
+    const riskInfo = getItemRiskInfo(item);
+    const riskItem = toRiskItem(item, riskInfo);
+
+    if (item.stockStatus === 'in_stock' || (!item.stockStatus && (item.remainingQuantity === undefined || item.remainingQuantity > LOW_STOCK_THRESHOLD))) {
+      inStockCount++;
+    } else if (item.stockStatus === 'low_stock' || (item.remainingQuantity !== undefined && item.remainingQuantity > 0 && item.remainingQuantity <= LOW_STOCK_THRESHOLD)) {
+      lowStockCount++;
+    } else if (item.stockStatus === 'out_of_stock' || item.remainingQuantity === 0) {
+      outOfStockCount++;
+    }
+
+    if (riskInfo.risks.includes('expiring_soon')) {
+      expiringSoonCount++;
+      expiringSoonList.push(riskItem);
+    }
+    if (riskInfo.risks.includes('expired')) {
+      expiredCount++;
+    }
+    if (riskInfo.risks.includes('long_unused')) {
+      longUnusedCount++;
+      longUnusedList.push(riskItem);
+    }
+    if (riskInfo.risks.includes('low_stock')) {
+      restockList.push(riskItem);
+    }
+    if (item.isEssential) {
+      essentialCount++;
+    }
+  }
+
+  const totalItems = allItems.length;
+  const healthyItems = inStockCount - expiringSoonCount - expiredCount - longUnusedCount;
+  const healthScore = totalItems > 0 ? Math.round((healthyItems / totalItems) * 100) : 100;
+
+  expiringSoonList.sort((a, b) => (a.daysUntilExpiry || 999) - (b.daysUntilExpiry || 999));
+  restockList.sort((a, b) => b.priority - a.priority);
+  longUnusedList.sort((a, b) => (b.daysSinceLastUse || 0) - (a.daysSinceLastUse || 0));
+
+  return {
+    totalItems,
+    inStockCount,
+    lowStockCount,
+    outOfStockCount,
+    expiringSoonCount,
+    expiredCount,
+    longUnusedCount,
+    essentialCount,
+    healthScore,
+    expiringSoonItems: expiringSoonList.slice(0, 10),
+    restockPriority: restockList.slice(0, 10),
+    longUnusedItems: longUnusedList.slice(0, 10),
+  };
+}
+
+export function updateItemLastUsed(category: ItemCategory, id: string): boolean {
+  const map: Record<string, any[]> = { lens: store.lenses, lipstick: store.lipsticks, blush: store.blushes, outfit: store.outfits };
+  const arr = map[category];
+  if (!arr) return false;
+  const idx = arr.findIndex((i: any) => i.id === id);
+  if (idx === -1) return false;
+  arr[idx] = { ...arr[idx], lastUsedAt: new Date().toISOString() };
+  persist();
+  return true;
 }
