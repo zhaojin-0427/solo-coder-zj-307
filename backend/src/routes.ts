@@ -9,9 +9,12 @@ import {
   getReviews, getReviewById, getReviewByChecklistId, getReviewsByLookId, getReviewsByScene,
   createReview, updateReview, deleteReview, getLookReviewSummary, getAllLookReviewSummaries, getReviewStats,
   getAllItemsWithRisk, getItemRiskInfo, getInventoryStats, updateItemLastUsed,
+  getTravelPlans, getTravelPlanById, createTravelPlan, updateTravelPlan, deleteTravelPlan,
+  computeTravelStats,
 } from './store';
-import { generateSuggestions, computeStatsWithLooks } from './recommend';
-import type { SceneType, SavedLook, GeneratedChecklist, Review, OutfitCombination } from './types';
+import { generateSuggestions, computeStatsWithLooks, generateTravelOutfits } from './recommend';
+import { generateTravelChecklist } from './travelPlanner';
+import type { SceneType, SavedLook, GeneratedChecklist, Review, OutfitCombination, TravelPlan, DailyScene } from './types';
 
 const router = Router();
 
@@ -202,6 +205,7 @@ router.get('/stats', (_req: Request, res: Response) => {
   const records = getUsageRecords();
   const reviewStats = getReviewStats();
   const inventoryStats = getInventoryStats();
+  const travelStats = computeTravelStats();
   const stats = computeStatsWithLooks(records, (id) => {
     const look = getSavedLookById(id);
     return look ? { style: look.style } : undefined;
@@ -222,6 +226,7 @@ router.get('/stats', (_req: Request, res: Response) => {
     expiringSoonItems: inventoryStats.expiringSoonItems,
     restockPriority: inventoryStats.restockPriority,
     longUnusedItems: inventoryStats.longUnusedItems,
+    travelStats,
   });
 });
 
@@ -278,6 +283,152 @@ router.put('/reviews/:id', (req: Request, res: Response) => {
 
 router.delete('/reviews/:id', (req: Request, res: Response) => {
   const ok = deleteReview(req.params.id);
+  if (!ok) return res.status(404).json({ error: 'Not found' });
+  res.json({ ok: true });
+});
+
+// Travel Plans
+router.get('/travel-plans', (_req: Request, res: Response) => {
+  res.json(getTravelPlans());
+});
+
+router.get('/travel-plans/:id', (req: Request, res: Response) => {
+  const plan = getTravelPlanById(req.params.id);
+  if (!plan) return res.status(404).json({ error: 'Not found' });
+  res.json(plan);
+});
+
+router.post('/travel-plans', (req: Request, res: Response) => {
+  const body = req.body as Partial<TravelPlan> & { name: string; destination: string; startDate: string; endDate: string; days: number; dailyScenes: DailyScene[] };
+  if (!body.name || !body.destination || !body.startDate || !body.endDate || body.days === undefined) {
+    return res.status(400).json({ error: '缺少必填字段: name, destination, startDate, endDate, days' });
+  }
+
+  const { lenses, lipsticks, blushes, outfits } = getAllItems();
+  const reviewSummaries = getAllLookReviewSummaries();
+  const savedLooks = getSavedLooks();
+  const dailyScenes = body.dailyScenes || [];
+  const dailyOutfits = generateTravelOutfits(
+    { lenses, lipsticks, blushes, outfits },
+    dailyScenes,
+    body.days,
+    reviewSummaries,
+    savedLooks
+  );
+
+  const plan = createTravelPlan({
+    ...body,
+    dailyScenes,
+    dailyOutfits,
+  });
+  res.status(201).json(plan);
+});
+
+router.post('/travel-plans/:id/generate-outfits', (req: Request, res: Response) => {
+  const plan = getTravelPlanById(req.params.id);
+  if (!plan) return res.status(404).json({ error: 'Not found' });
+
+  const { lenses, lipsticks, blushes, outfits } = getAllItems();
+  const reviewSummaries = getAllLookReviewSummaries();
+  const savedLooks = getSavedLooks();
+  const dailyScenes = (req.body.dailyScenes as DailyScene[]) || plan.dailyScenes;
+  const days = (req.body.days as number) || plan.days;
+
+  const newOutfits = generateTravelOutfits(
+    { lenses, lipsticks, blushes, outfits },
+    dailyScenes,
+    days,
+    reviewSummaries,
+    savedLooks
+  );
+
+  const lockedMap = new Map<number, string[]>();
+  for (const outfit of plan.dailyOutfits) {
+    if (outfit.lockedIds && outfit.lockedIds.length > 0) {
+      lockedMap.set(outfit.dayIndex, outfit.lockedIds);
+    }
+  }
+
+  const mergedOutfits = newOutfits.map(outfit => {
+    const lockedIds = lockedMap.get(outfit.dayIndex) || [];
+    const original = plan.dailyOutfits.find(o => o.dayIndex === outfit.dayIndex);
+    const mergedItems = { ...outfit.items };
+    if (original) {
+      for (const lockedId of lockedIds) {
+        if (original.items.lensId === lockedId) mergedItems.lensId = lockedId;
+        if (original.items.lipstickId === lockedId) mergedItems.lipstickId = lockedId;
+        if (original.items.blushId === lockedId) mergedItems.blushId = lockedId;
+        if (original.items.outfitId === lockedId) mergedItems.outfitId = lockedId;
+      }
+    }
+    return {
+      ...outfit,
+      items: mergedItems,
+      lockedIds,
+    };
+  });
+
+  const updated = updateTravelPlan(plan.id, { dailyOutfits: mergedOutfits, dailyScenes, days });
+  res.json(updated);
+});
+
+router.put('/travel-plans/:id', (req: Request, res: Response) => {
+  const updated = updateTravelPlan(req.params.id, req.body);
+  if (!updated) return res.status(404).json({ error: 'Not found' });
+  res.json(updated);
+});
+
+router.post('/travel-plans/:id/confirm', (req: Request, res: Response) => {
+  const plan = getTravelPlanById(req.params.id);
+  if (!plan) return res.status(404).json({ error: 'Not found' });
+
+  const { lenses, lipsticks, blushes, outfits } = getAllItems();
+
+  const checklist = generateTravelChecklist(plan, {
+    findLens: (id) => lenses.find(l => l.id === id),
+    findLipstick: (id) => lipsticks.find(l => l.id === id),
+    findBlush: (id) => blushes.find(b => b.id === id),
+    findOutfit: (id) => outfits.find(o => o.id === id),
+    getRiskInfo: (item) => getItemRiskInfo(item),
+  });
+
+  const updated = updateTravelPlan(plan.id, {
+    status: 'confirmed',
+    confirmedAt: new Date().toISOString(),
+    checklist,
+    dailyChecklists: checklist.dailyChecklists,
+    warnings: checklist.warnings,
+  });
+  res.json(updated);
+});
+
+router.post('/travel-plans/:id/complete', (req: Request, res: Response) => {
+  const plan = getTravelPlanById(req.params.id);
+  if (!plan) return res.status(404).json({ error: 'Not found' });
+
+  for (const outfit of plan.dailyOutfits) {
+    const items = outfit.items;
+    if (items.lensId) updateItemLastUsed('lens', items.lensId);
+    if (items.lipstickId) updateItemLastUsed('lipstick', items.lipstickId);
+    if (items.blushId) updateItemLastUsed('blush', items.blushId);
+    if (items.outfitId) updateItemLastUsed('outfit', items.outfitId);
+
+    addUsageRecord({
+      scene: 'travel',
+      items,
+      missedItems: req.body.missedItems || [],
+    });
+  }
+
+  const updated = updateTravelPlan(plan.id, {
+    status: 'completed',
+    completedAt: new Date().toISOString(),
+  });
+  res.json(updated);
+});
+
+router.delete('/travel-plans/:id', (req: Request, res: Response) => {
+  const ok = deleteTravelPlan(req.params.id);
   if (!ok) return res.status(404).json({ error: 'Not found' });
   res.json({ ok: true });
 });

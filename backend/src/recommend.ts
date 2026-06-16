@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import type { SceneType, LensItem, LipstickItem, BlushItem, OutfitItem, LookSuggestion, OutfitCombination, UsageRecord, Stats, ReviewStats, RiskType, MakeupItem } from './types';
+import type { SceneType, LensItem, LipstickItem, BlushItem, OutfitItem, LookSuggestion, OutfitCombination, UsageRecord, Stats, ReviewStats, RiskType, MakeupItem, DailyScene, DailyOutfit, LookReviewSummary, SavedLook } from './types';
 
 const EXPIRING_SOON_DAYS = 30;
 const LONG_UNUSED_DAYS = 90;
@@ -284,6 +284,12 @@ export function computeStats(records: UsageRecord[], reviewStats: ReviewStats): 
     expiringSoonItems: [],
     restockPriority: [],
     longUnusedItems: [],
+    travelStats: {
+      topTravelItems: [],
+      multiDayReuseRate: [],
+      travelMissedRank: [],
+      planCompletionRate: { total: 0, completed: 0, rate: 0 },
+    },
   };
 }
 
@@ -314,4 +320,142 @@ export function computeStatsWithLooks(records: UsageRecord[], lookGetter: (id: s
   }).sort((a, b) => b.reuseRate - a.reuseRate);
 
   return { ...base, styleReuseRate };
+}
+
+interface TravelItemPool {
+  lenses: LensItem[];
+  lipsticks: LipstickItem[];
+  blushes: BlushItem[];
+  outfits: OutfitItem[];
+}
+
+export function generateTravelOutfits(
+  pools: TravelItemPool,
+  dailyScenes: DailyScene[],
+  days: number,
+  reviewSummaries: LookReviewSummary[] = [],
+  savedLooks: SavedLook[] = []
+): DailyOutfit[] {
+  const result: DailyOutfit[] = [];
+
+  const lowScoreItemIds = new Set<string>();
+  for (const summary of reviewSummaries) {
+    if (summary.averageScore > 0 && summary.averageScore < 2.5) {
+      const look = savedLooks.find(l => l.id === summary.lookId);
+      if (look) {
+        if (look.items.lensId) lowScoreItemIds.add(look.items.lensId);
+        if (look.items.lipstickId) lowScoreItemIds.add(look.items.lipstickId);
+        if (look.items.blushId) lowScoreItemIds.add(look.items.blushId);
+        if (look.items.outfitId) lowScoreItemIds.add(look.items.outfitId);
+      }
+    }
+  }
+
+  function isItemAvailable<T extends MakeupItem & { remainingQuantity?: number; stockStatus?: string }>(item: T): boolean {
+    const { risks } = getItemRisks(item);
+    if (risks.includes('expired')) return false;
+    if (risks.includes('low_stock') && item.stockStatus === 'out_of_stock') return false;
+    if (item.remainingQuantity === 0) return false;
+    return true;
+  }
+
+  function filterAvailable<T extends MakeupItem & { remainingQuantity?: number; stockStatus?: string }>(items: T[]): T[] {
+    return items.filter(item => isItemAvailable(item));
+  }
+
+  function scoreItem<T extends { style: string[] } & MakeupItem>(item: T, scene: SceneType, previousId?: string): number {
+    const baseScore = matchScore(item.style, scene);
+    const travelBonus = matchScore(item.style, 'travel') * 0.5;
+    const { scorePenalty } = getItemRisks(item);
+    let score = (baseScore + travelBonus) * (1 - scorePenalty);
+
+    if (item.isEssential) score += 0.2;
+    if (lowScoreItemIds.has(item.id)) score *= 0.5;
+
+    if (previousId && item.id === previousId) {
+      if (item.category === 'lipstick' || item.category === 'blush' || item.category === 'outfit') {
+        score += 0.4;
+      } else if (item.category === 'lens' && (item as LensItem).lensType !== 'daily') {
+        score += 0.4;
+      }
+    }
+
+    return score;
+  }
+
+  function pickBestFromPool<T extends { style: string[] } & MakeupItem & { remainingQuantity?: number; stockStatus?: string }>(
+    items: T[],
+    scene: SceneType,
+    previousId?: string,
+    lockedId?: string
+  ): T | undefined {
+    if (lockedId) {
+      const locked = items.find(i => i.id === lockedId);
+      if (locked) return locked;
+    }
+    const available = filterAvailable(items);
+    if (available.length === 0) return undefined;
+    let best: T | undefined;
+    let bestScore = -1;
+    for (const item of available) {
+      const score = scoreItem(item, scene, previousId);
+      if (score > bestScore) {
+        bestScore = score;
+        best = item;
+      }
+    }
+    return best;
+  }
+
+  let prevLensId: string | undefined;
+  let prevLipstickId: string | undefined;
+  let prevBlushId: string | undefined;
+  let prevOutfitId: string | undefined;
+
+  const dailyLensConsumption = new Map<string, number>();
+
+  for (let i = 0; i < days; i++) {
+    const dayScene = dailyScenes.find(s => s.dayIndex === i) || { dayIndex: i, scene: 'travel' as SceneType };
+    const effectiveScene = dayScene.scene;
+
+    function getAvailableLenses(): LensItem[] {
+      return pools.lenses.filter(lens => {
+        if (!isItemAvailable(lens)) return false;
+        if (lens.lensType === 'daily') {
+          const used = dailyLensConsumption.get(lens.id) || 0;
+          const remaining = lens.remainingQuantity !== undefined ? lens.remainingQuantity - used : Number.MAX_SAFE_INTEGER;
+          return remaining > 0;
+        }
+        return true;
+      });
+    }
+
+    const lens = pickBestFromPool(getAvailableLenses(), effectiveScene, prevLensId);
+    const lipstick = pickBestFromPool(filterAvailable(pools.lipsticks), effectiveScene, prevLipstickId);
+    const blush = pickBestFromPool(filterAvailable(pools.blushes), effectiveScene, prevBlushId);
+    const outfit = pickBestFromPool(filterAvailable(pools.outfits), effectiveScene, prevOutfitId);
+
+    if (lens && lens.lensType === 'daily') {
+      dailyLensConsumption.set(lens.id, (dailyLensConsumption.get(lens.id) || 0) + 1);
+    }
+
+    result.push({
+      dayIndex: i,
+      items: {
+        lensId: lens?.id,
+        lipstickId: lipstick?.id,
+        blushId: blush?.id,
+        outfitId: outfit?.id,
+      },
+      lockedIds: [],
+      adjusted: false,
+    });
+
+    prevLensId = lens?.id;
+    prevLipstickId = lipstick?.id;
+    prevBlushId = blush?.id;
+    prevOutfitId = outfit?.id;
+  }
+
+  return result;
 }

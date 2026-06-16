@@ -5,7 +5,8 @@ import type {
   LensItem, LipstickItem, BlushItem, OutfitItem, MakeupItem,
   LookSuggestion, SavedLook, GeneratedChecklist, ChecklistItem, UsageRecord,
   Review, LookReviewSummary, ReviewStats, SceneType,
-  ItemRiskInfo, RiskType, ItemCategory, InventoryStats, RiskItem
+  ItemRiskInfo, RiskType, ItemCategory, InventoryStats, RiskItem,
+  TravelPlan, TravelStats
 } from './types';
 
 interface DataStore {
@@ -19,6 +20,7 @@ interface DataStore {
   checklists: GeneratedChecklist[];
   usageRecords: UsageRecord[];
   reviews: Review[];
+  travelPlans: TravelPlan[];
 }
 
 const DATA_FILE = path.join(__dirname, '..', 'data.json');
@@ -40,6 +42,7 @@ function loadData(): DataStore {
         checklists: parsed.checklists || defaultData.checklists,
         usageRecords: parsed.usageRecords || defaultData.usageRecords,
         reviews: parsed.reviews || defaultData.reviews,
+        travelPlans: parsed.travelPlans || defaultData.travelPlans,
       };
     } catch {
       return defaultData;
@@ -96,6 +99,7 @@ function getDefaultData(): DataStore {
     checklists: [],
     usageRecords: [],
     reviews: [],
+    travelPlans: [],
   };
 }
 
@@ -623,4 +627,141 @@ export function updateItemLastUsed(category: ItemCategory, id: string): boolean 
   arr[idx] = { ...arr[idx], lastUsedAt: new Date().toISOString() };
   persist();
   return true;
+}
+
+// Travel Plans
+export function getTravelPlans(): TravelPlan[] {
+  return store.travelPlans;
+}
+
+export function getTravelPlanById(id: string): TravelPlan | undefined {
+  return store.travelPlans.find(p => p.id === id);
+}
+
+export function createTravelPlan(data: Omit<TravelPlan, 'id' | 'createdAt' | 'updatedAt' | 'status' | 'lockedItemIds' | 'mergedItemIds' | 'dailyChecklists' | 'warnings'> & Partial<Pick<TravelPlan, 'status' | 'lockedItemIds' | 'mergedItemIds' | 'dailyChecklists' | 'warnings'>>): TravelPlan {
+  const now = new Date().toISOString();
+  const newPlan: TravelPlan = {
+    id: uuidv4(),
+    status: 'draft',
+    lockedItemIds: [],
+    mergedItemIds: [],
+    dailyChecklists: [],
+    warnings: [],
+    ...data,
+    createdAt: now,
+    updatedAt: now,
+  };
+  store.travelPlans.push(newPlan);
+  persist();
+  return newPlan;
+}
+
+export function updateTravelPlan(id: string, patch: Partial<TravelPlan>): TravelPlan | null {
+  const idx = store.travelPlans.findIndex(p => p.id === id);
+  if (idx === -1) return null;
+  store.travelPlans[idx] = {
+    ...store.travelPlans[idx],
+    ...patch,
+    updatedAt: new Date().toISOString(),
+  };
+  persist();
+  return store.travelPlans[idx];
+}
+
+export function deleteTravelPlan(id: string): boolean {
+  const idx = store.travelPlans.findIndex(p => p.id === id);
+  if (idx === -1) return false;
+  store.travelPlans.splice(idx, 1);
+  persist();
+  return true;
+}
+
+export function computeTravelStats(): TravelStats {
+  const travelRecords = store.usageRecords.filter(r => r.scene === 'travel');
+  const allPlans = store.travelPlans;
+
+  const itemUseCount = new Map<string, { itemId: string; itemName: string; category: ItemCategory; count: number }>();
+  const itemDayUsage = new Map<string, Set<string>>();
+
+  for (const record of travelRecords) {
+    const itemIds: { id: string; category: ItemCategory }[] = [];
+    if (record.items.lensId) itemIds.push({ id: record.items.lensId, category: 'lens' });
+    if (record.items.lipstickId) itemIds.push({ id: record.items.lipstickId, category: 'lipstick' });
+    if (record.items.blushId) itemIds.push({ id: record.items.blushId, category: 'blush' });
+    if (record.items.outfitId) itemIds.push({ id: record.items.outfitId, category: 'outfit' });
+
+    for (const { id, category } of itemIds) {
+      const itemName = findItemName(id, category);
+      const existing = itemUseCount.get(id);
+      if (existing) {
+        existing.count++;
+      } else {
+        itemUseCount.set(id, { itemId: id, itemName, category, count: 1 });
+      }
+
+      if (!itemDayUsage.has(id)) itemDayUsage.set(id, new Set());
+      const dayKey = new Date(record.usedAt).toDateString();
+      itemDayUsage.get(id)!.add(dayKey);
+    }
+  }
+
+  const topTravelItems = Array.from(itemUseCount.values())
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 10);
+
+  const totalTravelDays = new Set(travelRecords.map(r => new Date(r.usedAt).toDateString())).size;
+  const multiDayReuseRate = Array.from(itemDayUsage.entries())
+    .map(([itemId, days]) => {
+      const item = itemUseCount.get(itemId);
+      const reuseDays = days.size;
+      return {
+        itemId,
+        itemName: item?.itemName || itemId,
+        reuseDays,
+        totalDays: totalTravelDays,
+        rate: totalTravelDays > 0 ? Math.round((reuseDays / totalTravelDays) * 100) / 100 : 0,
+      };
+    })
+    .filter(x => x.reuseDays > 1)
+    .sort((a, b) => b.rate - a.rate)
+    .slice(0, 10);
+
+  const missedCount = new Map<string, number>();
+  for (const record of travelRecords) {
+    for (const m of record.missedItems) {
+      missedCount.set(m, (missedCount.get(m) || 0) + 1);
+    }
+  }
+  const travelMissedRank = Array.from(missedCount.entries())
+    .map(([itemName, count]) => ({ itemName, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 10);
+
+  const total = allPlans.length;
+  const completed = allPlans.filter(p => p.status === 'completed').length;
+  const planCompletionRate = {
+    total,
+    completed,
+    rate: total > 0 ? Math.round((completed / total) * 10000) / 100 : 0,
+  };
+
+  return {
+    topTravelItems,
+    multiDayReuseRate,
+    travelMissedRank,
+    planCompletionRate,
+  };
+}
+
+function findItemName(id: string, category: ItemCategory): string {
+  const map: Record<string, any[]> = {
+    lens: store.lenses,
+    lipstick: store.lipsticks,
+    blush: store.blushes,
+    outfit: store.outfits,
+  };
+  const arr = map[category];
+  if (!arr) return id;
+  const item = arr.find((i: any) => i.id === id);
+  return item?.name || id;
 }

@@ -2,7 +2,8 @@ import axios from 'axios';
 import type {
   LensItem, LipstickItem, BlushItem, OutfitItem,
   LookSuggestion, SavedLook, ChecklistItem, GeneratedChecklist, Stats, SceneType,
-  Review, LookReviewSummary, InventoryStats, RiskItem, ItemRiskInfo
+  Review, LookReviewSummary, InventoryStats, RiskItem, ItemRiskInfo,
+  TravelPlan, DailyScene, DailyOutfit
 } from './types';
 
 const api = axios.create({ baseURL: '/api' });
@@ -108,4 +109,23 @@ export const reviewApi = {
     api.put<Review>(`/reviews/${id}`, data).then(r => r.data),
   delete: (id: string) =>
     api.delete(`/reviews/${id}`).then(r => r.data),
+};
+
+export const travelPlansApi = {
+  getAll: () =>
+    api.get<TravelPlan[]>('/travel-plans').then(r => r.data),
+  get: (id: string) =>
+    api.get<TravelPlan>(`/travel-plans/${id}`).then(r => r.data),
+  create: (data: Omit<TravelPlan, 'id' | 'createdAt' | 'updatedAt' | 'dailyOutfits' | 'checklist' | 'dailyChecklists' | 'warnings' | 'status'> & { dailyScenes: DailyScene[] }) =>
+    api.post<TravelPlan>('/travel-plans', data).then(r => r.data),
+  generateOutfits: (id: string) =>
+    api.post<TravelPlan>(`/travel-plans/${id}/generate-outfits`).then(r => r.data),
+  update: (id: string, patch: Partial<TravelPlan>) =>
+    api.put<TravelPlan>(`/travel-plans/${id}`, patch).then(r => r.data),
+  confirm: (id: string) =>
+    api.post<TravelPlan>(`/travel-plans/${id}/confirm`).then(r => r.data),
+  complete: (id: string) =>
+    api.post<TravelPlan>(`/travel-plans/${id}/complete`).then(r => r.data),
+  delete: (id: string) =>
+    api.delete<{ ok: boolean }>(`/travel-plans/${id}`).then(r => r.data),
 };

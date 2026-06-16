@@ -188,6 +188,87 @@ export interface RiskItem {
   priority: number;
 }
 
+export interface WeatherInfo {
+  minTemp: number;
+  maxTemp: number;
+  description?: string;
+}
+
+export interface DailyScene {
+  dayIndex: number;
+  date?: string;
+  scene: SceneType;
+  notes?: string;
+}
+
+export interface DailyOutfit {
+  dayIndex: number;
+  items: OutfitCombination;
+  lockedIds: string[];
+  adjusted: boolean;
+}
+
+export interface PackingListItem {
+  id: string;
+  name: string;
+  category: 'care' | 'makeup' | 'accessory' | 'item' | 'other';
+  essential: boolean;
+  itemId?: string;
+  itemCategory?: ItemCategory;
+  quantity?: number;
+  note?: string;
+  isRefill?: boolean;
+  isLowStock?: boolean;
+  isExpiring?: boolean;
+}
+
+export interface DailyChecklist {
+  dayIndex: number;
+  items: PackingListItem[];
+}
+
+export type TravelStatus = 'draft' | 'confirmed' | 'completed' | 'cancelled';
+
+export interface TravelPlan {
+  id: string;
+  name: string;
+  destination: string;
+  startDate: string;
+  endDate: string;
+  days: number;
+  weather?: WeatherInfo[];
+  dailyScenes: DailyScene[];
+  baggageLimit?: {
+    weight?: number;
+    volume?: number;
+    bags?: number;
+  };
+  dailyOutfits: DailyOutfit[];
+  lockedItemIds: string[];
+  mergedItemIds: string[];
+  status: TravelStatus;
+  checklist?: TravelChecklist;
+  dailyChecklists: DailyChecklist[];
+  warnings: string[];
+  createdAt: string;
+  updatedAt: string;
+  confirmedAt?: string;
+  completedAt?: string;
+}
+
+export interface TravelChecklist {
+  totalItems: PackingListItem[];
+  dailyChecklists: DailyChecklist[];
+  warnings: string[];
+}
+
+export interface TravelStats {
+  topTravelItems: { itemId: string; itemName: string; category: ItemCategory; count: number }[];
+  multiDayReuseRate: { itemId: string; itemName: string; reuseDays: number; totalDays: number; rate: number }[];
+  travelMissedRank: { itemName: string; count: number }[];
+  planCompletionRate: { total: number; completed: number; rate: number };
+}
+
 export interface Stats {
   topCombinations: { combination: OutfitCombination; count: number }[];
   sceneDistribution: { scene: SceneType; count: number; percentage: number }[];
@@ -200,4 +281,5 @@ export interface Stats {
   expiringSoonItems: RiskItem[];
   restockPriority: RiskItem[];
   longUnusedItems: RiskItem[];
+  travelStats: TravelStats;
 }

@@ -685,6 +685,169 @@ export default function StatsPage() {
               </div>
             </div>
           )}
+
+          {stats?.travelStats && (
+            <div style={{ marginTop: 28 }}>
+              <h2 style={{ fontSize: 18, fontWeight: 700, color: '#111827', marginBottom: 16 }}>✈️ 旅行相关统计</h2>
+
+              <div className="stat-grid" style={{ marginBottom: 20 }}>
+                <div className="stat-card" style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 36, fontWeight: 800, color: '#10b981' }}>
+                    {stats.travelStats.planCompletionRate?.total || 0}
+                  </div>
+                  <div style={{ fontSize: 12, color: '#6b7280' }}>旅行计划总数</div>
+                </div>
+                <div className="stat-card" style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 36, fontWeight: 800, color: '#8b5cf6' }}>
+                    {stats.travelStats.planCompletionRate?.completed || 0}
+                  </div>
+                  <div style={{ fontSize: 12, color: '#6b7280' }}>已完成计划</div>
+                </div>
+                <div className="stat-card" style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 36, fontWeight: 800, color: '#db2777' }}>
+                    {(stats.travelStats.planCompletionRate?.rate || 0).toFixed(0)}%
+                  </div>
+                  <div style={{ fontSize: 12, color: '#6b7280' }}>计划完成率</div>
+                </div>
+                <div className="stat-card" style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 36, fontWeight: 800, color: '#f59e0b' }}>
+                    {stats.travelStats.topTravelItems?.length || 0}
+                  </div>
+                  <div style={{ fontSize: 12, color: '#6b7280' }}>旅行常用单品</div>
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 }}>
+                <div className="chart-card">
+                  <h3>🏆 旅行常用单品排行</h3>
+                  {stats.travelStats.topTravelItems && stats.travelStats.topTravelItems.length > 0 ? (
+                    <div>
+                      {(stats.travelStats.topTravelItems as any[]).slice(0, 5).map((item, i) => (
+                        <div key={`travel-top-${i}-${item.itemId || item.itemName}`} className="rank-item">
+                          <div className="rank">{i + 1}</div>
+                          <div className="name">
+                            {CATEGORY_EMOJI[item.category as ItemCategory] || '📦'} {item.itemName}
+                          </div>
+                          <div className="count">{item.count} 次</div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: 'center', color: '#9ca3af', padding: 40 }}>
+                      <div style={{ fontSize: 32, marginBottom: 8 }}>✈️</div>
+                      <div>暂无旅行使用数据</div>
+                      <div style={{ fontSize: 12, marginTop: 4 }}>完成几次旅行计划后查看排行</div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="chart-card">
+                  <h3>♻️ 多日单品复用率</h3>
+                  {stats.travelStats.multiDayReuseRate && stats.travelStats.multiDayReuseRate.length > 0 ? (
+                    <div>
+                      {(stats.travelStats.multiDayReuseRate as any[]).slice(0, 5).map((item, i) => {
+                        const ratePercent = (item.rate || item.reuseRate || 0) * 100;
+                        return (
+                          <div key={`reuse-${i}-${item.itemId || item.itemName}`} style={{
+                            padding: '10px 0',
+                            borderBottom: i < 4 ? '1px solid #f3f4f6' : 'none',
+                          }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                              <span style={{ fontSize: 13, fontWeight: 500 }}>{item.itemName}</span>
+                              <span style={{ fontSize: 12, color: '#db2777', fontWeight: 600 }}>
+                                {item.reuseDays || item.daysUsed || 0}天 / {item.totalDays || 0}天 ({ratePercent.toFixed(0)}%)
+                              </span>
+                            </div>
+                            <div style={{
+                              height: 8,
+                              background: '#f3f4f6',
+                              borderRadius: 4,
+                              overflow: 'hidden',
+                            }}>
+                              <div style={{
+                                height: '100%',
+                                background: 'linear-gradient(90deg, #db2777, #8b5cf6)',
+                                borderRadius: 4,
+                                width: `${Math.min(ratePercent, 100)}%`,
+                              }}></div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: 'center', color: '#9ca3af', padding: 40 }}>
+                      <div style={{ fontSize: 32, marginBottom: 8 }}>♻️</div>
+                      <div>暂无复用数据</div>
+                      <div style={{ fontSize: 12, marginTop: 4 }}>完成多日旅行后查看复用率</div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+                <div className="chart-card">
+                  <h3>⚠️ 旅行遗漏物品排行</h3>
+                  {stats.travelStats.travelMissedRank && stats.travelStats.travelMissedRank.length > 0 ? (
+                    <div>
+                      {(stats.travelStats.travelMissedRank as any[]).slice(0, 5).map((item, i) => (
+                        <div key={`travel-missed-${i}-${item.itemName}`} className="rank-item">
+                          <div className="rank" style={{
+                            background: i === 0 ? '#ef4444' : i === 1 ? '#f59e0b' : i === 2 ? '#fbbf24' : '#f3f4f6',
+                            color: i < 3 ? 'white' : '#6b7280',
+                          }}>{i + 1}</div>
+                          <div className="name">{item.itemName}</div>
+                          <div className="count">遗漏 {item.count} 次</div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: 'center', color: '#9ca3af', padding: 40 }}>
+                      <div style={{ fontSize: 32, marginBottom: 8 }}>🎉</div>
+                      <div>从未遗漏任何物品！</div>
+                      <div style={{ fontSize: 12, marginTop: 4 }}>继续保持好习惯</div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="chart-card">
+                  <h3>📊 旅行计划完成趋势</h3>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 180 }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{
+                        fontSize: 48,
+                        fontWeight: 800,
+                        background: 'linear-gradient(135deg, #10b981, #8b5cf6)',
+                        WebkitBackgroundClip: 'text',
+                        backgroundClip: 'text',
+                        color: 'transparent',
+                      }}>
+                        {(stats.travelStats.planCompletionRate?.rate || 0).toFixed(0)}%
+                      </div>
+                      <div style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}>
+                        已完成 {stats.travelStats.planCompletionRate?.completed || 0} / 共 {stats.travelStats.planCompletionRate?.total || 0} 个计划
+                      </div>
+                      <div style={{
+                        width: 200,
+                        height: 12,
+                        background: '#f3f4f6',
+                        borderRadius: 6,
+                        marginTop: 12,
+                        overflow: 'hidden',
+                      }}>
+                        <div style={{
+                          height: '100%',
+                          background: 'linear-gradient(90deg, #10b981, #8b5cf6)',
+                          borderRadius: 6,
+                          width: `${stats.travelStats.planCompletionRate?.rate || 0}%`,
+                        }}></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </PageErrorBoundary>
       )}
     </div>

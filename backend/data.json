@@ -13,7 +13,8 @@
         "通勤"
       ],
       "notes": "上班日常",
-      "createdAt": "2026-06-15T15:30:15.602Z"
+      "createdAt": "2026-06-15T15:30:15.602Z",
+      "lastUsedAt": "2026-06-16T08:59:52.986Z"
     },
     {
       "id": "1a62e730-6922-4adf-8db2-5ff41e17f1ae",
@@ -28,7 +29,8 @@
         "约会"
       ],
       "notes": "约会用",
-      "createdAt": "2026-06-15T15:30:15.602Z"
+      "createdAt": "2026-06-15T15:30:15.602Z",
+      "lastUsedAt": "2026-06-16T08:59:52.992Z"
     },
     {
       "id": "0db71af3-8265-4621-9176-41cb37d309e9",
@@ -44,7 +46,8 @@
         "酷"
       ],
       "notes": "拍照出片",
-      "createdAt": "2026-06-15T15:30:15.602Z"
+      "createdAt": "2026-06-15T15:30:15.602Z",
+      "lastUsedAt": "2026-06-16T08:59:52.989Z"
     },
     {
       "id": "a497f18b-7e1d-4907-afea-16e8b8128217",
@@ -66,6 +69,22 @@
       "storageLocation": "QA盒",
       "isEssential": true,
       "createdAt": "2026-06-16T03:23:46.700Z"
+    },
+    {
+      "id": "949facb9-8441-45f4-9e4e-f25ac70cc5fc",
+      "category": "lens",
+      "name": "QA日抛低量旅行美瞳44882",
+      "brand": "QA",
+      "color": "棕",
+      "diameter": 14,
+      "lensType": "daily",
+      "style": [
+        "旅行",
+        "自然"
+      ],
+      "stockStatus": "in_stock",
+      "remainingQuantity": 2,
+      "createdAt": "2026-06-16T09:00:44.904Z"
     }
   ],
   "lipsticks": [
@@ -81,7 +100,8 @@
         "通勤"
       ],
       "notes": "日常百搭",
-      "createdAt": "2026-06-15T15:30:15.602Z"
+      "createdAt": "2026-06-15T15:30:15.602Z",
+      "lastUsedAt": "2026-06-16T08:59:52.987Z"
     },
     {
       "id": "2827f4c8-1f29-4cea-b60d-67ce17beb7be",
@@ -94,7 +114,8 @@
         "甜美",
         "约会"
       ],
-      "createdAt": "2026-06-15T15:30:15.602Z"
+      "createdAt": "2026-06-15T15:30:15.602Z",
+      "lastUsedAt": "2026-06-16T08:59:52.993Z"
     },
     {
       "id": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
@@ -108,7 +129,8 @@
         "拍照",
         "酷"
       ],
-      "createdAt": "2026-06-15T15:30:15.602Z"
+      "createdAt": "2026-06-15T15:30:15.602Z",
+      "lastUsedAt": "2026-06-16T08:59:52.990Z"
     },
     {
       "id": "13f04b67-2aa0-46c1-8c45-1ac5e0c2ff45",
@@ -141,7 +163,8 @@
         "通勤",
         "甜美"
       ],
-      "createdAt": "2026-06-15T15:30:15.602Z"
+      "createdAt": "2026-06-15T15:30:15.602Z",
+      "lastUsedAt": "2026-06-16T08:59:52.988Z"
     },
     {
       "id": "9414dc39-d3e8-40f8-82bd-e25029c75011",
@@ -154,7 +177,8 @@
         "约会",
         "甜美"
       ],
-      "createdAt": "2026-06-15T15:30:15.602Z"
+      "createdAt": "2026-06-15T15:30:15.602Z",
+      "lastUsedAt": "2026-06-16T08:59:52.993Z"
     },
     {
       "id": "6e2d884e-cd12-407c-b310-e7b35aad9927",
@@ -168,7 +192,8 @@
         "拍照",
         "复古"
       ],
-      "createdAt": "2026-06-15T15:30:15.602Z"
+      "createdAt": "2026-06-15T15:30:15.602Z",
+      "lastUsedAt": "2026-06-16T08:59:52.991Z"
     },
     {
       "id": "89972285-bf3b-4c9a-9b09-6175727b25a1",
@@ -256,7 +281,8 @@
         "春",
         "秋"
       ],
-      "createdAt": "2026-06-15T15:30:15.602Z"
+      "createdAt": "2026-06-15T15:30:15.602Z",
+      "lastUsedAt": "2026-06-16T08:59:52.994Z"
     },
     {
       "id": "3f63c17f-7f80-4c2b-b970-3f69ff689a9c",
@@ -2281,6 +2307,210 @@
       "checklistId": "15e59a7f-2914-43f6-b16c-b6fee2e44afd",
       "missedItems": [],
       "usedAt": "2026-06-16T00:59:53.706Z"
+    },
+    {
+      "id": "83c64d4f-0c9c-4f81-b7f6-c7df7ce9f33b",
+      "scene": "travel",
+      "items": {
+        "lensId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+        "lipstickId": "91e12247-75d9-4245-8aaf-11c880323032",
+        "blushId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+        "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+      },
+      "missedItems": [],
+      "usedAt": "2026-06-16T08:24:52.924Z"
+    },
+    {
+      "id": "21f6fab1-08d8-489c-9d20-5ae3f53b3ddf",
+      "scene": "travel",
+      "items": {
+        "lensId": "0db71af3-8265-4621-9176-41cb37d309e9",
+        "lipstickId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+        "blushId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+        "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+      },
+      "missedItems": [],
+      "usedAt": "2026-06-16T08:24:52.926Z"
+    },
+    {
+      "id": "e0537336-b9ea-4f38-9eea-f804ebcfea12",
+      "scene": "travel",
+      "items": {
+        "lensId": "1a62e730-6922-4adf-8db2-5ff41e17f1ae",
+        "lipstickId": "2827f4c8-1f29-4cea-b60d-67ce17beb7be",
+        "blushId": "9414dc39-d3e8-40f8-82bd-e25029c75011",
+        "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+      },
+      "missedItems": [],
+      "usedAt": "2026-06-16T08:24:52.928Z"
+    },
+    {
+      "id": "3a7ad69d-1092-49d5-bf8e-5d6eeb29f0f6",
+      "scene": "travel",
+      "items": {
+        "lensId": "1a62e730-6922-4adf-8db2-5ff41e17f1ae",
+        "lipstickId": "2827f4c8-1f29-4cea-b60d-67ce17beb7be",
+        "blushId": "9414dc39-d3e8-40f8-82bd-e25029c75011",
+        "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+      },
+      "missedItems": [],
+      "usedAt": "2026-06-16T08:24:52.930Z"
+    },
+    {
+      "id": "e2840991-9ccb-4104-a79a-44bfbcd90895",
+      "scene": "travel",
+      "items": {
+        "lensId": "0db71af3-8265-4621-9176-41cb37d309e9",
+        "lipstickId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+        "blushId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+        "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+      },
+      "missedItems": [],
+      "usedAt": "2026-06-16T08:24:52.933Z"
+    },
+    {
+      "id": "d26a331c-5f90-4e5d-8bec-0f7e650c0de2",
+      "scene": "travel",
+      "items": {
+        "lensId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+        "lipstickId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+        "blushId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+        "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+      },
+      "missedItems": [],
+      "usedAt": "2026-06-16T08:24:52.936Z"
+    },
+    {
+      "id": "519ede46-9f3c-4936-8764-031c08471dd9",
+      "scene": "travel",
+      "items": {
+        "lensId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+        "lipstickId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+        "blushId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+        "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+      },
+      "missedItems": [],
+      "usedAt": "2026-06-16T08:24:52.938Z"
+    },
+    {
+      "id": "139684d8-e26b-4d79-aae9-8daf46af7dd1",
+      "scene": "travel",
+      "items": {
+        "lensId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+        "lipstickId": "91e12247-75d9-4245-8aaf-11c880323032",
+        "blushId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+        "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+      },
+      "missedItems": [],
+      "usedAt": "2026-06-16T08:24:58.119Z"
+    },
+    {
+      "id": "02321804-8c5f-4875-ab25-d60048ae2c03",
+      "scene": "travel",
+      "items": {
+        "lensId": "0db71af3-8265-4621-9176-41cb37d309e9",
+        "lipstickId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+        "blushId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+        "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+      },
+      "missedItems": [],
+      "usedAt": "2026-06-16T08:24:58.121Z"
+    },
+    {
+      "id": "c19657a6-da44-48b8-8159-12bc51ff8dcd",
+      "scene": "travel",
+      "items": {
+        "lensId": "1a62e730-6922-4adf-8db2-5ff41e17f1ae",
+        "lipstickId": "2827f4c8-1f29-4cea-b60d-67ce17beb7be",
+        "blushId": "9414dc39-d3e8-40f8-82bd-e25029c75011",
+        "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+      },
+      "missedItems": [],
+      "usedAt": "2026-06-16T08:24:58.123Z"
+    },
+    {
+      "id": "b2695dd1-1bb9-432a-9738-980ee7da7132",
+      "scene": "travel",
+      "items": {
+        "lensId": "1a62e730-6922-4adf-8db2-5ff41e17f1ae",
+        "lipstickId": "2827f4c8-1f29-4cea-b60d-67ce17beb7be",
+        "blushId": "9414dc39-d3e8-40f8-82bd-e25029c75011",
+        "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+      },
+      "missedItems": [],
+      "usedAt": "2026-06-16T08:24:58.125Z"
+    },
+    {
+      "id": "1e313ae0-ed79-4382-b926-46f6c649041f",
+      "scene": "travel",
+      "items": {
+        "lensId": "0db71af3-8265-4621-9176-41cb37d309e9",
+        "lipstickId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+        "blushId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+        "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+      },
+      "missedItems": [],
+      "usedAt": "2026-06-16T08:24:58.127Z"
+    },
+    {
+      "id": "50304ec1-fde1-41b8-b2bc-698ebc715a41",
+      "scene": "travel",
+      "items": {
+        "lensId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+        "lipstickId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+        "blushId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+        "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+      },
+      "missedItems": [],
+      "usedAt": "2026-06-16T08:24:58.130Z"
+    },
+    {
+      "id": "354b049f-b30c-451a-980c-b3242a67d870",
+      "scene": "travel",
+      "items": {
+        "lensId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+        "lipstickId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+        "blushId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+        "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+      },
+      "missedItems": [],
+      "usedAt": "2026-06-16T08:24:58.132Z"
+    },
+    {
+      "id": "7369f6c5-9554-4c40-8a39-a81530a59b96",
+      "scene": "travel",
+      "items": {
+        "lensId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+        "lipstickId": "91e12247-75d9-4245-8aaf-11c880323032",
+        "blushId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+        "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+      },
+      "missedItems": [],
+      "usedAt": "2026-06-16T08:59:52.989Z"
+    },
+    {
+      "id": "20c4c421-f21d-4912-9358-572ef7a13143",
+      "scene": "travel",
+      "items": {
+        "lensId": "0db71af3-8265-4621-9176-41cb37d309e9",
+        "lipstickId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+        "blushId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+        "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+      },
+      "missedItems": [],
+      "usedAt": "2026-06-16T08:59:52.992Z"
+    },
+    {
+      "id": "0a765a5c-5bcc-41e7-98a3-8ed922219c42",
+      "scene": "travel",
+      "items": {
+        "lensId": "1a62e730-6922-4adf-8db2-5ff41e17f1ae",
+        "lipstickId": "2827f4c8-1f29-4cea-b60d-67ce17beb7be",
+        "blushId": "9414dc39-d3e8-40f8-82bd-e25029c75011",
+        "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+      },
+      "missedItems": [],
+      "usedAt": "2026-06-16T08:59:52.994Z"
     }
   ],
   "reviews": [
@@ -2295,7 +2525,7 @@
       "notes": "更新一下：下午确实有点脱妆了，需要补妆。",
       "nextReminderDate": "2026-06-25",
       "createdAt": "2026-06-16T01:00:04.400Z",
-      "updatedAt": "2026-06-16T01:57:32.668Z"
+      "updatedAt": "2026-06-16T03:34:11.909Z"
     },
     {
       "id": "1b4cb729-1326-4426-98ee-8fee48cb9c18",
@@ -2323,6 +2553,2251 @@
       "nextReminderDate": "2026-06-28",
       "createdAt": "2026-06-16T01:18:10.901Z",
       "updatedAt": "2026-06-16T01:57:32.725Z"
+    }
+  ],
+  "travelPlans": [
+    {
+      "id": "33589095-1d87-4d0d-9eaf-1bfce55067db",
+      "status": "completed",
+      "lockedItemIds": [],
+      "mergedItemIds": [],
+      "dailyChecklists": [
+        {
+          "dayIndex": 0,
+          "items": [
+            {
+              "id": "750a9b7b-a987-4641-b5b8-fea3842065de",
+              "name": "自然棕日抛",
+              "category": "item",
+              "essential": true,
+              "itemId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+              "itemCategory": "lens",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "550809d8-64d8-40a4-96b9-58e8a03ebed5",
+              "name": "豆沙色",
+              "category": "item",
+              "essential": true,
+              "itemId": "91e12247-75d9-4245-8aaf-11c880323032",
+              "itemCategory": "lipstick",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "b7e14e7d-e774-44f8-8e97-b725c6d5ac60",
+              "name": "蜜桃色",
+              "category": "item",
+              "essential": true,
+              "itemId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+              "itemCategory": "blush",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "c7db7d7f-2f06-4e05-8b06-4d7a27adb9cb",
+              "name": "休闲卫衣+牛仔裤",
+              "category": "item",
+              "essential": true,
+              "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+              "itemCategory": "outfit",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            }
+          ]
+        },
+        {
+          "dayIndex": 1,
+          "items": [
+            {
+              "id": "666da6a5-ece5-4efe-ab89-8a67b992b4c1",
+              "name": "混血灰",
+              "category": "item",
+              "essential": true,
+              "itemId": "0db71af3-8265-4621-9176-41cb37d309e9",
+              "itemCategory": "lens",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "13ddbb7e-138f-462e-8c3e-41f271d49ce1",
+              "name": "复古红棕",
+              "category": "item",
+              "essential": true,
+              "itemId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+              "itemCategory": "lipstick",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "6b644e91-afdf-4b1c-a60e-9ae722b1a52a",
+              "name": "梅子色",
+              "category": "item",
+              "essential": true,
+              "itemId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+              "itemCategory": "blush",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "64e08049-cab6-4659-8d50-ce128af54208",
+              "name": "休闲卫衣+牛仔裤",
+              "category": "item",
+              "essential": true,
+              "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+              "itemCategory": "outfit",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            }
+          ]
+        },
+        {
+          "dayIndex": 2,
+          "items": [
+            {
+              "id": "f98c1c81-3d2a-4e8e-a5ac-225d51283643",
+              "name": "蜜糖棕月抛",
+              "category": "item",
+              "essential": true,
+              "itemId": "1a62e730-6922-4adf-8db2-5ff41e17f1ae",
+              "itemCategory": "lens",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "0f5e910d-c5d0-41d5-a7ce-7e999720bc61",
+              "name": "草莓红",
+              "category": "item",
+              "essential": true,
+              "itemId": "2827f4c8-1f29-4cea-b60d-67ce17beb7be",
+              "itemCategory": "lipstick",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "28d20e79-b740-49a3-bae1-3867565422ae",
+              "name": "玫瑰粉",
+              "category": "item",
+              "essential": true,
+              "itemId": "9414dc39-d3e8-40f8-82bd-e25029c75011",
+              "itemCategory": "blush",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "dec26be0-3235-467c-90a3-ea3600e9fac7",
+              "name": "休闲卫衣+牛仔裤",
+              "category": "item",
+              "essential": true,
+              "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+              "itemCategory": "outfit",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            }
+          ]
+        },
+        {
+          "dayIndex": 3,
+          "items": [
+            {
+              "id": "217010a8-6367-4f65-8cf8-fadcdfeb3aa3",
+              "name": "蜜糖棕月抛",
+              "category": "item",
+              "essential": true,
+              "itemId": "1a62e730-6922-4adf-8db2-5ff41e17f1ae",
+              "itemCategory": "lens",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "eff5d347-9293-40de-a716-bebadec1556d",
+              "name": "草莓红",
+              "category": "item",
+              "essential": true,
+              "itemId": "2827f4c8-1f29-4cea-b60d-67ce17beb7be",
+              "itemCategory": "lipstick",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "d29c2ddf-adfb-4472-b6f8-5e90484e1be0",
+              "name": "玫瑰粉",
+              "category": "item",
+              "essential": true,
+              "itemId": "9414dc39-d3e8-40f8-82bd-e25029c75011",
+              "itemCategory": "blush",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "dc06275b-b98b-4f07-b424-c0a70bfdea4d",
+              "name": "休闲卫衣+牛仔裤",
+              "category": "item",
+              "essential": true,
+              "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+              "itemCategory": "outfit",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            }
+          ]
+        },
+        {
+          "dayIndex": 4,
+          "items": [
+            {
+              "id": "42c7e1fa-0d07-46d5-ae72-780a0d622ea9",
+              "name": "混血灰",
+              "category": "item",
+              "essential": true,
+              "itemId": "0db71af3-8265-4621-9176-41cb37d309e9",
+              "itemCategory": "lens",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "fd36b92b-e3a2-40ec-8c03-1663fccb1252",
+              "name": "复古红棕",
+              "category": "item",
+              "essential": true,
+              "itemId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+              "itemCategory": "lipstick",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "7d26c8cf-be5f-4548-8b7a-35e0006b6c6e",
+              "name": "梅子色",
+              "category": "item",
+              "essential": true,
+              "itemId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+              "itemCategory": "blush",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "9ed38325-ea8a-4619-a359-d16ca3fa8095",
+              "name": "休闲卫衣+牛仔裤",
+              "category": "item",
+              "essential": true,
+              "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+              "itemCategory": "outfit",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            }
+          ]
+        },
+        {
+          "dayIndex": 5,
+          "items": [
+            {
+              "id": "66db37df-d9c0-40d6-90cd-35620d94a1fc",
+              "name": "自然棕日抛",
+              "category": "item",
+              "essential": true,
+              "itemId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+              "itemCategory": "lens",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "a9a0b7b5-c9b4-46c9-9d2d-8e36225ba623",
+              "name": "复古红棕",
+              "category": "item",
+              "essential": true,
+              "itemId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+              "itemCategory": "lipstick",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "ecdfc834-077e-4e4e-aa56-669b53a5fc26",
+              "name": "梅子色",
+              "category": "item",
+              "essential": true,
+              "itemId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+              "itemCategory": "blush",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "1aac527a-6a6e-4d24-aa3b-a3d09b82bee1",
+              "name": "休闲卫衣+牛仔裤",
+              "category": "item",
+              "essential": true,
+              "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+              "itemCategory": "outfit",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            }
+          ]
+        },
+        {
+          "dayIndex": 6,
+          "items": [
+            {
+              "id": "3770c03c-1869-4eb4-8b9d-3b4f484c62c8",
+              "name": "自然棕日抛",
+              "category": "item",
+              "essential": true,
+              "itemId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+              "itemCategory": "lens",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "fa860572-6fc9-43b9-bc02-0bbd4f4b4077",
+              "name": "复古红棕",
+              "category": "item",
+              "essential": true,
+              "itemId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+              "itemCategory": "lipstick",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "e4100832-f333-4591-ab78-ac9553809e69",
+              "name": "梅子色",
+              "category": "item",
+              "essential": true,
+              "itemId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+              "itemCategory": "blush",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "68a18a95-1628-4452-997a-65658abe3c2a",
+              "name": "休闲卫衣+牛仔裤",
+              "category": "item",
+              "essential": true,
+              "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+              "itemCategory": "outfit",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            }
+          ]
+        }
+      ],
+      "warnings": [
+        "长途旅行提醒(7天): 建议检查所有物品库存是否充足"
+      ],
+      "name": "东京樱花季7日游",
+      "destination": "日本东京",
+      "startDate": "2026-07-01",
+      "endDate": "2026-07-07",
+      "days": 7,
+      "dailyScenes": [
+        {
+          "dayIndex": 0,
+          "scene": "travel",
+          "notes": "抵达东京"
+        },
+        {
+          "dayIndex": 1,
+          "scene": "photo",
+          "notes": "浅草寺拍照"
+        },
+        {
+          "dayIndex": 2,
+          "scene": "date",
+          "notes": "台场约会"
+        },
+        {
+          "dayIndex": 3,
+          "scene": "travel",
+          "notes": "迪士尼乐园"
+        },
+        {
+          "dayIndex": 4,
+          "scene": "photo",
+          "notes": "新宿购物"
+        },
+        {
+          "dayIndex": 5,
+          "scene": "travel",
+          "notes": "镰仓一日游"
+        },
+        {
+          "dayIndex": 6,
+          "scene": "travel",
+          "notes": "返程"
+        }
+      ],
+      "weather": [
+        {
+          "minTemp": 20,
+          "maxTemp": 28,
+          "description": "晴转多云"
+        }
+      ],
+      "baggageLimit": {
+        "volume": 24
+      },
+      "dailyOutfits": [
+        {
+          "dayIndex": 0,
+          "items": {
+            "lensId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+            "lipstickId": "91e12247-75d9-4245-8aaf-11c880323032",
+            "blushId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+            "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+          },
+          "lockedIds": [],
+          "adjusted": false
+        },
+        {
+          "dayIndex": 1,
+          "items": {
+            "lensId": "0db71af3-8265-4621-9176-41cb37d309e9",
+            "lipstickId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+            "blushId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+            "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+          },
+          "lockedIds": [],
+          "adjusted": false
+        },
+        {
+          "dayIndex": 2,
+          "items": {
+            "lensId": "1a62e730-6922-4adf-8db2-5ff41e17f1ae",
+            "lipstickId": "2827f4c8-1f29-4cea-b60d-67ce17beb7be",
+            "blushId": "9414dc39-d3e8-40f8-82bd-e25029c75011",
+            "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+          },
+          "lockedIds": [],
+          "adjusted": false
+        },
+        {
+          "dayIndex": 3,
+          "items": {
+            "lensId": "1a62e730-6922-4adf-8db2-5ff41e17f1ae",
+            "lipstickId": "2827f4c8-1f29-4cea-b60d-67ce17beb7be",
+            "blushId": "9414dc39-d3e8-40f8-82bd-e25029c75011",
+            "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+          },
+          "lockedIds": [],
+          "adjusted": false
+        },
+        {
+          "dayIndex": 4,
+          "items": {
+            "lensId": "0db71af3-8265-4621-9176-41cb37d309e9",
+            "lipstickId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+            "blushId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+            "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+          },
+          "lockedIds": [],
+          "adjusted": false
+        },
+        {
+          "dayIndex": 5,
+          "items": {
+            "lensId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+            "lipstickId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+            "blushId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+            "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+          },
+          "lockedIds": [],
+          "adjusted": false
+        },
+        {
+          "dayIndex": 6,
+          "items": {
+            "lensId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+            "lipstickId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+            "blushId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+            "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+          },
+          "lockedIds": [],
+          "adjusted": false
+        }
+      ],
+      "createdAt": "2026-06-16T08:17:22.211Z",
+      "updatedAt": "2026-06-16T08:24:58.132Z",
+      "confirmedAt": "2026-06-16T08:17:47.543Z",
+      "checklist": {
+        "totalItems": [
+          {
+            "id": "02aca7f5-8b5f-45aa-890a-d4fc53d998ee",
+            "name": "自然棕日抛",
+            "category": "item",
+            "essential": true,
+            "itemId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+            "itemCategory": "lens",
+            "quantity": 3,
+            "isLowStock": false,
+            "isExpiring": false
+          },
+          {
+            "id": "76f3e1fe-6506-4987-b8eb-b9c463856937",
+            "name": "豆沙色",
+            "category": "item",
+            "essential": true,
+            "itemId": "91e12247-75d9-4245-8aaf-11c880323032",
+            "itemCategory": "lipstick",
+            "quantity": 1,
+            "isLowStock": false,
+            "isExpiring": false
+          },
+          {
+            "id": "69bba270-dd1a-4c14-9304-fabd84c95674",
+            "name": "蜜桃色",
+            "category": "item",
+            "essential": true,
+            "itemId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+            "itemCategory": "blush",
+            "quantity": 1,
+            "isLowStock": false,
+            "isExpiring": false
+          },
+          {
+            "id": "75a46623-290c-4270-b01d-b3b577d39da9",
+            "name": "休闲卫衣+牛仔裤",
+            "category": "item",
+            "essential": true,
+            "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+            "itemCategory": "outfit",
+            "quantity": 1,
+            "isLowStock": false,
+            "isExpiring": false
+          },
+          {
+            "id": "ff1f23b6-8299-4657-ad63-59f378ac4a1e",
+            "name": "混血灰",
+            "category": "item",
+            "essential": true,
+            "itemId": "0db71af3-8265-4621-9176-41cb37d309e9",
+            "itemCategory": "lens",
+            "quantity": 2,
+            "isLowStock": false,
+            "isExpiring": false
+          },
+          {
+            "id": "5ad12ce2-2b16-4174-8ad9-dc62f3a90f7c",
+            "name": "复古红棕",
+            "category": "item",
+            "essential": true,
+            "itemId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+            "itemCategory": "lipstick",
+            "quantity": 1,
+            "isLowStock": false,
+            "isExpiring": false
+          },
+          {
+            "id": "ba408e36-b19a-4384-a68e-2d46a2958cb1",
+            "name": "梅子色",
+            "category": "item",
+            "essential": true,
+            "itemId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+            "itemCategory": "blush",
+            "quantity": 1,
+            "isLowStock": false,
+            "isExpiring": false
+          },
+          {
+            "id": "27ba7988-1327-4312-9ccf-36c5ed326265",
+            "name": "蜜糖棕月抛",
+            "category": "item",
+            "essential": true,
+            "itemId": "1a62e730-6922-4adf-8db2-5ff41e17f1ae",
+            "itemCategory": "lens",
+            "quantity": 1,
+            "isLowStock": false,
+            "isExpiring": false
+          },
+          {
+            "id": "f037cee2-eeb2-45c8-9aee-e125caf22f95",
+            "name": "草莓红",
+            "category": "item",
+            "essential": true,
+            "itemId": "2827f4c8-1f29-4cea-b60d-67ce17beb7be",
+            "itemCategory": "lipstick",
+            "quantity": 1,
+            "isLowStock": false,
+            "isExpiring": false
+          },
+          {
+            "id": "baf283a1-0805-4926-a246-35a7b08459d2",
+            "name": "玫瑰粉",
+            "category": "item",
+            "essential": true,
+            "itemId": "9414dc39-d3e8-40f8-82bd-e25029c75011",
+            "itemCategory": "blush",
+            "quantity": 1,
+            "isLowStock": false,
+            "isExpiring": false
+          },
+          {
+            "id": "31c6aca0-4b34-4b09-a248-26bbb9f3f946",
+            "name": "美瞳护理液",
+            "category": "care",
+            "essential": true,
+            "quantity": 1,
+            "note": "非日抛必备"
+          },
+          {
+            "id": "f473845e-1ef0-422e-b060-de75eea62147",
+            "name": "隐形眼镜盒",
+            "category": "care",
+            "essential": true,
+            "quantity": 2,
+            "note": "建议额外备用1个"
+          },
+          {
+            "id": "64315b46-4b7b-469f-b7c8-0bc2e9af1827",
+            "name": "美瞳日抛备用",
+            "category": "care",
+            "essential": false,
+            "quantity": 2,
+            "note": "建议额外备2片"
+          },
+          {
+            "id": "7d62b8cf-211a-4933-864e-f278998544ec",
+            "name": "润眼液",
+            "category": "care",
+            "essential": false
+          },
+          {
+            "id": "ebd73eaa-63b4-4486-b9d8-cbddcbda4d1a",
+            "name": "备用框架眼镜",
+            "category": "accessory",
+            "essential": false
+          },
+          {
+            "id": "05575d3f-1178-4238-8f38-d38b9f3001c6",
+            "name": "粉饼/气垫",
+            "category": "makeup",
+            "essential": false,
+            "note": "控油补妆必备"
+          },
+          {
+            "id": "63d06479-00c2-4f62-b70c-5870c6fcc83e",
+            "name": "镜子",
+            "category": "makeup",
+            "essential": false
+          },
+          {
+            "id": "d2d6221d-3b56-44e4-9bf2-44a2db316972",
+            "name": "吸油纸",
+            "category": "makeup",
+            "essential": false,
+            "quantity": 3
+          },
+          {
+            "id": "eacfca04-759e-43b8-89c1-28f104e2f672",
+            "name": "口红补妆",
+            "category": "makeup",
+            "essential": false,
+            "note": "可选常用色号替换装"
+          },
+          {
+            "id": "220dced5-0d77-402c-9bb2-8c24a120b457",
+            "name": "卸妆湿巾",
+            "category": "care",
+            "essential": true,
+            "quantity": 4
+          },
+          {
+            "id": "1401c32c-47a9-4849-b87a-18807243231e",
+            "name": "替换装",
+            "category": "care",
+            "essential": false,
+            "note": "口红/气垫等替换装"
+          }
+        ],
+        "dailyChecklists": [
+          {
+            "dayIndex": 0,
+            "items": [
+              {
+                "id": "750a9b7b-a987-4641-b5b8-fea3842065de",
+                "name": "自然棕日抛",
+                "category": "item",
+                "essential": true,
+                "itemId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+                "itemCategory": "lens",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "550809d8-64d8-40a4-96b9-58e8a03ebed5",
+                "name": "豆沙色",
+                "category": "item",
+                "essential": true,
+                "itemId": "91e12247-75d9-4245-8aaf-11c880323032",
+                "itemCategory": "lipstick",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "b7e14e7d-e774-44f8-8e97-b725c6d5ac60",
+                "name": "蜜桃色",
+                "category": "item",
+                "essential": true,
+                "itemId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+                "itemCategory": "blush",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "c7db7d7f-2f06-4e05-8b06-4d7a27adb9cb",
+                "name": "休闲卫衣+牛仔裤",
+                "category": "item",
+                "essential": true,
+                "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+                "itemCategory": "outfit",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              }
+            ]
+          },
+          {
+            "dayIndex": 1,
+            "items": [
+              {
+                "id": "666da6a5-ece5-4efe-ab89-8a67b992b4c1",
+                "name": "混血灰",
+                "category": "item",
+                "essential": true,
+                "itemId": "0db71af3-8265-4621-9176-41cb37d309e9",
+                "itemCategory": "lens",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "13ddbb7e-138f-462e-8c3e-41f271d49ce1",
+                "name": "复古红棕",
+                "category": "item",
+                "essential": true,
+                "itemId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+                "itemCategory": "lipstick",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "6b644e91-afdf-4b1c-a60e-9ae722b1a52a",
+                "name": "梅子色",
+                "category": "item",
+                "essential": true,
+                "itemId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+                "itemCategory": "blush",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "64e08049-cab6-4659-8d50-ce128af54208",
+                "name": "休闲卫衣+牛仔裤",
+                "category": "item",
+                "essential": true,
+                "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+                "itemCategory": "outfit",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              }
+            ]
+          },
+          {
+            "dayIndex": 2,
+            "items": [
+              {
+                "id": "f98c1c81-3d2a-4e8e-a5ac-225d51283643",
+                "name": "蜜糖棕月抛",
+                "category": "item",
+                "essential": true,
+                "itemId": "1a62e730-6922-4adf-8db2-5ff41e17f1ae",
+                "itemCategory": "lens",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "0f5e910d-c5d0-41d5-a7ce-7e999720bc61",
+                "name": "草莓红",
+                "category": "item",
+                "essential": true,
+                "itemId": "2827f4c8-1f29-4cea-b60d-67ce17beb7be",
+                "itemCategory": "lipstick",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "28d20e79-b740-49a3-bae1-3867565422ae",
+                "name": "玫瑰粉",
+                "category": "item",
+                "essential": true,
+                "itemId": "9414dc39-d3e8-40f8-82bd-e25029c75011",
+                "itemCategory": "blush",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "dec26be0-3235-467c-90a3-ea3600e9fac7",
+                "name": "休闲卫衣+牛仔裤",
+                "category": "item",
+                "essential": true,
+                "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+                "itemCategory": "outfit",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              }
+            ]
+          },
+          {
+            "dayIndex": 3,
+            "items": [
+              {
+                "id": "217010a8-6367-4f65-8cf8-fadcdfeb3aa3",
+                "name": "蜜糖棕月抛",
+                "category": "item",
+                "essential": true,
+                "itemId": "1a62e730-6922-4adf-8db2-5ff41e17f1ae",
+                "itemCategory": "lens",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "eff5d347-9293-40de-a716-bebadec1556d",
+                "name": "草莓红",
+                "category": "item",
+                "essential": true,
+                "itemId": "2827f4c8-1f29-4cea-b60d-67ce17beb7be",
+                "itemCategory": "lipstick",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "d29c2ddf-adfb-4472-b6f8-5e90484e1be0",
+                "name": "玫瑰粉",
+                "category": "item",
+                "essential": true,
+                "itemId": "9414dc39-d3e8-40f8-82bd-e25029c75011",
+                "itemCategory": "blush",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "dc06275b-b98b-4f07-b424-c0a70bfdea4d",
+                "name": "休闲卫衣+牛仔裤",
+                "category": "item",
+                "essential": true,
+                "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+                "itemCategory": "outfit",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              }
+            ]
+          },
+          {
+            "dayIndex": 4,
+            "items": [
+              {
+                "id": "42c7e1fa-0d07-46d5-ae72-780a0d622ea9",
+                "name": "混血灰",
+                "category": "item",
+                "essential": true,
+                "itemId": "0db71af3-8265-4621-9176-41cb37d309e9",
+                "itemCategory": "lens",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "fd36b92b-e3a2-40ec-8c03-1663fccb1252",
+                "name": "复古红棕",
+                "category": "item",
+                "essential": true,
+                "itemId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+                "itemCategory": "lipstick",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "7d26c8cf-be5f-4548-8b7a-35e0006b6c6e",
+                "name": "梅子色",
+                "category": "item",
+                "essential": true,
+                "itemId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+                "itemCategory": "blush",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "9ed38325-ea8a-4619-a359-d16ca3fa8095",
+                "name": "休闲卫衣+牛仔裤",
+                "category": "item",
+                "essential": true,
+                "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+                "itemCategory": "outfit",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              }
+            ]
+          },
+          {
+            "dayIndex": 5,
+            "items": [
+              {
+                "id": "66db37df-d9c0-40d6-90cd-35620d94a1fc",
+                "name": "自然棕日抛",
+                "category": "item",
+                "essential": true,
+                "itemId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+                "itemCategory": "lens",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "a9a0b7b5-c9b4-46c9-9d2d-8e36225ba623",
+                "name": "复古红棕",
+                "category": "item",
+                "essential": true,
+                "itemId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+                "itemCategory": "lipstick",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "ecdfc834-077e-4e4e-aa56-669b53a5fc26",
+                "name": "梅子色",
+                "category": "item",
+                "essential": true,
+                "itemId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+                "itemCategory": "blush",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "1aac527a-6a6e-4d24-aa3b-a3d09b82bee1",
+                "name": "休闲卫衣+牛仔裤",
+                "category": "item",
+                "essential": true,
+                "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+                "itemCategory": "outfit",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              }
+            ]
+          },
+          {
+            "dayIndex": 6,
+            "items": [
+              {
+                "id": "3770c03c-1869-4eb4-8b9d-3b4f484c62c8",
+                "name": "自然棕日抛",
+                "category": "item",
+                "essential": true,
+                "itemId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+                "itemCategory": "lens",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "fa860572-6fc9-43b9-bc02-0bbd4f4b4077",
+                "name": "复古红棕",
+                "category": "item",
+                "essential": true,
+                "itemId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+                "itemCategory": "lipstick",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "e4100832-f333-4591-ab78-ac9553809e69",
+                "name": "梅子色",
+                "category": "item",
+                "essential": true,
+                "itemId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+                "itemCategory": "blush",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "68a18a95-1628-4452-997a-65658abe3c2a",
+                "name": "休闲卫衣+牛仔裤",
+                "category": "item",
+                "essential": true,
+                "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+                "itemCategory": "outfit",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              }
+            ]
+          }
+        ],
+        "warnings": [
+          "长途旅行提醒(7天): 建议检查所有物品库存是否充足"
+        ]
+      },
+      "completedAt": "2026-06-16T08:24:58.132Z"
+    },
+    {
+      "id": "9aa9c372-dd3c-4b5b-bf95-a6c148dd7ed7",
+      "status": "completed",
+      "lockedItemIds": [],
+      "mergedItemIds": [],
+      "dailyChecklists": [
+        {
+          "dayIndex": 0,
+          "items": [
+            {
+              "id": "4b1734e3-a49a-4f99-9359-eb8a20f8bbf8",
+              "name": "自然棕日抛",
+              "category": "item",
+              "essential": true,
+              "itemId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+              "itemCategory": "lens",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "39cf345a-adcf-474c-b10c-2e894b7796d7",
+              "name": "豆沙色",
+              "category": "item",
+              "essential": true,
+              "itemId": "91e12247-75d9-4245-8aaf-11c880323032",
+              "itemCategory": "lipstick",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "54528c8d-4213-4c0e-8e77-041443bfb128",
+              "name": "蜜桃色",
+              "category": "item",
+              "essential": true,
+              "itemId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+              "itemCategory": "blush",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "03507209-a301-490b-abef-bb22618ed100",
+              "name": "休闲卫衣+牛仔裤",
+              "category": "item",
+              "essential": true,
+              "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+              "itemCategory": "outfit",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            }
+          ]
+        },
+        {
+          "dayIndex": 1,
+          "items": [
+            {
+              "id": "96f4cac9-5d61-4666-a9cd-79ad98f140a5",
+              "name": "混血灰",
+              "category": "item",
+              "essential": true,
+              "itemId": "0db71af3-8265-4621-9176-41cb37d309e9",
+              "itemCategory": "lens",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "694c6a97-2612-4975-9b4a-351d07096fa7",
+              "name": "复古红棕",
+              "category": "item",
+              "essential": true,
+              "itemId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+              "itemCategory": "lipstick",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "f7c20ac5-f892-46d2-9a52-28eb86747696",
+              "name": "梅子色",
+              "category": "item",
+              "essential": true,
+              "itemId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+              "itemCategory": "blush",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "dcb1f691-eceb-4215-9a40-76b916f9b4eb",
+              "name": "休闲卫衣+牛仔裤",
+              "category": "item",
+              "essential": true,
+              "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+              "itemCategory": "outfit",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            }
+          ]
+        },
+        {
+          "dayIndex": 2,
+          "items": [
+            {
+              "id": "17832ee8-9d1d-4152-a7a0-c4abfd3eacc1",
+              "name": "蜜糖棕月抛",
+              "category": "item",
+              "essential": true,
+              "itemId": "1a62e730-6922-4adf-8db2-5ff41e17f1ae",
+              "itemCategory": "lens",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "d0c379dc-6d38-4e1b-b738-8ce53e38c8d8",
+              "name": "草莓红",
+              "category": "item",
+              "essential": true,
+              "itemId": "2827f4c8-1f29-4cea-b60d-67ce17beb7be",
+              "itemCategory": "lipstick",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "7eea0d9d-3cff-4260-95e3-91012daeab55",
+              "name": "玫瑰粉",
+              "category": "item",
+              "essential": true,
+              "itemId": "9414dc39-d3e8-40f8-82bd-e25029c75011",
+              "itemCategory": "blush",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "e1c859b5-a620-41c6-a6c4-0d9153c52b97",
+              "name": "休闲卫衣+牛仔裤",
+              "category": "item",
+              "essential": true,
+              "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+              "itemCategory": "outfit",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            }
+          ]
+        }
+      ],
+      "warnings": [
+        "长途旅行提醒(5天): 建议检查所有物品库存是否充足"
+      ],
+      "name": "QA旅行计划65168",
+      "destination": "杭州西湖",
+      "startDate": "2026-07-03",
+      "endDate": "2026-07-07",
+      "days": 5,
+      "weather": [
+        {
+          "date": "2026-07-03",
+          "condition": "晴",
+          "minTemp": 24,
+          "maxTemp": 33
+        },
+        {
+          "date": "2026-07-04",
+          "condition": "小雨",
+          "minTemp": 23,
+          "maxTemp": 28
+        },
+        {
+          "date": "2026-07-05",
+          "condition": "多云",
+          "minTemp": 22,
+          "maxTemp": 30
+        }
+      ],
+      "dailyScenes": [
+        {
+          "dayIndex": 0,
+          "scene": "travel",
+          "notes": "QA第1天"
+        },
+        {
+          "dayIndex": 1,
+          "scene": "photo",
+          "notes": "QA第2天"
+        },
+        {
+          "dayIndex": 2,
+          "scene": "travel",
+          "notes": "QA第3天"
+        },
+        {
+          "dayIndex": 3,
+          "scene": "photo",
+          "notes": "QA第4天"
+        },
+        {
+          "dayIndex": 4,
+          "scene": "travel",
+          "notes": "QA第5天"
+        }
+      ],
+      "baggageLimit": {
+        "weight": 8,
+        "bags": 1
+      },
+      "dailyOutfits": [
+        {
+          "dayIndex": 0,
+          "items": {
+            "lensId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+            "lipstickId": "91e12247-75d9-4245-8aaf-11c880323032",
+            "blushId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+            "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+          },
+          "lockedIds": [],
+          "adjusted": false
+        },
+        {
+          "dayIndex": 1,
+          "items": {
+            "lensId": "0db71af3-8265-4621-9176-41cb37d309e9",
+            "lipstickId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+            "blushId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+            "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+          },
+          "lockedIds": [],
+          "adjusted": false
+        },
+        {
+          "dayIndex": 2,
+          "items": {
+            "lensId": "1a62e730-6922-4adf-8db2-5ff41e17f1ae",
+            "lipstickId": "2827f4c8-1f29-4cea-b60d-67ce17beb7be",
+            "blushId": "9414dc39-d3e8-40f8-82bd-e25029c75011",
+            "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+          },
+          "lockedIds": [],
+          "adjusted": false
+        }
+      ],
+      "createdAt": "2026-06-16T08:46:05.198Z",
+      "updatedAt": "2026-06-16T08:59:52.995Z",
+      "confirmedAt": "2026-06-16T08:59:07.753Z",
+      "checklist": {
+        "totalItems": [
+          {
+            "id": "3ad53c76-f52e-4380-b2ac-5be290d6cc5b",
+            "name": "自然棕日抛",
+            "category": "item",
+            "essential": true,
+            "itemId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+            "itemCategory": "lens",
+            "quantity": 1,
+            "isLowStock": false,
+            "isExpiring": false
+          },
+          {
+            "id": "d54d0ec2-a6f4-439b-8eb7-2ddab5dd9c23",
+            "name": "豆沙色",
+            "category": "item",
+            "essential": true,
+            "itemId": "91e12247-75d9-4245-8aaf-11c880323032",
+            "itemCategory": "lipstick",
+            "quantity": 1,
+            "isLowStock": false,
+            "isExpiring": false
+          },
+          {
+            "id": "520a4019-2511-470a-a32f-b17989b69b9b",
+            "name": "蜜桃色",
+            "category": "item",
+            "essential": true,
+            "itemId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+            "itemCategory": "blush",
+            "quantity": 1,
+            "isLowStock": false,
+            "isExpiring": false
+          },
+          {
+            "id": "7bf54b31-aeb7-451b-b722-c4a6987e6c3d",
+            "name": "休闲卫衣+牛仔裤",
+            "category": "item",
+            "essential": true,
+            "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+            "itemCategory": "outfit",
+            "quantity": 1,
+            "isLowStock": false,
+            "isExpiring": false
+          },
+          {
+            "id": "24fd054b-cb10-4d13-af20-b38b43b7006f",
+            "name": "混血灰",
+            "category": "item",
+            "essential": true,
+            "itemId": "0db71af3-8265-4621-9176-41cb37d309e9",
+            "itemCategory": "lens",
+            "quantity": 1,
+            "isLowStock": false,
+            "isExpiring": false
+          },
+          {
+            "id": "9982b5ca-eda4-4f30-b725-04a026377db3",
+            "name": "复古红棕",
+            "category": "item",
+            "essential": true,
+            "itemId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+            "itemCategory": "lipstick",
+            "quantity": 1,
+            "isLowStock": false,
+            "isExpiring": false
+          },
+          {
+            "id": "d4baaf73-91e6-4424-9ff7-7d6e4e58e669",
+            "name": "梅子色",
+            "category": "item",
+            "essential": true,
+            "itemId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+            "itemCategory": "blush",
+            "quantity": 1,
+            "isLowStock": false,
+            "isExpiring": false
+          },
+          {
+            "id": "ecfe157c-d909-480d-b0c3-1fe8babb944c",
+            "name": "蜜糖棕月抛",
+            "category": "item",
+            "essential": true,
+            "itemId": "1a62e730-6922-4adf-8db2-5ff41e17f1ae",
+            "itemCategory": "lens",
+            "quantity": 1,
+            "isLowStock": false,
+            "isExpiring": false
+          },
+          {
+            "id": "da8b539b-2156-4977-a659-5f70921de5ba",
+            "name": "草莓红",
+            "category": "item",
+            "essential": true,
+            "itemId": "2827f4c8-1f29-4cea-b60d-67ce17beb7be",
+            "itemCategory": "lipstick",
+            "quantity": 1,
+            "isLowStock": false,
+            "isExpiring": false
+          },
+          {
+            "id": "89e172fa-37e9-4104-9078-fa54b8b27612",
+            "name": "玫瑰粉",
+            "category": "item",
+            "essential": true,
+            "itemId": "9414dc39-d3e8-40f8-82bd-e25029c75011",
+            "itemCategory": "blush",
+            "quantity": 1,
+            "isLowStock": false,
+            "isExpiring": false
+          },
+          {
+            "id": "f823b4ee-1953-42a7-b44f-7a20d2ff276b",
+            "name": "美瞳护理液",
+            "category": "care",
+            "essential": true,
+            "quantity": 1,
+            "note": "非日抛必备"
+          },
+          {
+            "id": "1ca15ab7-bc4c-432f-b5ab-54ec7a6cda68",
+            "name": "隐形眼镜盒",
+            "category": "care",
+            "essential": true,
+            "quantity": 2,
+            "note": "建议额外备用1个"
+          },
+          {
+            "id": "42b6c749-e733-4114-a5c0-378f2524028d",
+            "name": "美瞳日抛备用",
+            "category": "care",
+            "essential": false,
+            "quantity": 1,
+            "note": "建议额外备1片"
+          },
+          {
+            "id": "7d37d600-36dd-430e-ba22-6e628e47b994",
+            "name": "润眼液",
+            "category": "care",
+            "essential": false
+          },
+          {
+            "id": "2981b58f-0c60-4ecd-a1bc-937f240d32ae",
+            "name": "备用框架眼镜",
+            "category": "accessory",
+            "essential": false
+          },
+          {
+            "id": "24e24db7-1eb9-4725-982e-35c25aa7c78e",
+            "name": "粉饼/气垫",
+            "category": "makeup",
+            "essential": false,
+            "note": "控油补妆必备"
+          },
+          {
+            "id": "97697f00-e1c7-4e71-9fc9-bdbca2ca5a7b",
+            "name": "镜子",
+            "category": "makeup",
+            "essential": false
+          },
+          {
+            "id": "1ad2a033-8f85-4747-be70-93e2e54144d0",
+            "name": "吸油纸",
+            "category": "makeup",
+            "essential": false,
+            "quantity": 2
+          },
+          {
+            "id": "f41f576e-9a9a-4be7-a0f5-ffacdbce8fde",
+            "name": "口红补妆",
+            "category": "makeup",
+            "essential": false,
+            "note": "可选常用色号替换装"
+          },
+          {
+            "id": "bd09045e-6837-4d89-b57f-e22782d44120",
+            "name": "卸妆湿巾",
+            "category": "care",
+            "essential": true,
+            "quantity": 3
+          },
+          {
+            "id": "5a763627-331a-40db-a7bb-d53cf5fc0c66",
+            "name": "替换装",
+            "category": "care",
+            "essential": false,
+            "note": "口红/气垫等替换装"
+          }
+        ],
+        "dailyChecklists": [
+          {
+            "dayIndex": 0,
+            "items": [
+              {
+                "id": "4b1734e3-a49a-4f99-9359-eb8a20f8bbf8",
+                "name": "自然棕日抛",
+                "category": "item",
+                "essential": true,
+                "itemId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+                "itemCategory": "lens",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "39cf345a-adcf-474c-b10c-2e894b7796d7",
+                "name": "豆沙色",
+                "category": "item",
+                "essential": true,
+                "itemId": "91e12247-75d9-4245-8aaf-11c880323032",
+                "itemCategory": "lipstick",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "54528c8d-4213-4c0e-8e77-041443bfb128",
+                "name": "蜜桃色",
+                "category": "item",
+                "essential": true,
+                "itemId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+                "itemCategory": "blush",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "03507209-a301-490b-abef-bb22618ed100",
+                "name": "休闲卫衣+牛仔裤",
+                "category": "item",
+                "essential": true,
+                "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+                "itemCategory": "outfit",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              }
+            ]
+          },
+          {
+            "dayIndex": 1,
+            "items": [
+              {
+                "id": "96f4cac9-5d61-4666-a9cd-79ad98f140a5",
+                "name": "混血灰",
+                "category": "item",
+                "essential": true,
+                "itemId": "0db71af3-8265-4621-9176-41cb37d309e9",
+                "itemCategory": "lens",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "694c6a97-2612-4975-9b4a-351d07096fa7",
+                "name": "复古红棕",
+                "category": "item",
+                "essential": true,
+                "itemId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+                "itemCategory": "lipstick",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "f7c20ac5-f892-46d2-9a52-28eb86747696",
+                "name": "梅子色",
+                "category": "item",
+                "essential": true,
+                "itemId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+                "itemCategory": "blush",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "dcb1f691-eceb-4215-9a40-76b916f9b4eb",
+                "name": "休闲卫衣+牛仔裤",
+                "category": "item",
+                "essential": true,
+                "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+                "itemCategory": "outfit",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              }
+            ]
+          },
+          {
+            "dayIndex": 2,
+            "items": [
+              {
+                "id": "17832ee8-9d1d-4152-a7a0-c4abfd3eacc1",
+                "name": "蜜糖棕月抛",
+                "category": "item",
+                "essential": true,
+                "itemId": "1a62e730-6922-4adf-8db2-5ff41e17f1ae",
+                "itemCategory": "lens",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "d0c379dc-6d38-4e1b-b738-8ce53e38c8d8",
+                "name": "草莓红",
+                "category": "item",
+                "essential": true,
+                "itemId": "2827f4c8-1f29-4cea-b60d-67ce17beb7be",
+                "itemCategory": "lipstick",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "7eea0d9d-3cff-4260-95e3-91012daeab55",
+                "name": "玫瑰粉",
+                "category": "item",
+                "essential": true,
+                "itemId": "9414dc39-d3e8-40f8-82bd-e25029c75011",
+                "itemCategory": "blush",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "e1c859b5-a620-41c6-a6c4-0d9153c52b97",
+                "name": "休闲卫衣+牛仔裤",
+                "category": "item",
+                "essential": true,
+                "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+                "itemCategory": "outfit",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              }
+            ]
+          }
+        ],
+        "warnings": [
+          "长途旅行提醒(5天): 建议检查所有物品库存是否充足"
+        ]
+      },
+      "completedAt": "2026-06-16T08:59:52.995Z"
+    },
+    {
+      "id": "5468e88a-e37b-4638-9c06-78424b8879e5",
+      "status": "confirmed",
+      "lockedItemIds": [],
+      "mergedItemIds": [],
+      "dailyChecklists": [
+        {
+          "dayIndex": 0,
+          "items": [
+            {
+              "id": "c0c61d40-82d8-4050-a4c7-80b6c65f7e89",
+              "name": "QA日抛低量旅行美瞳44882",
+              "category": "item",
+              "essential": true,
+              "itemId": "949facb9-8441-45f4-9e4e-f25ac70cc5fc",
+              "itemCategory": "lens",
+              "quantity": 1,
+              "isLowStock": true,
+              "isExpiring": false
+            },
+            {
+              "id": "28ddb498-3926-4322-a7ab-ecf223dcb9d4",
+              "name": "豆沙色",
+              "category": "item",
+              "essential": true,
+              "itemId": "91e12247-75d9-4245-8aaf-11c880323032",
+              "itemCategory": "lipstick",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "b10bf2ef-0611-4b7e-8b74-5ae94a95eec8",
+              "name": "蜜桃色",
+              "category": "item",
+              "essential": true,
+              "itemId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+              "itemCategory": "blush",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "c4614503-c115-4272-ad69-38e4c6f131ce",
+              "name": "休闲卫衣+牛仔裤",
+              "category": "item",
+              "essential": true,
+              "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+              "itemCategory": "outfit",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            }
+          ]
+        },
+        {
+          "dayIndex": 1,
+          "items": [
+            {
+              "id": "0c5862c4-09a4-4f41-a5bd-1258d17c1292",
+              "name": "QA日抛低量旅行美瞳44882",
+              "category": "item",
+              "essential": true,
+              "itemId": "949facb9-8441-45f4-9e4e-f25ac70cc5fc",
+              "itemCategory": "lens",
+              "quantity": 1,
+              "isLowStock": true,
+              "isExpiring": false
+            },
+            {
+              "id": "0aab8775-b19d-4f48-952c-a5e6cc1815b9",
+              "name": "豆沙色",
+              "category": "item",
+              "essential": true,
+              "itemId": "91e12247-75d9-4245-8aaf-11c880323032",
+              "itemCategory": "lipstick",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "c7d5fb84-5622-4a41-b6c6-cb53a9d9f94e",
+              "name": "蜜桃色",
+              "category": "item",
+              "essential": true,
+              "itemId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+              "itemCategory": "blush",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "8d1ba8ab-5bc1-4600-b1d8-710a67a295aa",
+              "name": "休闲卫衣+牛仔裤",
+              "category": "item",
+              "essential": true,
+              "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+              "itemCategory": "outfit",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            }
+          ]
+        },
+        {
+          "dayIndex": 2,
+          "items": [
+            {
+              "id": "8c7d0c32-89a3-4eca-ac7f-5f2c5e30cde4",
+              "name": "QA日抛低量旅行美瞳44882",
+              "category": "item",
+              "essential": true,
+              "itemId": "949facb9-8441-45f4-9e4e-f25ac70cc5fc",
+              "itemCategory": "lens",
+              "quantity": 1,
+              "isLowStock": true,
+              "isExpiring": false
+            },
+            {
+              "id": "bdb65fa3-4542-4371-8469-ab17ffcf42f6",
+              "name": "豆沙色",
+              "category": "item",
+              "essential": true,
+              "itemId": "91e12247-75d9-4245-8aaf-11c880323032",
+              "itemCategory": "lipstick",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "f44e4c95-c199-4fb1-8f92-27c1b2add374",
+              "name": "蜜桃色",
+              "category": "item",
+              "essential": true,
+              "itemId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+              "itemCategory": "blush",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "d0564362-102f-4efd-943e-e14c95063fd1",
+              "name": "休闲卫衣+牛仔裤",
+              "category": "item",
+              "essential": true,
+              "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+              "itemCategory": "outfit",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            }
+          ]
+        },
+        {
+          "dayIndex": 3,
+          "items": [
+            {
+              "id": "a8617795-d551-439e-ae4e-65d009a1b494",
+              "name": "QA日抛低量旅行美瞳44882",
+              "category": "item",
+              "essential": true,
+              "itemId": "949facb9-8441-45f4-9e4e-f25ac70cc5fc",
+              "itemCategory": "lens",
+              "quantity": 1,
+              "isLowStock": true,
+              "isExpiring": false
+            },
+            {
+              "id": "8eb64d6b-7449-477b-a788-bb521bdcb09a",
+              "name": "豆沙色",
+              "category": "item",
+              "essential": true,
+              "itemId": "91e12247-75d9-4245-8aaf-11c880323032",
+              "itemCategory": "lipstick",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "e9fee537-e6b2-49a9-9a70-aa1eff20f1fb",
+              "name": "蜜桃色",
+              "category": "item",
+              "essential": true,
+              "itemId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+              "itemCategory": "blush",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            },
+            {
+              "id": "fb469ea2-77a1-4d2e-b6b7-8b385ecd2ceb",
+              "name": "休闲卫衣+牛仔裤",
+              "category": "item",
+              "essential": true,
+              "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+              "itemCategory": "outfit",
+              "quantity": 1,
+              "isLowStock": false,
+              "isExpiring": false
+            }
+          ]
+        }
+      ],
+      "warnings": [
+        "库存预警: QA日抛低量旅行美瞳44882 数量可能不足，建议备货 4 件"
+      ],
+      "name": "QA低量日抛4日游44882",
+      "destination": "厦门",
+      "startDate": "2026-08-01",
+      "endDate": "2026-08-04",
+      "days": 4,
+      "dailyScenes": [
+        {
+          "dayIndex": 0,
+          "scene": "travel",
+          "notes": "低量日抛验证"
+        },
+        {
+          "dayIndex": 1,
+          "scene": "travel",
+          "notes": "低量日抛验证"
+        },
+        {
+          "dayIndex": 2,
+          "scene": "travel",
+          "notes": "低量日抛验证"
+        },
+        {
+          "dayIndex": 3,
+          "scene": "travel",
+          "notes": "低量日抛验证"
+        }
+      ],
+      "baggageLimit": {
+        "bags": 1
+      },
+      "dailyOutfits": [
+        {
+          "dayIndex": 0,
+          "items": {
+            "lensId": "949facb9-8441-45f4-9e4e-f25ac70cc5fc",
+            "lipstickId": "91e12247-75d9-4245-8aaf-11c880323032",
+            "blushId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+            "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+          },
+          "lockedIds": [
+            "949facb9-8441-45f4-9e4e-f25ac70cc5fc"
+          ],
+          "adjusted": true
+        },
+        {
+          "dayIndex": 1,
+          "items": {
+            "lensId": "949facb9-8441-45f4-9e4e-f25ac70cc5fc",
+            "lipstickId": "91e12247-75d9-4245-8aaf-11c880323032",
+            "blushId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+            "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+          },
+          "lockedIds": [
+            "949facb9-8441-45f4-9e4e-f25ac70cc5fc"
+          ],
+          "adjusted": true
+        },
+        {
+          "dayIndex": 2,
+          "items": {
+            "lensId": "949facb9-8441-45f4-9e4e-f25ac70cc5fc",
+            "lipstickId": "91e12247-75d9-4245-8aaf-11c880323032",
+            "blushId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+            "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+          },
+          "lockedIds": [
+            "949facb9-8441-45f4-9e4e-f25ac70cc5fc"
+          ],
+          "adjusted": true
+        },
+        {
+          "dayIndex": 3,
+          "items": {
+            "lensId": "949facb9-8441-45f4-9e4e-f25ac70cc5fc",
+            "lipstickId": "91e12247-75d9-4245-8aaf-11c880323032",
+            "blushId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+            "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+          },
+          "lockedIds": [
+            "949facb9-8441-45f4-9e4e-f25ac70cc5fc"
+          ],
+          "adjusted": true
+        }
+      ],
+      "createdAt": "2026-06-16T09:00:44.910Z",
+      "updatedAt": "2026-06-16T09:00:44.915Z",
+      "confirmedAt": "2026-06-16T09:00:44.915Z",
+      "checklist": {
+        "totalItems": [
+          {
+            "id": "2cf70039-be58-41b6-a71f-ccf9d0639715",
+            "name": "QA日抛低量旅行美瞳44882",
+            "category": "item",
+            "essential": true,
+            "itemId": "949facb9-8441-45f4-9e4e-f25ac70cc5fc",
+            "itemCategory": "lens",
+            "quantity": 4,
+            "isLowStock": true,
+            "isExpiring": false
+          },
+          {
+            "id": "c2cfc282-1eeb-416f-bdce-d2ed70568538",
+            "name": "豆沙色",
+            "category": "item",
+            "essential": true,
+            "itemId": "91e12247-75d9-4245-8aaf-11c880323032",
+            "itemCategory": "lipstick",
+            "quantity": 1,
+            "isLowStock": false,
+            "isExpiring": false
+          },
+          {
+            "id": "cebdb58d-bbb2-45b1-9597-2c92db478b4c",
+            "name": "蜜桃色",
+            "category": "item",
+            "essential": true,
+            "itemId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+            "itemCategory": "blush",
+            "quantity": 1,
+            "isLowStock": false,
+            "isExpiring": false
+          },
+          {
+            "id": "cfe20c89-1aba-4c3b-8bef-705617cd1184",
+            "name": "休闲卫衣+牛仔裤",
+            "category": "item",
+            "essential": true,
+            "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+            "itemCategory": "outfit",
+            "quantity": 1,
+            "isLowStock": false,
+            "isExpiring": false
+          },
+          {
+            "id": "d2e35a7e-dcc8-4abf-9a26-5d7c185965ff",
+            "name": "美瞳护理液",
+            "category": "care",
+            "essential": true,
+            "note": "非日抛必备"
+          },
+          {
+            "id": "bd2cafe0-523f-4d3e-aae9-5452e1f47156",
+            "name": "隐形眼镜盒",
+            "category": "care",
+            "essential": true,
+            "quantity": 2,
+            "note": "建议额外备用1个"
+          },
+          {
+            "id": "0e44bc98-f3a8-43b8-b271-da036213fcee",
+            "name": "美瞳日抛备用",
+            "category": "care",
+            "essential": false,
+            "quantity": 2,
+            "note": "建议额外备2片"
+          },
+          {
+            "id": "2adf8a28-b673-47af-a4fc-d9ed94f0e5f0",
+            "name": "润眼液",
+            "category": "care",
+            "essential": false
+          },
+          {
+            "id": "fb5378aa-9b49-4dd8-abbe-ef69511d10a9",
+            "name": "备用框架眼镜",
+            "category": "accessory",
+            "essential": false
+          },
+          {
+            "id": "80a1d3e9-71e1-4bcd-a202-33283d5ac282",
+            "name": "粉饼/气垫",
+            "category": "makeup",
+            "essential": false,
+            "note": "控油补妆必备"
+          },
+          {
+            "id": "5cdac80c-cd71-480e-9e22-1fb0d20687d6",
+            "name": "镜子",
+            "category": "makeup",
+            "essential": false
+          },
+          {
+            "id": "04fdcc28-066e-4593-b167-37c94185d461",
+            "name": "吸油纸",
+            "category": "makeup",
+            "essential": false,
+            "quantity": 2
+          },
+          {
+            "id": "b0a4898d-2726-4c86-9bae-a61c6a790043",
+            "name": "口红补妆",
+            "category": "makeup",
+            "essential": false,
+            "note": "可选常用色号替换装"
+          },
+          {
+            "id": "02c5ade4-8c68-4f03-b371-4e6fde73e64b",
+            "name": "卸妆湿巾",
+            "category": "care",
+            "essential": true,
+            "quantity": 2
+          },
+          {
+            "id": "0fd0443a-3507-46fc-b85e-5c03981b6485",
+            "name": "替换装",
+            "category": "care",
+            "essential": false,
+            "note": "口红/气垫等替换装"
+          }
+        ],
+        "dailyChecklists": [
+          {
+            "dayIndex": 0,
+            "items": [
+              {
+                "id": "c0c61d40-82d8-4050-a4c7-80b6c65f7e89",
+                "name": "QA日抛低量旅行美瞳44882",
+                "category": "item",
+                "essential": true,
+                "itemId": "949facb9-8441-45f4-9e4e-f25ac70cc5fc",
+                "itemCategory": "lens",
+                "quantity": 1,
+                "isLowStock": true,
+                "isExpiring": false
+              },
+              {
+                "id": "28ddb498-3926-4322-a7ab-ecf223dcb9d4",
+                "name": "豆沙色",
+                "category": "item",
+                "essential": true,
+                "itemId": "91e12247-75d9-4245-8aaf-11c880323032",
+                "itemCategory": "lipstick",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "b10bf2ef-0611-4b7e-8b74-5ae94a95eec8",
+                "name": "蜜桃色",
+                "category": "item",
+                "essential": true,
+                "itemId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+                "itemCategory": "blush",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "c4614503-c115-4272-ad69-38e4c6f131ce",
+                "name": "休闲卫衣+牛仔裤",
+                "category": "item",
+                "essential": true,
+                "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+                "itemCategory": "outfit",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              }
+            ]
+          },
+          {
+            "dayIndex": 1,
+            "items": [
+              {
+                "id": "0c5862c4-09a4-4f41-a5bd-1258d17c1292",
+                "name": "QA日抛低量旅行美瞳44882",
+                "category": "item",
+                "essential": true,
+                "itemId": "949facb9-8441-45f4-9e4e-f25ac70cc5fc",
+                "itemCategory": "lens",
+                "quantity": 1,
+                "isLowStock": true,
+                "isExpiring": false
+              },
+              {
+                "id": "0aab8775-b19d-4f48-952c-a5e6cc1815b9",
+                "name": "豆沙色",
+                "category": "item",
+                "essential": true,
+                "itemId": "91e12247-75d9-4245-8aaf-11c880323032",
+                "itemCategory": "lipstick",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "c7d5fb84-5622-4a41-b6c6-cb53a9d9f94e",
+                "name": "蜜桃色",
+                "category": "item",
+                "essential": true,
+                "itemId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+                "itemCategory": "blush",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "8d1ba8ab-5bc1-4600-b1d8-710a67a295aa",
+                "name": "休闲卫衣+牛仔裤",
+                "category": "item",
+                "essential": true,
+                "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+                "itemCategory": "outfit",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              }
+            ]
+          },
+          {
+            "dayIndex": 2,
+            "items": [
+              {
+                "id": "8c7d0c32-89a3-4eca-ac7f-5f2c5e30cde4",
+                "name": "QA日抛低量旅行美瞳44882",
+                "category": "item",
+                "essential": true,
+                "itemId": "949facb9-8441-45f4-9e4e-f25ac70cc5fc",
+                "itemCategory": "lens",
+                "quantity": 1,
+                "isLowStock": true,
+                "isExpiring": false
+              },
+              {
+                "id": "bdb65fa3-4542-4371-8469-ab17ffcf42f6",
+                "name": "豆沙色",
+                "category": "item",
+                "essential": true,
+                "itemId": "91e12247-75d9-4245-8aaf-11c880323032",
+                "itemCategory": "lipstick",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "f44e4c95-c199-4fb1-8f92-27c1b2add374",
+                "name": "蜜桃色",
+                "category": "item",
+                "essential": true,
+                "itemId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+                "itemCategory": "blush",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "d0564362-102f-4efd-943e-e14c95063fd1",
+                "name": "休闲卫衣+牛仔裤",
+                "category": "item",
+                "essential": true,
+                "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+                "itemCategory": "outfit",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              }
+            ]
+          },
+          {
+            "dayIndex": 3,
+            "items": [
+              {
+                "id": "a8617795-d551-439e-ae4e-65d009a1b494",
+                "name": "QA日抛低量旅行美瞳44882",
+                "category": "item",
+                "essential": true,
+                "itemId": "949facb9-8441-45f4-9e4e-f25ac70cc5fc",
+                "itemCategory": "lens",
+                "quantity": 1,
+                "isLowStock": true,
+                "isExpiring": false
+              },
+              {
+                "id": "8eb64d6b-7449-477b-a788-bb521bdcb09a",
+                "name": "豆沙色",
+                "category": "item",
+                "essential": true,
+                "itemId": "91e12247-75d9-4245-8aaf-11c880323032",
+                "itemCategory": "lipstick",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "e9fee537-e6b2-49a9-9a70-aa1eff20f1fb",
+                "name": "蜜桃色",
+                "category": "item",
+                "essential": true,
+                "itemId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+                "itemCategory": "blush",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              },
+              {
+                "id": "fb469ea2-77a1-4d2e-b6b7-8b385ecd2ceb",
+                "name": "休闲卫衣+牛仔裤",
+                "category": "item",
+                "essential": true,
+                "itemId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c",
+                "itemCategory": "outfit",
+                "quantity": 1,
+                "isLowStock": false,
+                "isExpiring": false
+              }
+            ]
+          }
+        ],
+        "warnings": [
+          "库存预警: QA日抛低量旅行美瞳44882 数量可能不足，建议备货 4 件"
+        ]
+      }
     }
   ]
 }
