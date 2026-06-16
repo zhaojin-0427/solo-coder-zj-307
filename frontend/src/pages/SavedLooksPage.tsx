@@ -48,12 +48,12 @@ export default function SavedLooksPage() {
     try {
       const templates = await checklistApi.getTemplates();
       const items = templates.map(t => ({ checklistItemId: t.id, checked: !t.essential }));
-      await checklistApi.create({
+      const checklist = await checklistApi.create({
         lookId: look.id,
         scene: look.scene,
         items,
       });
-      navigate('/checklist');
+      navigate('/checklist', { state: { newChecklistId: checklist.id } });
     } catch (e) {
       alert('创建清单失败');
     }

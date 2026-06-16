@@ -120,3 +120,10 @@ export const CategoryLabels: Record<ItemCategory, string> = {
   blush: '腮红',
   outfit: '服饰',
 };
+
+export interface AllItems {
+  lenses: LensItem[];
+  lipsticks: LipstickItem[];
+  blushes: BlushItem[];
+  outfits: OutfitItem[];
+}

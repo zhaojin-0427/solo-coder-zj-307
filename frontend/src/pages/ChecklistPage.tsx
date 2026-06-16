@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { checklistApi, savedLooksApi, itemsApi } from '../api';
 import type { GeneratedChecklist, ChecklistItem, SceneType, AllItems, SavedLook } from '../types';
 import { SceneLabels } from '../types';
@@ -11,6 +12,8 @@ const CAT_LABEL: Record<string, { name: string; color: string }> = {
 };
 
 export default function ChecklistPage() {
+  const location = useLocation();
+  const locationState = location.state as { newChecklistId?: string } | null;
   const [checklists, setChecklists] = useState<GeneratedChecklist[]>([]);
   const [templates, setTemplates] = useState<ChecklistItem[]>([]);
   const [looks, setLooks] = useState<SavedLook[]>([]);
@@ -20,8 +23,10 @@ export default function ChecklistPage() {
   const [newScene, setNewScene] = useState<SceneType>('commute');
   const [newLookId, setNewLookId] = useState<string>('');
   const [loading, setLoading] = useState(false);
+  const hasInitialLoaded = useRef(false);
+  const lastLocationKey = useRef<string>('');
 
-  const load = async () => {
+  const load = async (highlightId?: string) => {
     setLoading(true);
     try {
       const [c, t, l, i] = await Promise.all([
@@ -34,13 +39,40 @@ export default function ChecklistPage() {
       setTemplates(t);
       setLooks(l);
       setItems(i);
-      if (!selectedId && c.length > 0) setSelectedId(c[0].id);
+
+      const targetId = highlightId || locationState?.newChecklistId;
+      if (targetId && c.some(cl => cl.id === targetId)) {
+        setSelectedId(targetId);
+      } else if (selectedId && c.some(cl => cl.id === selectedId)) {
+        // 保持当前选中
+      } else if (c.length > 0) {
+        setSelectedId(c[0].id);
+      } else {
+        setSelectedId(null);
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    load();
+    hasInitialLoaded.current = true;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!hasInitialLoaded.current) return;
+    const newId = locationState?.newChecklistId;
+    if (newId && newId !== selectedId) {
+      if (checklists.some(c => c.id === newId)) {
+        setSelectedId(newId);
+      } else {
+        load(newId);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.key]);
 
   const selected = checklists.find(c => c.id === selectedId) || null;
   const selectedLook = selected?.lookId ? looks.find(l => l.id === selected.lookId) : undefined;
@@ -81,9 +113,8 @@ export default function ChecklistPage() {
     const payload: any = { scene: newScene, items };
     if (newLookId) payload.lookId = newLookId;
     const created = await checklistApi.create(payload);
-    setSelectedId(created.id);
     setShowCreate(false);
-    load();
+    load(created.id);
   };
 
   const findItem = (id?: string, category: 'lens' | 'lipstick' | 'blush' | 'outfit' = 'lens') => {

@@ -72,7 +72,7 @@ export default function SuggestPage() {
         style: s.style,
       });
       await checklistApi.update(checklist.id, { lookId: saved.id });
-      navigate('/checklist');
+      navigate('/checklist', { state: { newChecklistId: checklist.id } });
     } catch (e) {
       alert('创建清单失败');
     }

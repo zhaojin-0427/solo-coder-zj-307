@@ -206,6 +206,418 @@
   ],
   "suggestions": [
     {
+      "id": "379cd19f-944c-4c59-8488-6ce7c4b7607e",
+      "name": "通勤方案1",
+      "scene": "commute",
+      "items": {
+        "lensId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+        "lipstickId": "91e12247-75d9-4245-8aaf-11c880323032",
+        "blushId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+        "outfitId": "6b051859-86b3-4ed6-89cb-8e4142a4145c"
+      },
+      "description": "日常通勤look，简洁不失精致",
+      "style": [
+        "自然",
+        "通勤",
+        "甜美",
+        "职业"
+      ],
+      "score": 0.5,
+      "createdAt": "2026-06-16T00:44:13.232Z"
+    },
+    {
+      "id": "751d3321-6de9-4306-95b5-22a9859cdafa",
+      "name": "通勤方案2",
+      "scene": "commute",
+      "items": {
+        "lensId": "1a62e730-6922-4adf-8db2-5ff41e17f1ae",
+        "lipstickId": "2827f4c8-1f29-4cea-b60d-67ce17beb7be",
+        "blushId": "9414dc39-d3e8-40f8-82bd-e25029c75011",
+        "outfitId": "6b051859-86b3-4ed6-89cb-8e4142a4145c"
+      },
+      "description": "元气通勤，让工作好心情",
+      "style": [
+        "甜美",
+        "约会",
+        "通勤",
+        "职业"
+      ],
+      "score": 0.13,
+      "createdAt": "2026-06-16T00:44:13.232Z"
+    },
+    {
+      "id": "76c837be-333e-47fc-a41a-5df7da1e8a47",
+      "name": "通勤方案3",
+      "scene": "commute",
+      "items": {
+        "lensId": "0db71af3-8265-4621-9176-41cb37d309e9",
+        "lipstickId": "91e12247-75d9-4245-8aaf-11c880323032",
+        "blushId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+        "outfitId": "f7361d3f-f79b-4a46-9a38-b545b42ae3fa"
+      },
+      "description": "低调优雅的办公室风格",
+      "style": [
+        "混血",
+        "拍照",
+        "酷",
+        "自然",
+        "通勤"
+      ],
+      "score": 0.13,
+      "createdAt": "2026-06-16T00:44:13.232Z"
+    },
+    {
+      "id": "628ebe0c-de3b-4f64-b831-9c334502049c",
+      "name": "通勤方案4",
+      "scene": "commute",
+      "items": {
+        "lensId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+        "lipstickId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+        "blushId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+        "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+      },
+      "description": "日常通勤look，简洁不失精致",
+      "style": [
+        "自然",
+        "通勤",
+        "复古",
+        "拍照",
+        "酷"
+      ],
+      "score": 0.38,
+      "createdAt": "2026-06-16T00:44:13.232Z"
+    },
+    {
+      "id": "8bdc3bd1-dab1-4c41-b3a4-2c2475499d09",
+      "name": "通勤方案5",
+      "scene": "commute",
+      "items": {
+        "lensId": "1a62e730-6922-4adf-8db2-5ff41e17f1ae",
+        "lipstickId": "2827f4c8-1f29-4cea-b60d-67ce17beb7be",
+        "blushId": "9414dc39-d3e8-40f8-82bd-e25029c75011",
+        "outfitId": "6b051859-86b3-4ed6-89cb-8e4142a4145c"
+      },
+      "description": "元气通勤，让工作好心情",
+      "style": [
+        "甜美",
+        "约会",
+        "通勤",
+        "职业"
+      ],
+      "score": 0.13,
+      "createdAt": "2026-06-16T00:44:13.232Z"
+    },
+    {
+      "id": "5a33d662-3284-4121-a574-de5d84b24a58",
+      "name": "通勤方案1",
+      "scene": "commute",
+      "items": {
+        "lensId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+        "lipstickId": "91e12247-75d9-4245-8aaf-11c880323032",
+        "blushId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+        "outfitId": "6b051859-86b3-4ed6-89cb-8e4142a4145c"
+      },
+      "description": "日常通勤look，简洁不失精致",
+      "style": [
+        "自然",
+        "通勤",
+        "甜美",
+        "职业"
+      ],
+      "score": 0.5,
+      "createdAt": "2026-06-16T00:44:13.228Z"
+    },
+    {
+      "id": "9c08ee1a-76c7-4970-b7b8-ca90f49b4c89",
+      "name": "通勤方案2",
+      "scene": "commute",
+      "items": {
+        "lensId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+        "lipstickId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+        "blushId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+        "outfitId": "7822cd57-bfab-4512-aac2-040783963f06"
+      },
+      "description": "元气通勤，让工作好心情",
+      "style": [
+        "自然",
+        "通勤",
+        "复古",
+        "拍照",
+        "酷"
+      ],
+      "score": 0.13,
+      "createdAt": "2026-06-16T00:44:13.228Z"
+    },
+    {
+      "id": "bb8738f6-9851-4f2e-9605-ec91d8d0459c",
+      "name": "通勤方案3",
+      "scene": "commute",
+      "items": {
+        "lensId": "1a62e730-6922-4adf-8db2-5ff41e17f1ae",
+        "lipstickId": "2827f4c8-1f29-4cea-b60d-67ce17beb7be",
+        "blushId": "9414dc39-d3e8-40f8-82bd-e25029c75011",
+        "outfitId": "6b051859-86b3-4ed6-89cb-8e4142a4145c"
+      },
+      "description": "低调优雅的办公室风格",
+      "style": [
+        "甜美",
+        "约会",
+        "通勤",
+        "职业"
+      ],
+      "score": 0.13,
+      "createdAt": "2026-06-16T00:44:13.228Z"
+    },
+    {
+      "id": "3a6ce3ab-864b-4d72-8c40-68276dee0b35",
+      "name": "通勤方案4",
+      "scene": "commute",
+      "items": {
+        "lensId": "0db71af3-8265-4621-9176-41cb37d309e9",
+        "lipstickId": "91e12247-75d9-4245-8aaf-11c880323032",
+        "blushId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+        "outfitId": "f7361d3f-f79b-4a46-9a38-b545b42ae3fa"
+      },
+      "description": "日常通勤look，简洁不失精致",
+      "style": [
+        "混血",
+        "拍照",
+        "酷",
+        "自然",
+        "通勤"
+      ],
+      "score": 0.25,
+      "createdAt": "2026-06-16T00:44:13.228Z"
+    },
+    {
+      "id": "985d9bc2-ee47-4db9-a3de-90c093fc8a70",
+      "name": "通勤方案5",
+      "scene": "commute",
+      "items": {
+        "lensId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+        "lipstickId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+        "blushId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+        "outfitId": "7822cd57-bfab-4512-aac2-040783963f06"
+      },
+      "description": "元气通勤，让工作好心情",
+      "style": [
+        "自然",
+        "通勤",
+        "复古",
+        "拍照",
+        "酷"
+      ],
+      "score": 0.13,
+      "createdAt": "2026-06-16T00:44:13.228Z"
+    },
+    {
+      "id": "a5171410-f354-4e6a-96aa-338311535ee2",
+      "name": "通勤方案1",
+      "scene": "commute",
+      "items": {
+        "lensId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+        "lipstickId": "91e12247-75d9-4245-8aaf-11c880323032",
+        "blushId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+        "outfitId": "6b051859-86b3-4ed6-89cb-8e4142a4145c"
+      },
+      "description": "日常通勤look，简洁不失精致",
+      "style": [
+        "自然",
+        "通勤",
+        "甜美",
+        "职业"
+      ],
+      "score": 0.5,
+      "createdAt": "2026-06-15T15:46:48.861Z"
+    },
+    {
+      "id": "fb28a41b-1d71-4ee8-b8a4-4b968a0cc3ad",
+      "name": "通勤方案2",
+      "scene": "commute",
+      "items": {
+        "lensId": "0db71af3-8265-4621-9176-41cb37d309e9",
+        "lipstickId": "91e12247-75d9-4245-8aaf-11c880323032",
+        "blushId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+        "outfitId": "f7361d3f-f79b-4a46-9a38-b545b42ae3fa"
+      },
+      "description": "元气通勤，让工作好心情",
+      "style": [
+        "混血",
+        "拍照",
+        "酷",
+        "自然",
+        "通勤"
+      ],
+      "score": 0.13,
+      "createdAt": "2026-06-15T15:46:48.861Z"
+    },
+    {
+      "id": "faf5f510-05fa-46b1-a297-36eb1c8f1fea",
+      "name": "通勤方案3",
+      "scene": "commute",
+      "items": {
+        "lensId": "1a62e730-6922-4adf-8db2-5ff41e17f1ae",
+        "lipstickId": "2827f4c8-1f29-4cea-b60d-67ce17beb7be",
+        "blushId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+        "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+      },
+      "description": "低调优雅的办公室风格",
+      "style": [
+        "甜美",
+        "约会",
+        "自然",
+        "通勤",
+        "旅行"
+      ],
+      "score": 0.25,
+      "createdAt": "2026-06-15T15:46:48.861Z"
+    },
+    {
+      "id": "de5f2c49-188b-4e6d-aaee-e6d295b72271",
+      "name": "通勤方案4",
+      "scene": "commute",
+      "items": {
+        "lensId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+        "lipstickId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+        "blushId": "9414dc39-d3e8-40f8-82bd-e25029c75011",
+        "outfitId": "7822cd57-bfab-4512-aac2-040783963f06"
+      },
+      "description": "日常通勤look，简洁不失精致",
+      "style": [
+        "自然",
+        "通勤",
+        "复古",
+        "拍照",
+        "酷"
+      ],
+      "score": 0.13,
+      "createdAt": "2026-06-15T15:46:48.861Z"
+    },
+    {
+      "id": "8b84bfcd-cff9-41da-8764-f0df2b026998",
+      "name": "通勤方案5",
+      "scene": "commute",
+      "items": {
+        "lensId": "0db71af3-8265-4621-9176-41cb37d309e9",
+        "lipstickId": "91e12247-75d9-4245-8aaf-11c880323032",
+        "blushId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+        "outfitId": "f7361d3f-f79b-4a46-9a38-b545b42ae3fa"
+      },
+      "description": "元气通勤，让工作好心情",
+      "style": [
+        "混血",
+        "拍照",
+        "酷",
+        "自然",
+        "通勤"
+      ],
+      "score": 0.13,
+      "createdAt": "2026-06-15T15:46:48.861Z"
+    },
+    {
+      "id": "5624171b-e15b-490f-960a-0e1d626bbeab",
+      "name": "通勤方案1",
+      "scene": "commute",
+      "items": {
+        "lensId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+        "lipstickId": "91e12247-75d9-4245-8aaf-11c880323032",
+        "blushId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+        "outfitId": "6b051859-86b3-4ed6-89cb-8e4142a4145c"
+      },
+      "description": "日常通勤look，简洁不失精致",
+      "style": [
+        "自然",
+        "通勤",
+        "甜美",
+        "职业"
+      ],
+      "score": 0.5,
+      "createdAt": "2026-06-15T15:46:48.857Z"
+    },
+    {
+      "id": "2de2dc03-233b-42fd-b956-53762c782efa",
+      "name": "通勤方案2",
+      "scene": "commute",
+      "items": {
+        "lensId": "0db71af3-8265-4621-9176-41cb37d309e9",
+        "lipstickId": "2827f4c8-1f29-4cea-b60d-67ce17beb7be",
+        "blushId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+        "outfitId": "f7361d3f-f79b-4a46-9a38-b545b42ae3fa"
+      },
+      "description": "元气通勤，让工作好心情",
+      "style": [
+        "混血",
+        "拍照",
+        "酷",
+        "甜美",
+        "约会"
+      ],
+      "score": 0,
+      "createdAt": "2026-06-15T15:46:48.857Z"
+    },
+    {
+      "id": "47907137-7542-4277-95f8-64a96a5f303e",
+      "name": "通勤方案3",
+      "scene": "commute",
+      "items": {
+        "lensId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+        "lipstickId": "91e12247-75d9-4245-8aaf-11c880323032",
+        "blushId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+        "outfitId": "9a7fbba8-d6f9-4a47-9dcc-d8b5eb33867c"
+      },
+      "description": "低调优雅的办公室风格",
+      "style": [
+        "自然",
+        "通勤",
+        "甜美",
+        "旅行"
+      ],
+      "score": 0.5,
+      "createdAt": "2026-06-15T15:46:48.857Z"
+    },
+    {
+      "id": "0f32e928-81e9-476d-a852-250c85861135",
+      "name": "通勤方案4",
+      "scene": "commute",
+      "items": {
+        "lensId": "1a62e730-6922-4adf-8db2-5ff41e17f1ae",
+        "lipstickId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+        "blushId": "9414dc39-d3e8-40f8-82bd-e25029c75011",
+        "outfitId": "7822cd57-bfab-4512-aac2-040783963f06"
+      },
+      "description": "日常通勤look，简洁不失精致",
+      "style": [
+        "甜美",
+        "约会",
+        "复古",
+        "拍照",
+        "酷"
+      ],
+      "score": 0,
+      "createdAt": "2026-06-15T15:46:48.857Z"
+    },
+    {
+      "id": "bcea9ea6-56c6-4e54-9dcf-9cef2840b0cd",
+      "name": "通勤方案5",
+      "scene": "commute",
+      "items": {
+        "lensId": "0db71af3-8265-4621-9176-41cb37d309e9",
+        "lipstickId": "2827f4c8-1f29-4cea-b60d-67ce17beb7be",
+        "blushId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+        "outfitId": "f7361d3f-f79b-4a46-9a38-b545b42ae3fa"
+      },
+      "description": "元气通勤，让工作好心情",
+      "style": [
+        "混血",
+        "拍照",
+        "酷",
+        "甜美",
+        "约会"
+      ],
+      "score": 0,
+      "createdAt": "2026-06-15T15:46:48.857Z"
+    },
+    {
       "id": "65e5f138-ea1d-426f-9c11-af733ecf8dd1",
       "name": "通勤方案1",
       "scene": "commute",
@@ -971,6 +1383,46 @@
       ],
       "savedAt": "2026-06-15T15:39:36.025Z",
       "useCount": 0
+    },
+    {
+      "id": "a92222ac-8c3f-425a-bfc8-7aba1949e849",
+      "name": "通勤方案1",
+      "scene": "commute",
+      "items": {
+        "lensId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+        "lipstickId": "91e12247-75d9-4245-8aaf-11c880323032",
+        "blushId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+        "outfitId": "6b051859-86b3-4ed6-89cb-8e4142a4145c"
+      },
+      "description": "日常通勤look，简洁不失精致",
+      "style": [
+        "自然",
+        "通勤",
+        "甜美",
+        "职业"
+      ],
+      "savedAt": "2026-06-15T15:47:08.628Z",
+      "useCount": 2
+    },
+    {
+      "id": "e44514eb-0b82-4dc6-85eb-d6d3508f5c8b",
+      "name": "通勤方案1",
+      "scene": "commute",
+      "items": {
+        "lensId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+        "lipstickId": "91e12247-75d9-4245-8aaf-11c880323032",
+        "blushId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+        "outfitId": "6b051859-86b3-4ed6-89cb-8e4142a4145c"
+      },
+      "description": "日常通勤look，简洁不失精致",
+      "style": [
+        "自然",
+        "通勤",
+        "甜美",
+        "职业"
+      ],
+      "savedAt": "2026-06-16T00:44:13.969Z",
+      "useCount": 0
     }
   ],
   "checklistTemplates": [
@@ -1132,6 +1584,103 @@
       ],
       "createdAt": "2026-06-15T15:39:36.022Z",
       "lookId": "c855dc73-cdd1-499b-8cfd-83f6737cc0d4"
+    },
+    {
+      "id": "5531a07b-933a-4130-9eac-921d8669221a",
+      "scene": "commute",
+      "items": [
+        {
+          "checklistItemId": "59e8c4ab-132e-4ab9-8a99-2ee236ddd0bc",
+          "checked": false
+        },
+        {
+          "checklistItemId": "26db771d-261c-451f-ab73-059aabbc46a8",
+          "checked": false
+        },
+        {
+          "checklistItemId": "77e58c69-edf2-4712-8de4-31efe63f5548",
+          "checked": true
+        },
+        {
+          "checklistItemId": "ae52696b-ab41-46e6-9efb-824e6d6187d1",
+          "checked": true
+        },
+        {
+          "checklistItemId": "49961ab1-724e-42f6-a103-7f09a62f08d9",
+          "checked": true
+        },
+        {
+          "checklistItemId": "15eb3d90-d72a-4fdc-bacd-bf22859b9481",
+          "checked": true
+        },
+        {
+          "checklistItemId": "c6d8ce2d-b473-4345-8798-bb96003bfc07",
+          "checked": true
+        },
+        {
+          "checklistItemId": "548c72f4-3215-41a4-a609-93825171dc19",
+          "checked": true
+        },
+        {
+          "checklistItemId": "88dd8ad0-f04c-4236-b077-399af888533c",
+          "checked": true
+        },
+        {
+          "checklistItemId": "0e723dcf-a6f8-47a3-8d0a-dcfebd96f15d",
+          "checked": true
+        }
+      ],
+      "createdAt": "2026-06-15T15:47:08.603Z",
+      "lookId": "a92222ac-8c3f-425a-bfc8-7aba1949e849",
+      "completedAt": "2026-06-15T15:47:39.279Z"
+    },
+    {
+      "id": "660f33c0-1fc6-4501-94b0-a595787e1615",
+      "scene": "commute",
+      "items": [
+        {
+          "checklistItemId": "59e8c4ab-132e-4ab9-8a99-2ee236ddd0bc",
+          "checked": false
+        },
+        {
+          "checklistItemId": "26db771d-261c-451f-ab73-059aabbc46a8",
+          "checked": false
+        },
+        {
+          "checklistItemId": "77e58c69-edf2-4712-8de4-31efe63f5548",
+          "checked": true
+        },
+        {
+          "checklistItemId": "ae52696b-ab41-46e6-9efb-824e6d6187d1",
+          "checked": true
+        },
+        {
+          "checklistItemId": "49961ab1-724e-42f6-a103-7f09a62f08d9",
+          "checked": true
+        },
+        {
+          "checklistItemId": "15eb3d90-d72a-4fdc-bacd-bf22859b9481",
+          "checked": true
+        },
+        {
+          "checklistItemId": "c6d8ce2d-b473-4345-8798-bb96003bfc07",
+          "checked": true
+        },
+        {
+          "checklistItemId": "548c72f4-3215-41a4-a609-93825171dc19",
+          "checked": true
+        },
+        {
+          "checklistItemId": "88dd8ad0-f04c-4236-b077-399af888533c",
+          "checked": true
+        },
+        {
+          "checklistItemId": "0e723dcf-a6f8-47a3-8d0a-dcfebd96f15d",
+          "checked": true
+        }
+      ],
+      "createdAt": "2026-06-16T00:44:13.965Z",
+      "lookId": "e44514eb-0b82-4dc6-85eb-d6d3508f5c8b"
     }
   ],
   "usageRecords": [
@@ -1152,6 +1701,42 @@
         "隐形眼镜盒"
       ],
       "usedAt": "2026-06-15T15:38:22.673Z"
+    },
+    {
+      "id": "f3c041c0-a915-42e9-bb9e-38c1667fffa8",
+      "lookId": "a92222ac-8c3f-425a-bfc8-7aba1949e849",
+      "savedLookId": "a92222ac-8c3f-425a-bfc8-7aba1949e849",
+      "scene": "commute",
+      "items": {
+        "lensId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+        "lipstickId": "91e12247-75d9-4245-8aaf-11c880323032",
+        "blushId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+        "outfitId": "6b051859-86b3-4ed6-89cb-8e4142a4145c"
+      },
+      "checklistId": "5531a07b-933a-4130-9eac-921d8669221a",
+      "missedItems": [
+        "美瞳护理液",
+        "隐形眼镜盒"
+      ],
+      "usedAt": "2026-06-15T15:47:17.495Z"
+    },
+    {
+      "id": "eac5641c-3fd1-40ec-a774-4135c0f25528",
+      "lookId": "a92222ac-8c3f-425a-bfc8-7aba1949e849",
+      "savedLookId": "a92222ac-8c3f-425a-bfc8-7aba1949e849",
+      "scene": "commute",
+      "items": {
+        "lensId": "3151840e-f88d-41ae-b754-06d5cbfc8b96",
+        "lipstickId": "91e12247-75d9-4245-8aaf-11c880323032",
+        "blushId": "43c38e73-0e8c-4d14-9a65-0833de2f4694",
+        "outfitId": "6b051859-86b3-4ed6-89cb-8e4142a4145c"
+      },
+      "checklistId": "5531a07b-933a-4130-9eac-921d8669221a",
+      "missedItems": [
+        "美瞳护理液",
+        "隐形眼镜盒"
+      ],
+      "usedAt": "2026-06-15T15:47:39.281Z"
     }
   ]
 }
