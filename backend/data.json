@@ -30,7 +30,7 @@
       ],
       "notes": "约会用",
       "createdAt": "2026-06-15T15:30:15.602Z",
-      "lastUsedAt": "2026-06-16T08:59:52.992Z"
+      "lastUsedAt": "2026-06-16T09:51:40.329Z"
     },
     {
       "id": "0db71af3-8265-4621-9176-41cb37d309e9",
@@ -115,7 +115,7 @@
         "约会"
       ],
       "createdAt": "2026-06-15T15:30:15.602Z",
-      "lastUsedAt": "2026-06-16T08:59:52.993Z"
+      "lastUsedAt": "2026-06-16T09:51:40.329Z"
     },
     {
       "id": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
@@ -178,7 +178,7 @@
         "甜美"
       ],
       "createdAt": "2026-06-15T15:30:15.602Z",
-      "lastUsedAt": "2026-06-16T08:59:52.993Z"
+      "lastUsedAt": "2026-06-16T09:51:40.330Z"
     },
     {
       "id": "6e2d884e-cd12-407c-b310-e7b35aad9927",
@@ -245,7 +245,8 @@
         "春",
         "夏"
       ],
-      "createdAt": "2026-06-15T15:30:15.602Z"
+      "createdAt": "2026-06-15T15:30:15.602Z",
+      "lastUsedAt": "2026-06-16T09:51:40.330Z"
     },
     {
       "id": "7822cd57-bfab-4512-aac2-040783963f06",
@@ -2243,6 +2244,195 @@
       ],
       "createdAt": "2026-06-16T00:59:45.460Z",
       "completedAt": "2026-06-16T00:59:53.706Z"
+    },
+    {
+      "id": "94ff23b0-6a1a-416b-94b8-a86107245006",
+      "scene": "date",
+      "items": [
+        {
+          "checklistItemId": "59e8c4ab-132e-4ab9-8a99-2ee236ddd0bc",
+          "checked": false
+        },
+        {
+          "checklistItemId": "26db771d-261c-451f-ab73-059aabbc46a8",
+          "checked": false
+        },
+        {
+          "checklistItemId": "77e58c69-edf2-4712-8de4-31efe63f5548",
+          "checked": false
+        },
+        {
+          "checklistItemId": "ae52696b-ab41-46e6-9efb-824e6d6187d1",
+          "checked": false
+        },
+        {
+          "checklistItemId": "49961ab1-724e-42f6-a103-7f09a62f08d9",
+          "checked": false
+        },
+        {
+          "checklistItemId": "15eb3d90-d72a-4fdc-bacd-bf22859b9481",
+          "checked": false
+        },
+        {
+          "checklistItemId": "c6d8ce2d-b473-4345-8798-bb96003bfc07",
+          "checked": false
+        },
+        {
+          "checklistItemId": "548c72f4-3215-41a4-a609-93825171dc19",
+          "checked": false
+        },
+        {
+          "checklistItemId": "88dd8ad0-f04c-4236-b077-399af888533c",
+          "checked": false
+        },
+        {
+          "checklistItemId": "0e723dcf-a6f8-47a3-8d0a-dcfebd96f15d",
+          "checked": false
+        }
+      ],
+      "createdAt": "2026-06-16T09:51:40.324Z",
+      "completedAt": "2026-06-16T09:51:40.327Z"
+    },
+    {
+      "id": "922d5389-3013-420d-9d6c-716375ee5b30",
+      "scene": "photo",
+      "items": [
+        {
+          "checklistItemId": "59e8c4ab-132e-4ab9-8a99-2ee236ddd0bc",
+          "checked": false
+        },
+        {
+          "checklistItemId": "26db771d-261c-451f-ab73-059aabbc46a8",
+          "checked": false
+        },
+        {
+          "checklistItemId": "77e58c69-edf2-4712-8de4-31efe63f5548",
+          "checked": false
+        },
+        {
+          "checklistItemId": "ae52696b-ab41-46e6-9efb-824e6d6187d1",
+          "checked": false
+        },
+        {
+          "checklistItemId": "49961ab1-724e-42f6-a103-7f09a62f08d9",
+          "checked": false
+        },
+        {
+          "checklistItemId": "15eb3d90-d72a-4fdc-bacd-bf22859b9481",
+          "checked": false
+        },
+        {
+          "checklistItemId": "c6d8ce2d-b473-4345-8798-bb96003bfc07",
+          "checked": false
+        },
+        {
+          "checklistItemId": "548c72f4-3215-41a4-a609-93825171dc19",
+          "checked": false
+        },
+        {
+          "checklistItemId": "88dd8ad0-f04c-4236-b077-399af888533c",
+          "checked": false
+        },
+        {
+          "checklistItemId": "0e723dcf-a6f8-47a3-8d0a-dcfebd96f15d",
+          "checked": false
+        }
+      ],
+      "createdAt": "2026-06-16T09:54:10.781Z"
+    },
+    {
+      "id": "f5c1d92f-5ace-4f47-801b-0061015f4c27",
+      "scene": "photo",
+      "items": [
+        {
+          "checklistItemId": "59e8c4ab-132e-4ab9-8a99-2ee236ddd0bc",
+          "checked": false
+        },
+        {
+          "checklistItemId": "26db771d-261c-451f-ab73-059aabbc46a8",
+          "checked": false
+        },
+        {
+          "checklistItemId": "77e58c69-edf2-4712-8de4-31efe63f5548",
+          "checked": false
+        },
+        {
+          "checklistItemId": "ae52696b-ab41-46e6-9efb-824e6d6187d1",
+          "checked": false
+        },
+        {
+          "checklistItemId": "49961ab1-724e-42f6-a103-7f09a62f08d9",
+          "checked": false
+        },
+        {
+          "checklistItemId": "15eb3d90-d72a-4fdc-bacd-bf22859b9481",
+          "checked": false
+        },
+        {
+          "checklistItemId": "c6d8ce2d-b473-4345-8798-bb96003bfc07",
+          "checked": false
+        },
+        {
+          "checklistItemId": "548c72f4-3215-41a4-a609-93825171dc19",
+          "checked": false
+        },
+        {
+          "checklistItemId": "88dd8ad0-f04c-4236-b077-399af888533c",
+          "checked": false
+        },
+        {
+          "checklistItemId": "0e723dcf-a6f8-47a3-8d0a-dcfebd96f15d",
+          "checked": false
+        }
+      ],
+      "createdAt": "2026-06-16T09:54:31.063Z"
+    },
+    {
+      "id": "c9134b0b-a84c-4338-9f30-4ea1ef6efa39",
+      "scene": "photo",
+      "items": [
+        {
+          "checklistItemId": "59e8c4ab-132e-4ab9-8a99-2ee236ddd0bc",
+          "checked": false
+        },
+        {
+          "checklistItemId": "26db771d-261c-451f-ab73-059aabbc46a8",
+          "checked": false
+        },
+        {
+          "checklistItemId": "77e58c69-edf2-4712-8de4-31efe63f5548",
+          "checked": false
+        },
+        {
+          "checklistItemId": "ae52696b-ab41-46e6-9efb-824e6d6187d1",
+          "checked": false
+        },
+        {
+          "checklistItemId": "49961ab1-724e-42f6-a103-7f09a62f08d9",
+          "checked": false
+        },
+        {
+          "checklistItemId": "15eb3d90-d72a-4fdc-bacd-bf22859b9481",
+          "checked": false
+        },
+        {
+          "checklistItemId": "c6d8ce2d-b473-4345-8798-bb96003bfc07",
+          "checked": false
+        },
+        {
+          "checklistItemId": "548c72f4-3215-41a4-a609-93825171dc19",
+          "checked": false
+        },
+        {
+          "checklistItemId": "88dd8ad0-f04c-4236-b077-399af888533c",
+          "checked": false
+        },
+        {
+          "checklistItemId": "0e723dcf-a6f8-47a3-8d0a-dcfebd96f15d",
+          "checked": false
+        }
+      ],
+      "createdAt": "2026-06-16T09:54:31.066Z"
     }
   ],
   "usageRecords": [
@@ -2511,6 +2701,30 @@
       },
       "missedItems": [],
       "usedAt": "2026-06-16T08:59:52.994Z"
+    },
+    {
+      "id": "31a97ccc-b01d-4880-9c88-6a25dd6bb691",
+      "scene": "date",
+      "items": {
+        "lensId": "1a62e730-6922-4adf-8db2-5ff41e17f1ae",
+        "lipstickId": "2827f4c8-1f29-4cea-b60d-67ce17beb7be",
+        "blushId": "9414dc39-d3e8-40f8-82bd-e25029c75011",
+        "outfitId": "f7361d3f-f79b-4a46-9a38-b545b42ae3fa"
+      },
+      "checklistId": "94ff23b0-6a1a-416b-94b8-a86107245006",
+      "missedItems": [
+        "美瞳护理液",
+        "隐形眼镜盒",
+        "备用框架眼镜",
+        "润眼液",
+        "口红补妆",
+        "粉饼/气垫",
+        "镜子",
+        "吸油纸",
+        "美瞳日抛备用",
+        "卸妆湿巾"
+      ],
+      "usedAt": "2026-06-16T09:51:40.331Z"
     }
   ],
   "reviews": [
@@ -4798,6 +5012,138 @@
           "库存预警: QA日抛低量旅行美瞳44882 数量可能不足，建议备货 4 件"
         ]
       }
+    }
+  ],
+  "makeupPlans": [
+    {
+      "id": "3848b7d3-a86f-43ed-a0ac-6cabd9efe93d",
+      "date": "2026-06-17",
+      "timeSlot": "18:30-22:30",
+      "eventName": "QA约会晚餐00312",
+      "scene": "date",
+      "location": "外滩餐厅",
+      "expectedDuration": 8,
+      "needsPhoto": true,
+      "notes": "需要拍照",
+      "items": {
+        "lensId": "1a62e730-6922-4adf-8db2-5ff41e17f1ae",
+        "lipstickId": "2827f4c8-1f29-4cea-b60d-67ce17beb7be",
+        "blushId": "9414dc39-d3e8-40f8-82bd-e25029c75011",
+        "outfitId": "f7361d3f-f79b-4a46-9a38-b545b42ae3fa"
+      },
+      "status": "completed",
+      "checklistId": "94ff23b0-6a1a-416b-94b8-a86107245006",
+      "reminders": [
+        {
+          "id": "b303dbd0-bcca-4d64-86a1-4a1b03c54c14",
+          "planId": "",
+          "type": "lens_change",
+          "message": "检查月抛美瞳「蜜糖棕月抛」是否需要更换",
+          "dismissed": false
+        },
+        {
+          "id": "60f248c1-9cf7-449c-af17-d78b413a957e",
+          "planId": "",
+          "type": "care_solution",
+          "message": "准备美瞳护理液和隐形眼镜盒",
+          "dismissed": false
+        },
+        {
+          "id": "e0a9c186-686a-409c-930f-51b90539adf8",
+          "planId": "",
+          "type": "touchup",
+          "message": "带好补妆物品（粉饼/气垫、口红）",
+          "dismissed": false
+        },
+        {
+          "id": "fb788628-a073-443a-8ef3-504a358e6a60",
+          "planId": "",
+          "type": "backup_glasses",
+          "message": "佩戴时间较长，建议携带备用框架眼镜",
+          "dismissed": false
+        }
+      ],
+      "warnings": [],
+      "createdAt": "2026-06-16T09:51:40.321Z",
+      "updatedAt": "2026-06-16T09:51:40.327Z",
+      "completedAt": "2026-06-16T09:51:40.327Z"
+    },
+    {
+      "id": "8b792fad-5848-4662-a244-a860bf97d3cf",
+      "date": "2026-06-20",
+      "timeSlot": "afternoon",
+      "eventName": "公司年会",
+      "scene": "commute",
+      "location": "国贸大厦",
+      "expectedDuration": 4,
+      "needsPhoto": true,
+      "notes": "需要正式妆容",
+      "items": {},
+      "status": "planned",
+      "reminders": [
+        {
+          "id": "e5949154-122d-46e8-b12a-251f1eeecf1f",
+          "planId": "",
+          "type": "touchup",
+          "message": "带好补妆物品（粉饼/气垫、口红）",
+          "dismissed": false
+        }
+      ],
+      "warnings": [],
+      "createdAt": "2026-06-16T09:38:42.333Z",
+      "updatedAt": "2026-06-16T09:38:42.333Z"
+    },
+    {
+      "id": "03a6b5f0-5e9e-4e49-ae5a-c1a9adbec928",
+      "date": "2026-06-18",
+      "timeSlot": "afternoon",
+      "eventName": "QA拍照日历计划",
+      "scene": "photo",
+      "location": "摄影棚",
+      "expectedDuration": 7,
+      "needsPhoto": true,
+      "notes": "API推荐保存",
+      "items": {
+        "lensId": "0db71af3-8265-4621-9176-41cb37d309e9",
+        "lipstickId": "502fdd12-c568-4e75-ae53-a5cbdd2f957c",
+        "blushId": "6e2d884e-cd12-407c-b310-e7b35aad9927",
+        "outfitId": "7822cd57-bfab-4512-aac2-040783963f06"
+      },
+      "status": "planned",
+      "checklistId": "c9134b0b-a84c-4338-9f30-4ea1ef6efa39",
+      "reminders": [
+        {
+          "id": "55fe48b1-1b3d-47a9-8f14-755d1f469e22",
+          "planId": "",
+          "type": "lens_open",
+          "message": "记得携带日抛美瞳「混血灰」，建议多备1-2片",
+          "dismissed": false
+        },
+        {
+          "id": "dbd91952-7a92-44a7-9e65-8466f9b60d0f",
+          "planId": "",
+          "type": "care_solution",
+          "message": "准备美瞳护理液和隐形眼镜盒",
+          "dismissed": false
+        },
+        {
+          "id": "751ebfbf-0327-472a-a862-74cd0159ec08",
+          "planId": "",
+          "type": "touchup",
+          "message": "带好补妆物品（粉饼/气垫、口红）",
+          "dismissed": false
+        },
+        {
+          "id": "32b37316-4e90-40a1-9822-be4c43942338",
+          "planId": "",
+          "type": "backup_glasses",
+          "message": "佩戴时间较长，建议携带备用框架眼镜",
+          "dismissed": false
+        }
+      ],
+      "warnings": [],
+      "createdAt": "2026-06-16T09:53:39.651Z",
+      "updatedAt": "2026-06-16T09:54:31.067Z"
     }
   ]
 }

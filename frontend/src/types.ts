@@ -277,6 +277,70 @@ export const TravelStatusLabels: Record<TravelStatus, string> = {
   cancelled: '已取消',
 };
 
+export type MakeupPlanStatus = 'planned' | 'reminded' | 'in_progress' | 'completed' | 'cancelled';
+export type ReminderType = 'lens_open' | 'lens_change' | 'care_solution' | 'touchup' | 'backup_glasses';
+
+export interface PlanReminder {
+  id: string;
+  planId: string;
+  type: ReminderType;
+  message: string;
+  triggeredAt?: string;
+  dismissed: boolean;
+}
+
+export interface MakeupPlan {
+  id: string;
+  date: string;
+  timeSlot: string;
+  eventName: string;
+  scene: SceneType;
+  location?: string;
+  expectedDuration?: number;
+  needsPhoto: boolean;
+  notes?: string;
+  savedLookId?: string;
+  items: OutfitCombination;
+  status: MakeupPlanStatus;
+  reminders: PlanReminder[];
+  checklistId?: string;
+  reviewId?: string;
+  warnings: string[];
+  createdAt: string;
+  updatedAt: string;
+  completedAt?: string;
+}
+
+export interface PlanStats {
+  planCompletionRate: { total: number; completed: number; rate: number };
+  upcoming7DayTodos: MakeupPlan[];
+  planSceneDistribution: { scene: SceneType; count: number; percentage: number }[];
+  topPlanItems: { itemId: string; itemName: string; category: ItemCategory; count: number }[];
+}
+
+export const MakeupPlanStatusLabels: Record<MakeupPlanStatus, string> = {
+  planned: '已计划',
+  reminded: '已提醒',
+  in_progress: '进行中',
+  completed: '已完成',
+  cancelled: '已取消',
+};
+
+export const ReminderTypeLabels: Record<ReminderType, string> = {
+  lens_open: '美瞳开封',
+  lens_change: '美瞳更换',
+  care_solution: '护理液准备',
+  touchup: '补妆物品',
+  backup_glasses: '备用眼镜',
+};
+
+export const TimeSlotLabels: Record<string, string> = {
+  morning: '上午',
+  afternoon: '下午',
+  evening: '晚间',
+  allday: '全天',
+};
+
 export interface Stats {
   topCombinations: { combination: OutfitCombination; count: number }[];
   sceneDistribution: { scene: SceneType; count: number; percentage: number }[];
@@ -290,6 +354,7 @@ export interface Stats {
   restockPriority: RiskItem[];
   longUnusedItems: RiskItem[];
   travelStats?: TravelStats;
+  planStats?: PlanStats;
 }
 
 export interface AllItems {

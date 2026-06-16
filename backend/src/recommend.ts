@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import type { SceneType, LensItem, LipstickItem, BlushItem, OutfitItem, LookSuggestion, OutfitCombination, UsageRecord, Stats, ReviewStats, RiskType, MakeupItem, DailyScene, DailyOutfit, LookReviewSummary, SavedLook } from './types';
+import type { SceneType, LensItem, LipstickItem, BlushItem, OutfitItem, LookSuggestion, OutfitCombination, UsageRecord, Stats, ReviewStats, RiskType, MakeupItem, DailyScene, DailyOutfit, LookReviewSummary, SavedLook, MakeupPlan } from './types';
 
 const EXPIRING_SOON_DAYS = 30;
 const LONG_UNUSED_DAYS = 90;
@@ -290,6 +290,12 @@ export function computeStats(records: UsageRecord[], reviewStats: ReviewStats): 
       travelMissedRank: [],
       planCompletionRate: { total: 0, completed: 0, rate: 0 },
     },
+    planStats: {
+      planCompletionRate: { total: 0, completed: 0, rate: 0 },
+      upcoming7DayTodos: [],
+      planSceneDistribution: [],
+      topPlanItems: [],
+    },
   };
 }
 
@@ -458,4 +464,141 @@ export function generateTravelOutfits(
   }
 
   return result;
+}
+
+export function generatePlanRecommendation(
+  pools: TravelItemPool,
+  scene: SceneType,
+  date: string,
+  reviewSummaries: LookReviewSummary[] = [],
+  savedLooks: SavedLook[] = [],
+  travelPlans: { startDate: string; endDate: string; dailyOutfits: DailyOutfit[]; status: string }[] = [],
+  existingPlans: MakeupPlan[] = []
+): OutfitCombination[] {
+  const lowScoreItemIds = new Set<string>();
+  for (const summary of reviewSummaries) {
+    if (summary.averageScore > 0 && summary.averageScore < 2.5) {
+      const look = savedLooks.find(l => l.id === summary.lookId);
+      if (look) {
+        if (look.items.lensId) lowScoreItemIds.add(look.items.lensId);
+        if (look.items.lipstickId) lowScoreItemIds.add(look.items.lipstickId);
+        if (look.items.blushId) lowScoreItemIds.add(look.items.blushId);
+        if (look.items.outfitId) lowScoreItemIds.add(look.items.outfitId);
+      }
+    }
+  }
+
+  const travelOccupiedIds = new Set<string>();
+  for (const tp of travelPlans) {
+    if (tp.status === 'cancelled' || tp.status === 'completed') continue;
+    if (date >= tp.startDate && date <= tp.endDate) {
+      for (const outfit of tp.dailyOutfits) {
+        if (outfit.items.lensId) travelOccupiedIds.add(outfit.items.lensId);
+        if (outfit.items.lipstickId) travelOccupiedIds.add(outfit.items.lipstickId);
+        if (outfit.items.blushId) travelOccupiedIds.add(outfit.items.blushId);
+        if (outfit.items.outfitId) travelOccupiedIds.add(outfit.items.outfitId);
+      }
+    }
+  }
+
+  const existingItemIds = new Set<string>();
+  for (const plan of existingPlans) {
+    if (plan.date === date && plan.status !== 'cancelled' && plan.status !== 'completed') {
+      if (plan.items.lensId) existingItemIds.add(plan.items.lensId);
+      if (plan.items.lipstickId) existingItemIds.add(plan.items.lipstickId);
+      if (plan.items.blushId) existingItemIds.add(plan.items.blushId);
+      if (plan.items.outfitId) existingItemIds.add(plan.items.outfitId);
+    }
+  }
+
+  function isItemAvailable<T extends MakeupItem & { remainingQuantity?: number; stockStatus?: string }>(item: T): boolean {
+    const { risks } = getItemRisks(item);
+    if (risks.includes('expired')) return false;
+    if (risks.includes('low_stock') && item.stockStatus === 'out_of_stock') return false;
+    if (item.remainingQuantity === 0) return false;
+    return true;
+  }
+
+  function filterAvailable<T extends MakeupItem & { remainingQuantity?: number; stockStatus?: string }>(items: T[]): T[] {
+    return items.filter(isItemAvailable);
+  }
+
+  function scorePlanItem<T extends { style: string[] } & MakeupItem>(item: T, scene: SceneType): number {
+    const baseScore = matchScore(item.style, scene);
+    const { scorePenalty } = getItemRisks(item);
+    let score = baseScore * (1 - scorePenalty);
+
+    if (item.isEssential) score += 0.15;
+    if (lowScoreItemIds.has(item.id)) score *= 0.5;
+    if (travelOccupiedIds.has(item.id)) score *= 0.7;
+    if (existingItemIds.has(item.id)) score *= 0.85;
+
+    return score;
+  }
+
+  function pickBestForPlan<T extends { style: string[] } & MakeupItem & { remainingQuantity?: number; stockStatus?: string }>(
+    items: T[],
+    scene: SceneType
+  ): T | undefined {
+    const available = filterAvailable(items);
+    if (available.length === 0) return undefined;
+    let best: T | undefined;
+    let bestScore = -1;
+    for (const item of available) {
+      const score = scorePlanItem(item, scene);
+      if (score > bestScore) { bestScore = score; best = item; }
+    }
+    return best;
+  }
+
+  const results: OutfitCombination[] = [];
+
+  const matchedSavedLooks = savedLooks.filter(l => l.scene === scene);
+  if (matchedSavedLooks.length > 0) {
+    matchedSavedLooks.sort((a, b) => {
+      const scoreA = a.useCount + (lowScoreItemIds.has(a.id) ? -10 : 0);
+      const scoreB = b.useCount + (lowScoreItemIds.has(b.id) ? -10 : 0);
+      return scoreB - scoreA;
+    });
+    for (const look of matchedSavedLooks.slice(0, 3)) {
+      results.push({ ...look.items });
+    }
+  }
+
+  const bestLens = pickBestForPlan(pools.lenses, scene);
+  const bestLip = pickBestForPlan(pools.lipsticks, scene);
+  const bestBlush = pickBestForPlan(pools.blushes, scene);
+  const bestOutfit = pickBestForPlan(pools.outfits, scene);
+  results.push({
+    lensId: bestLens?.id,
+    lipstickId: bestLip?.id,
+    blushId: bestBlush?.id,
+    outfitId: bestOutfit?.id,
+  });
+
+  const shuffledLens = shuffle(filterAvailable(pools.lenses));
+  const shuffledLip = shuffle(filterAvailable(pools.lipsticks));
+  const shuffledBlush = shuffle(filterAvailable(pools.blushes));
+  const shuffledOutfit = shuffle(filterAvailable(pools.outfits));
+
+  for (let i = 0; i < 2; i++) {
+    results.push({
+      lensId: shuffledLens[i % shuffledLens.length]?.id,
+      lipstickId: shuffledLip[i % shuffledLip.length]?.id,
+      blushId: shuffledBlush[i % shuffledBlush.length]?.id,
+      outfitId: shuffledOutfit[i % shuffledOutfit.length]?.id,
+    });
+  }
+
+  const uniqueResults: OutfitCombination[] = [];
+  const seen = new Set<string>();
+  for (const combo of results) {
+    const key = JSON.stringify(combo);
+    if (!seen.has(key)) {
+      seen.add(key);
+      uniqueResults.push(combo);
+    }
+  }
+
+  return uniqueResults.slice(0, 5);
 }

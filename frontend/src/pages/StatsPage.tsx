@@ -1,8 +1,8 @@
 import { Component, useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { statsApi, itemsApi, savedLooksApi, AllItemsWithRisk } from '../api';
-import type { Stats, SavedLook, SceneType, RiskType, ItemCategory } from '../types';
-import { SceneLabels, CategoryLabels } from '../types';
+import type { Stats, SavedLook, SceneType, RiskType, ItemCategory, MakeupPlanStatus } from '../types';
+import { SceneLabels, CategoryLabels, MakeupPlanStatusLabels } from '../types';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, LineChart, Line } from 'recharts';
 
 const SCENE_COLORS: Record<SceneType, string> = {
@@ -20,6 +20,14 @@ const SCENE_EMOJI: Record<SceneType, string> = {
 };
 
 const COLORS = ['#db2777', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#06b6d4'];
+
+const CATEGORY_EMOJI: Record<ItemCategory, string> = {
+  lens: '👁️', lipstick: '💄', blush: '🌸', outfit: '👗',
+};
+
+const STATUS_COLORS_BACKEND: Record<string, string> = {
+  planned: '#3b82f6', reminded: '#f59e0b', in_progress: '#8b5cf6', completed: '#10b981', cancelled: '#9ca3af',
+};
 
 class PageErrorBoundary extends Component<{ children: React.ReactNode }, { hasError: boolean; error?: string }> {
   state = { hasError: false, error: '' };
@@ -92,10 +100,6 @@ export default function StatsPage() {
     expiring_soon: { label: '即将过期', color: '#d97706', emoji: '⏰' },
     low_stock: { label: '库存不足', color: '#ea580c', emoji: '📦' },
     long_unused: { label: '长期闲置', color: '#6b7280', emoji: '💤' },
-  };
-
-  const CATEGORY_EMOJI: Record<ItemCategory, string> = {
-    lens: '👁️', lipstick: '💄', blush: '🌸', outfit: '👗',
   };
 
   const inventoryStats = stats?.inventoryStats;
@@ -845,6 +849,137 @@ export default function StatsPage() {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          )}
+
+          {stats?.planStats && (
+            <div style={{ marginTop: 28 }}>
+              <h2 style={{ fontSize: 18, fontWeight: 700, color: '#111827', marginBottom: 16 }}>📅 妆容计划统计</h2>
+
+              <div className="stat-grid" style={{ marginBottom: 20 }}>
+                <div className="stat-card" style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 36, fontWeight: 800, color: '#3b82f6' }}>
+                    {stats.planStats.planCompletionRate?.total || 0}
+                  </div>
+                  <div style={{ fontSize: 12, color: '#6b7280' }}>计划总数</div>
+                </div>
+                <div className="stat-card" style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 36, fontWeight: 800, color: '#10b981' }}>
+                    {stats.planStats.planCompletionRate?.completed || 0}
+                  </div>
+                  <div style={{ fontSize: 12, color: '#6b7280' }}>已完成</div>
+                </div>
+                <div className="stat-card" style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 36, fontWeight: 800, color: '#db2777' }}>
+                    {(stats.planStats.planCompletionRate?.rate || 0).toFixed(0)}%
+                  </div>
+                  <div style={{ fontSize: 12, color: '#6b7280' }}>计划完成率</div>
+                </div>
+                <div className="stat-card" style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 36, fontWeight: 800, color: '#f59e0b' }}>
+                    {stats.planStats.upcoming7DayTodos?.length || 0}
+                  </div>
+                  <div style={{ fontSize: 12, color: '#6b7280' }}>未来7天待办</div>
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 }}>
+                <div className="chart-card">
+                  <h3>📋 未来7天待办计划</h3>
+                  {stats.planStats.upcoming7DayTodos && stats.planStats.upcoming7DayTodos.length > 0 ? (
+                    <div>
+                      {stats.planStats.upcoming7DayTodos.map((plan, i) => (
+                        <div key={`todo-${i}-${plan.id}`} style={{
+                          padding: '10px 12px',
+                          borderBottom: i < stats.planStats!.upcoming7DayTodos.length - 1 ? '1px solid #f3f4f6' : 'none',
+                          borderRadius: 8,
+                        }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                            <div style={{ fontWeight: 600, fontSize: 13 }}>
+                              {SCENE_EMOJI[plan.scene as SceneType]} {plan.eventName}
+                            </div>
+                            <span style={{
+                              fontSize: 11,
+                              padding: '2px 8px',
+                              borderRadius: 10,
+                              background: STATUS_COLORS_BACKEND[plan.status] || '#f3f4f6',
+                              color: 'white',
+                              fontWeight: 600,
+                            }}>
+                              {MakeupPlanStatusLabels[plan.status]}
+                            </span>
+                          </div>
+                          <div style={{ fontSize: 11, color: '#9ca3af' }}>
+                            📅 {plan.date} · {plan.timeSlot} · {SceneLabels[plan.scene]}
+                            {plan.location ? ` · 📍${plan.location}` : ''}
+                          </div>
+                          {plan.warnings.length > 0 && (
+                            <div style={{ fontSize: 11, color: '#d97706', marginTop: 2 }}>
+                              ⚠️ {plan.warnings.slice(0, 2).join('；')}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: 'center', color: '#9ca3af', padding: 40 }}>
+                      <div style={{ fontSize: 32, marginBottom: 8 }}>📅</div>
+                      <div>近7天无待办计划</div>
+                      <div style={{ fontSize: 12, marginTop: 4 }}>去日历页面创建妆容计划吧</div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="chart-card">
+                  <h3>📊 计划场景分布</h3>
+                  {stats.planStats.planSceneDistribution && stats.planStats.planSceneDistribution.length > 0 ? (
+                    <div>
+                      {stats.planStats.planSceneDistribution.filter(s => s.count > 0).map((s, i) => (
+                        <div className="bar-row" key={`plan-scene-${i}`}>
+                          <div className="name">
+                            {SCENE_EMOJI[s.scene as SceneType]} {SceneLabels[s.scene as SceneType]}
+                          </div>
+                          <div className="bar">
+                            <div className="fill" style={{
+                              width: `${Math.max(s.percentage || 10, 10)}%`,
+                              background: `linear-gradient(90deg, ${SCENE_COLORS[s.scene as SceneType] || '#db2777'}, #8b5cf6)`
+                            }}></div>
+                          </div>
+                          <div className="count">{s.count} 次 ({s.percentage || 0}%)</div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: 'center', color: '#9ca3af', padding: 40 }}>
+                      <div style={{ fontSize: 32, marginBottom: 8 }}>📊</div>
+                      <div>暂无计划数据</div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="chart-card">
+                <h3>🏆 高频计划单品排行</h3>
+                {stats.planStats.topPlanItems && stats.planStats.topPlanItems.length > 0 ? (
+                  <div>
+                    {stats.planStats.topPlanItems.slice(0, 10).map((item, i) => (
+                      <div key={`plan-item-${i}-${item.itemId}`} className="rank-item">
+                        <div className="rank">{i + 1}</div>
+                        <div className="name">
+                          {CATEGORY_EMOJI[item.category]} {item.itemName}
+                        </div>
+                        <div className="count">计划使用 {item.count} 次</div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div style={{ textAlign: 'center', color: '#9ca3af', padding: 40 }}>
+                    <div style={{ fontSize: 32, marginBottom: 8 }}>🏆</div>
+                    <div>暂无计划使用数据</div>
+                    <div style={{ fontSize: 12, marginTop: 4 }}>创建妆容计划后查看排行</div>
+                  </div>
+                )}
               </div>
             </div>
           )}

@@ -6,7 +6,7 @@ import type {
   LookSuggestion, SavedLook, GeneratedChecklist, ChecklistItem, UsageRecord,
   Review, LookReviewSummary, ReviewStats, SceneType,
   ItemRiskInfo, RiskType, ItemCategory, InventoryStats, RiskItem,
-  TravelPlan, TravelStats
+  TravelPlan, TravelStats, MakeupPlan, MakeupPlanStatus, PlanReminder, ReminderType, PlanStats, OutfitCombination
 } from './types';
 
 interface DataStore {
@@ -21,6 +21,7 @@ interface DataStore {
   usageRecords: UsageRecord[];
   reviews: Review[];
   travelPlans: TravelPlan[];
+  makeupPlans: MakeupPlan[];
 }
 
 const DATA_FILE = path.join(__dirname, '..', 'data.json');
@@ -43,6 +44,7 @@ function loadData(): DataStore {
         usageRecords: parsed.usageRecords || defaultData.usageRecords,
         reviews: parsed.reviews || defaultData.reviews,
         travelPlans: parsed.travelPlans || defaultData.travelPlans,
+        makeupPlans: parsed.makeupPlans || defaultData.makeupPlans,
       };
     } catch {
       return defaultData;
@@ -100,6 +102,7 @@ function getDefaultData(): DataStore {
     usageRecords: [],
     reviews: [],
     travelPlans: [],
+    makeupPlans: [],
   };
 }
 
@@ -764,4 +767,317 @@ function findItemName(id: string, category: ItemCategory): string {
   if (!arr) return id;
   const item = arr.find((i: any) => i.id === id);
   return item?.name || id;
+}
+
+export function getMakeupPlans(filters?: { startDate?: string; endDate?: string; scene?: SceneType; status?: MakeupPlanStatus }): MakeupPlan[] {
+  let plans = store.makeupPlans;
+  if (filters) {
+    if (filters.startDate) plans = plans.filter(p => p.date >= filters.startDate!);
+    if (filters.endDate) plans = plans.filter(p => p.date <= filters.endDate!);
+    if (filters.scene) plans = plans.filter(p => p.scene === filters.scene);
+    if (filters.status) plans = plans.filter(p => p.status === filters.status);
+  }
+  return plans.sort((a, b) => a.date.localeCompare(b.date) || a.timeSlot.localeCompare(b.timeSlot));
+}
+
+export function getMakeupPlanById(id: string): MakeupPlan | undefined {
+  return store.makeupPlans.find(p => p.id === id);
+}
+
+export function createMakeupPlan(data: Omit<MakeupPlan, 'id' | 'createdAt' | 'updatedAt' | 'reminders' | 'warnings'>): MakeupPlan {
+  const now = new Date().toISOString();
+  const warnings = generatePlanWarnings(data.items, data.date);
+  const reminders = generatePlanReminders(data);
+  const newPlan: MakeupPlan = {
+    id: uuidv4(),
+    ...data,
+    reminders,
+    warnings,
+    createdAt: now,
+    updatedAt: now,
+  };
+  store.makeupPlans.push(newPlan);
+  persist();
+  return newPlan;
+}
+
+export function updateMakeupPlan(id: string, patch: Partial<MakeupPlan>): MakeupPlan | null {
+  const idx = store.makeupPlans.findIndex(p => p.id === id);
+  if (idx === -1) return null;
+  const updated = {
+    ...store.makeupPlans[idx],
+    ...patch,
+    updatedAt: new Date().toISOString(),
+  };
+  if (patch.items || patch.date) {
+    updated.warnings = generatePlanWarnings(updated.items, updated.date);
+  }
+  if (patch.date || patch.timeSlot || patch.scene || patch.needsPhoto || patch.expectedDuration) {
+    updated.reminders = generatePlanReminders(updated);
+  }
+  store.makeupPlans[idx] = updated;
+  persist();
+  return store.makeupPlans[idx];
+}
+
+export function deleteMakeupPlan(id: string): boolean {
+  const idx = store.makeupPlans.findIndex(p => p.id === id);
+  if (idx === -1) return false;
+  store.makeupPlans.splice(idx, 1);
+  persist();
+  return true;
+}
+
+export function convertPlanToChecklist(planId: string): GeneratedChecklist | null {
+  const plan = getMakeupPlanById(planId);
+  if (!plan) return null;
+
+  const templateItems = getChecklistTemplates();
+  const checklistItems = templateItems.map(t => ({
+    checklistItemId: t.id,
+    checked: false,
+  }));
+
+  if (plan.items.lensId) {
+    const lens = store.lenses.find(l => l.id === plan.items.lensId);
+    if (lens) {
+      const lensCare = templateItems.find(t => t.name === '美瞳护理液');
+      if (lensCare && !checklistItems.find(ci => ci.checklistItemId === lensCare.id)) {
+        checklistItems.push({ checklistItemId: lensCare.id, checked: false });
+      }
+      const lensCase = templateItems.find(t => t.name === '隐形眼镜盒');
+      if (lensCase && !checklistItems.find(ci => ci.checklistItemId === lensCase.id)) {
+        checklistItems.push({ checklistItemId: lensCase.id, checked: false });
+      }
+    }
+  }
+
+  const checklist = createChecklist({
+    lookId: plan.savedLookId,
+    scene: plan.scene,
+    items: checklistItems,
+  });
+
+  updateMakeupPlan(planId, { checklistId: checklist.id });
+  return checklist;
+}
+
+export function completeMakeupPlan(planId: string): { plan: MakeupPlan; checklist: GeneratedChecklist | null } | null {
+  const plan = getMakeupPlanById(planId);
+  if (!plan) return null;
+
+  let checklist: GeneratedChecklist | null = null;
+
+  if (!plan.checklistId) {
+    checklist = convertPlanToChecklist(planId);
+  } else {
+    checklist = getChecklistById(plan.checklistId) || null;
+  }
+
+  const now = new Date().toISOString();
+  const updated = updateMakeupPlan(planId, {
+    status: 'completed',
+    completedAt: now,
+  });
+
+  if (updated && checklist) {
+    updateChecklist(checklist.id, { completedAt: now });
+
+    const templates = getChecklistTemplates();
+    const missedItems: string[] = [];
+    for (const ci of checklist.items) {
+      if (!ci.checked) {
+        const t = templates.find(tt => tt.id === ci.checklistItemId);
+        if (t) missedItems.push(t.name);
+      }
+    }
+
+    if (updated.items.lensId) updateItemLastUsed('lens', updated.items.lensId);
+    if (updated.items.lipstickId) updateItemLastUsed('lipstick', updated.items.lipstickId);
+    if (updated.items.blushId) updateItemLastUsed('blush', updated.items.blushId);
+    if (updated.items.outfitId) updateItemLastUsed('outfit', updated.items.outfitId);
+
+    if (updated.savedLookId) {
+      incrementSavedLookUse(updated.savedLookId);
+    }
+
+    addUsageRecord({
+      lookId: updated.savedLookId,
+      savedLookId: updated.savedLookId,
+      scene: updated.scene,
+      items: updated.items,
+      checklistId: checklist.id,
+      missedItems,
+    });
+  }
+
+  return { plan: updated!, checklist };
+}
+
+function generatePlanWarnings(items: OutfitCombination, date: string): string[] {
+  const warnings: string[] = [];
+
+  const checkItem = (id: string | undefined, category: ItemCategory) => {
+    if (!id) return;
+    const map: Record<string, any[]> = { lens: store.lenses, lipstick: store.lipsticks, blush: store.blushes, outfit: store.outfits };
+    const arr = map[category];
+    if (!arr) return;
+    const item = arr.find((i: any) => i.id === id) as MakeupItem | undefined;
+    if (!item) {
+      warnings.push(`单品不存在: ${id}`);
+      return;
+    }
+    const riskInfo = getItemRiskInfo(item);
+    if (riskInfo.risks.includes('expired')) {
+      warnings.push(`${item.name} 已过期`);
+    } else if (riskInfo.risks.includes('expiring_soon')) {
+      warnings.push(`${item.name} 即将过期（剩余${riskInfo.daysUntilExpiry}天）`);
+    }
+    if (riskInfo.risks.includes('low_stock')) {
+      warnings.push(`${item.name} 库存不足`);
+    }
+  };
+
+  checkItem(items.lensId, 'lens');
+  checkItem(items.lipstickId, 'lipstick');
+  checkItem(items.blushId, 'blush');
+  checkItem(items.outfitId, 'outfit');
+
+  const conflictPlans = store.makeupPlans.filter(p =>
+    p.date === date && p.status !== 'cancelled' && p.status !== 'completed'
+  );
+  if (conflictPlans.length > 1) {
+    warnings.push(`当天已有${conflictPlans.length - 1}个其他计划`);
+  }
+
+  const conflictingTravel = store.travelPlans.filter(tp =>
+    tp.status !== 'cancelled' && tp.status !== 'completed' &&
+    date >= tp.startDate && date <= tp.endDate
+  );
+  if (conflictingTravel.length > 0) {
+    warnings.push(`当天有旅行计划「${conflictingTravel.map(t => t.name).join('、')}」，部分单品可能被占用`);
+  }
+
+  return warnings;
+}
+
+function generatePlanReminders(plan: Omit<MakeupPlan, 'id' | 'createdAt' | 'updatedAt' | 'reminders' | 'warnings'>): PlanReminder[] {
+  const reminders: PlanReminder[] = [];
+  const planId = '';
+
+  if (plan.items.lensId) {
+    const lens = store.lenses.find(l => l.id === plan.items.lensId);
+    if (lens) {
+      if (lens.lensType === 'daily') {
+        reminders.push({
+          id: uuidv4(),
+          planId,
+          type: 'lens_open',
+          message: `记得携带日抛美瞳「${lens.name}」，建议多备1-2片`,
+          dismissed: false,
+        });
+      } else if (lens.lensType === 'monthly') {
+        reminders.push({
+          id: uuidv4(),
+          planId,
+          type: 'lens_change',
+          message: `检查月抛美瞳「${lens.name}」是否需要更换`,
+          dismissed: false,
+        });
+      }
+      reminders.push({
+        id: uuidv4(),
+        planId,
+        type: 'care_solution',
+        message: '准备美瞳护理液和隐形眼镜盒',
+        dismissed: false,
+      });
+    }
+  }
+
+  reminders.push({
+    id: uuidv4(),
+    planId,
+    type: 'touchup',
+    message: '带好补妆物品（粉饼/气垫、口红）',
+    dismissed: false,
+  });
+
+  if (plan.expectedDuration && plan.expectedDuration > 6) {
+    reminders.push({
+      id: uuidv4(),
+      planId,
+      type: 'backup_glasses',
+      message: '佩戴时间较长，建议携带备用框架眼镜',
+      dismissed: false,
+    });
+  }
+
+  return reminders;
+}
+
+export function computePlanStats(): PlanStats {
+  const allPlans = store.makeupPlans;
+  const now = new Date();
+  const in7Days = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+  const in7DaysStr = in7Days.toISOString().split('T')[0];
+  const todayStr = now.toISOString().split('T')[0];
+
+  const total = allPlans.length;
+  const completed = allPlans.filter(p => p.status === 'completed').length;
+  const planCompletionRate = {
+    total,
+    completed,
+    rate: total > 0 ? Math.round((completed / total) * 10000) / 100 : 0,
+  };
+
+  const upcoming7DayTodos = allPlans
+    .filter(p => p.date >= todayStr && p.date <= in7DaysStr && p.status !== 'cancelled' && p.status !== 'completed')
+    .sort((a, b) => a.date.localeCompare(b.date) || a.timeSlot.localeCompare(b.timeSlot));
+
+  const sceneCount = new Map<SceneType, number>();
+  const sceneList: SceneType[] = ['commute', 'date', 'photo', 'travel'];
+  for (const plan of allPlans) {
+    sceneCount.set(plan.scene, (sceneCount.get(plan.scene) || 0) + 1);
+  }
+  const planSceneDistribution = sceneList.map(scene => {
+    const count = sceneCount.get(scene) || 0;
+    return { scene, count, percentage: total > 0 ? Math.round((count / total) * 10000) / 100 : 0 };
+  }).sort((a, b) => b.count - a.count);
+
+  const itemCount = new Map<string, { itemId: string; itemName: string; category: ItemCategory; count: number }>();
+  for (const plan of allPlans) {
+    const items = plan.items;
+    const entries: [string | undefined, ItemCategory][] = [
+      [items.lensId, 'lens'],
+      [items.lipstickId, 'lipstick'],
+      [items.blushId, 'blush'],
+      [items.outfitId, 'outfit'],
+    ];
+    for (const [id, category] of entries) {
+      if (!id) continue;
+      const existing = itemCount.get(id);
+      if (existing) {
+        existing.count++;
+      } else {
+        itemCount.set(id, {
+          itemId: id,
+          itemName: findItemName(id, category),
+          category,
+          count: 1,
+        });
+      }
+    }
+  }
+
+  const topPlanItems = Array.from(itemCount.values())
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 10);
+
+  return {
+    planCompletionRate,
+    upcoming7DayTodos,
+    planSceneDistribution,
+    topPlanItems,
+  };
 }

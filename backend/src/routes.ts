@@ -11,10 +11,12 @@ import {
   getAllItemsWithRisk, getItemRiskInfo, getInventoryStats, updateItemLastUsed,
   getTravelPlans, getTravelPlanById, createTravelPlan, updateTravelPlan, deleteTravelPlan,
   computeTravelStats,
+  getMakeupPlans, getMakeupPlanById, createMakeupPlan, updateMakeupPlan, deleteMakeupPlan,
+  convertPlanToChecklist, completeMakeupPlan, computePlanStats,
 } from './store';
-import { generateSuggestions, computeStatsWithLooks, generateTravelOutfits } from './recommend';
+import { generateSuggestions, computeStatsWithLooks, generateTravelOutfits, generatePlanRecommendation } from './recommend';
 import { generateTravelChecklist } from './travelPlanner';
-import type { SceneType, SavedLook, GeneratedChecklist, Review, OutfitCombination, TravelPlan, DailyScene } from './types';
+import type { SceneType, SavedLook, GeneratedChecklist, Review, OutfitCombination, TravelPlan, DailyScene, MakeupPlanStatus } from './types';
 
 const router = Router();
 
@@ -206,6 +208,7 @@ router.get('/stats', (_req: Request, res: Response) => {
   const reviewStats = getReviewStats();
   const inventoryStats = getInventoryStats();
   const travelStats = computeTravelStats();
+  const planStats = computePlanStats();
   const stats = computeStatsWithLooks(records, (id) => {
     const look = getSavedLookById(id);
     return look ? { style: look.style } : undefined;
@@ -227,6 +230,7 @@ router.get('/stats', (_req: Request, res: Response) => {
     restockPriority: inventoryStats.restockPriority,
     longUnusedItems: inventoryStats.longUnusedItems,
     travelStats,
+    planStats,
   });
 });
 
@@ -431,6 +435,97 @@ router.delete('/travel-plans/:id', (req: Request, res: Response) => {
   const ok = deleteTravelPlan(req.params.id);
   if (!ok) return res.status(404).json({ error: 'Not found' });
   res.json({ ok: true });
+});
+
+// Makeup Plans
+router.get('/makeup-plans', (req: Request, res: Response) => {
+  const filters = {
+    startDate: req.query.startDate as string | undefined,
+    endDate: req.query.endDate as string | undefined,
+    scene: req.query.scene as SceneType | undefined,
+    status: req.query.status as MakeupPlanStatus | undefined,
+  };
+  res.json(getMakeupPlans(filters));
+});
+
+router.get('/makeup-plans/:id', (req: Request, res: Response) => {
+  const plan = getMakeupPlanById(req.params.id);
+  if (!plan) return res.status(404).json({ error: 'Not found' });
+  res.json(plan);
+});
+
+router.post('/makeup-plans', (req: Request, res: Response) => {
+  const body = req.body;
+  if (!body.date || !body.eventName || !body.scene) {
+    return res.status(400).json({ error: '缺少必填字段: date, eventName, scene' });
+  }
+  if (!['commute', 'date', 'photo', 'travel'].includes(body.scene)) {
+    return res.status(400).json({ error: '无效的场景类型' });
+  }
+  const plan = createMakeupPlan({
+    date: body.date,
+    timeSlot: body.timeSlot || '全天',
+    eventName: body.eventName,
+    scene: body.scene,
+    location: body.location,
+    expectedDuration: body.expectedDuration,
+    needsPhoto: body.needsPhoto || false,
+    notes: body.notes,
+    savedLookId: body.savedLookId,
+    items: body.items || {},
+    status: body.status || 'planned',
+    checklistId: body.checklistId,
+    reviewId: body.reviewId,
+  });
+  res.status(201).json(plan);
+});
+
+router.put('/makeup-plans/:id', (req: Request, res: Response) => {
+  const updated = updateMakeupPlan(req.params.id, req.body);
+  if (!updated) return res.status(404).json({ error: 'Not found' });
+  res.json(updated);
+});
+
+router.delete('/makeup-plans/:id', (req: Request, res: Response) => {
+  const ok = deleteMakeupPlan(req.params.id);
+  if (!ok) return res.status(404).json({ error: 'Not found' });
+  res.json({ ok: true });
+});
+
+router.post('/makeup-plans/recommend', (req: Request, res: Response) => {
+  const { scene, date } = req.body;
+  if (!scene || !date) return res.status(400).json({ error: '缺少 scene 和 date' });
+  if (!['commute', 'date', 'photo', 'travel'].includes(scene)) {
+    return res.status(400).json({ error: '无效的场景类型' });
+  }
+  const { lenses, lipsticks, blushes, outfits } = getAllItems();
+  const reviewSummaries = getAllLookReviewSummaries();
+  const savedLooks = getSavedLooks();
+  const travelPlans = getTravelPlans();
+  const existingPlans = getMakeupPlans();
+
+  const recommendations = generatePlanRecommendation(
+    { lenses, lipsticks, blushes, outfits },
+    scene as SceneType,
+    date,
+    reviewSummaries,
+    savedLooks,
+    travelPlans,
+    existingPlans
+  );
+  res.json(recommendations);
+});
+
+router.post('/makeup-plans/:id/convert-checklist', (req: Request, res: Response) => {
+  const checklist = convertPlanToChecklist(req.params.id);
+  if (!checklist) return res.status(404).json({ error: 'Plan not found' });
+  res.json(checklist);
+});
+
+router.post('/makeup-plans/:id/complete', (req: Request, res: Response) => {
+  const result = completeMakeupPlan(req.params.id);
+  if (!result) return res.status(404).json({ error: 'Plan not found' });
+  res.json(result);
 });
 
 router.get('/health', (_req: Request, res: Response) => {

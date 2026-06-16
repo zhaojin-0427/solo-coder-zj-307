@@ -3,7 +3,7 @@ import type {
   LensItem, LipstickItem, BlushItem, OutfitItem,
   LookSuggestion, SavedLook, ChecklistItem, GeneratedChecklist, Stats, SceneType,
   Review, LookReviewSummary, InventoryStats, RiskItem, ItemRiskInfo,
-  TravelPlan, DailyScene, DailyOutfit
+  TravelPlan, DailyScene, DailyOutfit, MakeupPlan, MakeupPlanStatus, OutfitCombination
 } from './types';
 
 const api = axios.create({ baseURL: '/api' });
@@ -128,4 +128,30 @@ export const travelPlansApi = {
     api.post<TravelPlan>(`/travel-plans/${id}/complete`).then(r => r.data),
   delete: (id: string) =>
     api.delete<{ ok: boolean }>(`/travel-plans/${id}`).then(r => r.data),
+};
+
+export const makeupPlansApi = {
+  getAll: (filters?: { startDate?: string; endDate?: string; scene?: SceneType; status?: MakeupPlanStatus }) => {
+    const params = new URLSearchParams();
+    if (filters?.startDate) params.set('startDate', filters.startDate);
+    if (filters?.endDate) params.set('endDate', filters.endDate);
+    if (filters?.scene) params.set('scene', filters.scene);
+    if (filters?.status) params.set('status', filters.status);
+    const qs = params.toString();
+    return api.get<MakeupPlan[]>(`/makeup-plans${qs ? '?' + qs : ''}`).then(r => r.data);
+  },
+  get: (id: string) =>
+    api.get<MakeupPlan>(`/makeup-plans/${id}`).then(r => r.data),
+  create: (data: Partial<MakeupPlan> & { date: string; eventName: string; scene: SceneType }) =>
+    api.post<MakeupPlan>('/makeup-plans', data).then(r => r.data),
+  update: (id: string, patch: Partial<MakeupPlan>) =>
+    api.put<MakeupPlan>(`/makeup-plans/${id}`, patch).then(r => r.data),
+  delete: (id: string) =>
+    api.delete<{ ok: boolean }>(`/makeup-plans/${id}`).then(r => r.data),
+  recommend: (scene: SceneType, date: string) =>
+    api.post<OutfitCombination[]>('/makeup-plans/recommend', { scene, date }).then(r => r.data),
+  convertChecklist: (id: string) =>
+    api.post<GeneratedChecklist>(`/makeup-plans/${id}/convert-checklist`).then(r => r.data),
+  complete: (id: string) =>
+    api.post<{ plan: MakeupPlan; checklist: GeneratedChecklist | null }>(`/makeup-plans/${id}/complete`).then(r => r.data),
 };

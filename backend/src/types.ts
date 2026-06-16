@@ -269,6 +269,48 @@ export interface TravelStats {
   planCompletionRate: { total: number; completed: number; rate: number };
 }
 
+export type MakeupPlanStatus = 'planned' | 'reminded' | 'in_progress' | 'completed' | 'cancelled';
+
+export type ReminderType = 'lens_open' | 'lens_change' | 'care_solution' | 'touchup' | 'backup_glasses';
+
+export interface PlanReminder {
+  id: string;
+  planId: string;
+  type: ReminderType;
+  message: string;
+  triggeredAt?: string;
+  dismissed: boolean;
+}
+
+export interface MakeupPlan {
+  id: string;
+  date: string;
+  timeSlot: string;
+  eventName: string;
+  scene: SceneType;
+  location?: string;
+  expectedDuration?: number;
+  needsPhoto: boolean;
+  notes?: string;
+  savedLookId?: string;
+  items: OutfitCombination;
+  status: MakeupPlanStatus;
+  reminders: PlanReminder[];
+  checklistId?: string;
+  reviewId?: string;
+  warnings: string[];
+  createdAt: string;
+  updatedAt: string;
+  completedAt?: string;
+}
+
+export interface PlanStats {
+  planCompletionRate: { total: number; completed: number; rate: number };
+  upcoming7DayTodos: MakeupPlan[];
+  planSceneDistribution: { scene: SceneType; count: number; percentage: number }[];
+  topPlanItems: { itemId: string; itemName: string; category: ItemCategory; count: number }[];
+}
+
 export interface Stats {
   topCombinations: { combination: OutfitCombination; count: number }[];
   sceneDistribution: { scene: SceneType; count: number; percentage: number }[];
@@ -282,4 +324,5 @@ export interface Stats {
   restockPriority: RiskItem[];
   longUnusedItems: RiskItem[];
   travelStats: TravelStats;
+  planStats: PlanStats;
 }

@@ -7,6 +7,7 @@ import TravelListPage from './pages/TravelListPage';
 import TravelCreatePage from './pages/TravelCreatePage';
 import TravelDetailPage from './pages/TravelDetailPage';
 import StatsPage from './pages/StatsPage';
+import CalendarPage from './pages/CalendarPage';
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
           <NavLink to="/" end>📦 单品档案</NavLink>
           <NavLink to="/suggest">🎨 场景搭配</NavLink>
           <NavLink to="/saved">⭐ 方案收藏</NavLink>
+          <NavLink to="/calendar">📅 妆容日历</NavLink>
           <NavLink to="/checklist">📋 出门清单</NavLink>
           <NavLink to="/travel">✈️ 旅行打包</NavLink>
           <NavLink to="/stats">📊 统计分析</NavLink>
@@ -28,6 +30,7 @@ export default function App() {
           <Route path="/" element={<ItemsPage />} />
           <Route path="/suggest" element={<SuggestPage />} />
           <Route path="/saved" element={<SavedLooksPage />} />
+          <Route path="/calendar" element={<CalendarPage />} />
           <Route path="/checklist" element={<ChecklistPage />} />
           <Route path="/travel" element={<TravelListPage />} />
           <Route path="/travel/new" element={<TravelCreatePage />} />
