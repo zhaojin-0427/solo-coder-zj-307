@@ -6,9 +6,11 @@ import {
   getSavedLooks, saveLook, updateSavedLook, deleteSavedLook, incrementSavedLookUse, getSavedLookById,
   getChecklistTemplates, getChecklists, createChecklist, updateChecklist, deleteChecklist, getChecklistById,
   addUsageRecord, getUsageRecords,
+  getReviews, getReviewById, getReviewByChecklistId, getReviewsByLookId, getReviewsByScene,
+  createReview, updateReview, deleteReview, getLookReviewSummary, getAllLookReviewSummaries, getReviewStats,
 } from './store';
 import { generateSuggestions, computeStatsWithLooks } from './recommend';
-import type { SceneType, SavedLook, GeneratedChecklist } from './types';
+import type { SceneType, SavedLook, GeneratedChecklist, Review } from './types';
 
 const router = Router();
 
@@ -181,11 +183,69 @@ router.post('/checklists/:id/complete', (req: Request, res: Response) => {
 // Stats
 router.get('/stats', (_req: Request, res: Response) => {
   const records = getUsageRecords();
+  const reviewStats = getReviewStats();
   const stats = computeStatsWithLooks(records, (id) => {
     const look = getSavedLookById(id);
     return look ? { style: look.style } : undefined;
-  });
+  }, reviewStats);
   res.json(stats);
+});
+
+// Reviews
+router.get('/reviews', (req: Request, res: Response) => {
+  const lookId = req.query.lookId as string | undefined;
+  const scene = req.query.scene as string | undefined;
+  if (lookId) {
+    res.json(getReviewsByLookId(lookId));
+  } else if (scene) {
+    res.json(getReviewsByScene(scene));
+  } else {
+    res.json(getReviews());
+  }
+});
+
+router.get('/reviews/:id', (req: Request, res: Response) => {
+  const r = getReviewById(req.params.id);
+  if (!r) return res.status(404).json({ error: 'Not found' });
+  res.json(r);
+});
+
+router.get('/reviews/checklist/:checklistId', (req: Request, res: Response) => {
+  const r = getReviewByChecklistId(req.params.checklistId);
+  if (!r) return res.status(404).json({ error: 'Not found' });
+  res.json(r);
+});
+
+router.get('/reviews/summaries/looks', (_req: Request, res: Response) => {
+  res.json(getAllLookReviewSummaries());
+});
+
+router.get('/reviews/summary/look/:lookId', (req: Request, res: Response) => {
+  res.json(getLookReviewSummary(req.params.lookId));
+});
+
+router.post('/reviews', (req: Request, res: Response) => {
+  const body = req.body as Omit<Review, 'id' | 'createdAt' | 'updatedAt'>;
+  if (!body.checklistId) return res.status(400).json({ error: '缺少清单ID' });
+  if (body.comfortScore === undefined || body.makeupDurabilityScore === undefined ||
+      body.sceneFitScore === undefined || body.photoQualityScore === undefined) {
+    return res.status(400).json({ error: '缺少评分项' });
+  }
+  const result = createReview(body);
+  if ('error' in result) return res.status(400).json({ error: result.error });
+  res.status(201).json(result);
+});
+
+router.put('/reviews/:id', (req: Request, res: Response) => {
+  const result = updateReview(req.params.id, req.body);
+  if ('error' in result) return res.status(400).json({ error: result.error });
+  res.json(result);
+});
+
+router.delete('/reviews/:id', (req: Request, res: Response) => {
+  const ok = deleteReview(req.params.id);
+  if (!ok) return res.status(404).json({ error: 'Not found' });
+  res.json({ ok: true });
 });
 
 router.get('/health', (_req: Request, res: Response) => {

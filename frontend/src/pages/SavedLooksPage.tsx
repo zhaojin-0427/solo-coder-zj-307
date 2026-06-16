@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { savedLooksApi, itemsApi, checklistApi } from '../api';
-import type { SavedLook, AllItems, SceneType } from '../types';
+import { savedLooksApi, itemsApi, checklistApi, reviewApi } from '../api';
+import type { SavedLook, AllItems, SceneType, LookReviewSummary } from '../types';
 import { SceneLabels } from '../types';
 
 export default function SavedLooksPage() {
@@ -13,16 +13,19 @@ export default function SavedLooksPage() {
   const [editLook, setEditLook] = useState<SavedLook | null>(null);
   const [editName, setEditName] = useState('');
   const [editDesc, setEditDesc] = useState('');
+  const [reviewSummaries, setReviewSummaries] = useState<LookReviewSummary[]>([]);
 
   const load = async () => {
     setLoading(true);
     try {
-      const [looksData, itemsData] = await Promise.all([
+      const [looksData, itemsData, summariesData] = await Promise.all([
         savedLooksApi.getAll(),
         itemsApi.getAll(),
+        reviewApi.getLookSummaries(),
       ]);
       setLooks(looksData);
       setItems(itemsData);
+      setReviewSummaries(summariesData);
     } finally {
       setLoading(false);
     }
@@ -102,6 +105,7 @@ export default function SavedLooksPage() {
           const lip = findItem(s.items.lipstickId, 'lipstick');
           const blush = findItem(s.items.blushId, 'blush');
           const outfit = findItem(s.items.outfitId, 'outfit');
+          const summary = reviewSummaries.find(sum => sum.lookId === s.id);
 
           return (
             <div key={s.id} className="card item-card suggestion-card">
@@ -116,6 +120,31 @@ export default function SavedLooksPage() {
                   <span key={t} className={`tag ${['pink', 'purple', 'blue', 'green'][i % 4]}`}>{t}</span>
                 ))}
               </div>
+              {summary && summary.reviewCount > 0 && (
+                <div style={{ marginTop: 10, padding: 10, background: 'linear-gradient(135deg, #fef3c7, #fce7f3)', borderRadius: 8 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+                    <span style={{ fontSize: 12, color: '#92400e', fontWeight: 600 }}>用户评价</span>
+                    <span style={{ fontSize: 16, fontWeight: 700, color: '#db2777' }}>
+                      ⭐ {summary.averageScore.toFixed(1)}
+                      <span style={{ fontSize: 11, color: '#9ca3af', fontWeight: 400, marginLeft: 4 }}>
+                        ({summary.reviewCount}次)
+                      </span>
+                    </span>
+                  </div>
+                  {summary.latestReview && (
+                    <div style={{ fontSize: 11, color: '#78350f', lineHeight: 1.5 }}>
+                      <div style={{ fontWeight: 600, marginBottom: 2 }}>
+                        最近复盘：{new Date(summary.latestReview.createdAt).toLocaleDateString('zh-CN')}
+                      </div>
+                      {summary.latestReview.notes && (
+                        <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
+                          "{summary.latestReview.notes}"
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
               <div className="items-list">
                 <div className="row"><span className="label">👁️ 美瞳</span><span>{lens?.name || '-'}</span></div>
                 <div className="row"><span className="label">💄 口红</span><span>{lip?.name || '-'}</span></div>

@@ -1,7 +1,8 @@
 import axios from 'axios';
 import type {
   LensItem, LipstickItem, BlushItem, OutfitItem,
-  LookSuggestion, SavedLook, ChecklistItem, GeneratedChecklist, Stats, SceneType
+  LookSuggestion, SavedLook, ChecklistItem, GeneratedChecklist, Stats, SceneType,
+  Review, LookReviewSummary
 } from './types';
 
 const api = axios.create({ baseURL: '/api' });
@@ -70,4 +71,25 @@ export const checklistApi = {
 
 export const statsApi = {
   get: () => api.get<Stats>('/stats').then(r => r.data),
+};
+
+export const reviewApi = {
+  getAll: (params?: { lookId?: string; scene?: SceneType }) => {
+    const q = params?.lookId ? `?lookId=${params.lookId}` : params?.scene ? `?scene=${params.scene}` : '';
+    return api.get<Review[]>(`/reviews${q}`).then(r => r.data);
+  },
+  get: (id: string) =>
+    api.get<Review>(`/reviews/${id}`).then(r => r.data),
+  getByChecklistId: (checklistId: string) =>
+    api.get<Review>(`/reviews/checklist/${checklistId}`).then(r => r.data),
+  getLookSummaries: () =>
+    api.get<LookReviewSummary[]>('/reviews/summaries/looks').then(r => r.data),
+  getLookSummary: (lookId: string) =>
+    api.get<LookReviewSummary>(`/reviews/summary/look/${lookId}`).then(r => r.data),
+  create: (data: Omit<Review, 'id' | 'createdAt' | 'updatedAt'>) =>
+    api.post<Review>('/reviews', data).then(r => r.data),
+  update: (id: string, data: Partial<Omit<Review, 'id' | 'createdAt' | 'updatedAt'>>) =>
+    api.put<Review>(`/reviews/${id}`, data).then(r => r.data),
+  delete: (id: string) =>
+    api.delete(`/reviews/${id}`).then(r => r.data),
 };

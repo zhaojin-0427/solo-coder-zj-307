@@ -113,6 +113,34 @@ export interface UsageRecord {
   usedAt: string;
 }
 
+export interface Review {
+  id: string;
+  checklistId: string;
+  lookId?: string;
+  scene: SceneType;
+  comfortScore: number;
+  makeupDurabilityScore: number;
+  sceneFitScore: number;
+  photoQualityScore: number;
+  notes: string;
+  nextReminderDate?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface LookReviewSummary {
+  lookId: string;
+  averageScore: number;
+  reviewCount: number;
+  latestReview?: Review;
+}
+
+export interface ReviewStats {
+  scoreTrend: { date: string; averageScore: number; count: number }[];
+  lowScoreKeywords: { keyword: string; count: number }[];
+  upcomingReminders: { review: Review; checklist?: GeneratedChecklist; look?: SavedLook }[];
+}
+
 export interface Stats {
   topCombinations: { combination: OutfitCombination; count: number }[];
   sceneDistribution: { scene: SceneType; count: number; percentage: number }[];
@@ -120,4 +148,5 @@ export interface Stats {
   styleReuseRate: { style: string; totalUsed: number; uniqueLooks: number; reuseRate: number }[];
   totalLooks: number;
   totalChecklists: number;
+  reviewStats: ReviewStats;
 }

@@ -1,8 +1,9 @@
 import { Component, useEffect, useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { statsApi, itemsApi, savedLooksApi } from '../api';
 import type { Stats, AllItems, SavedLook, SceneType } from '../types';
 import { SceneLabels } from '../types';
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, LineChart, Line } from 'recharts';
 
 const SCENE_COLORS: Record<SceneType, string> = {
   commute: '#3b82f6',
@@ -41,6 +42,7 @@ class PageErrorBoundary extends Component<{ children: React.ReactNode }, { hasEr
 }
 
 export default function StatsPage() {
+  const navigate = useNavigate();
   const [stats, setStats] = useState<Stats | null>(null);
   const [items, setItems] = useState<AllItems | null>(null);
   const [looks, setLooks] = useState<SavedLook[]>([]);
@@ -97,7 +99,7 @@ export default function StatsPage() {
       const arr = stats?.styleReuseRate;
       if (!arr || !Array.isArray(arr)) return [];
       return arr.filter(s => s && typeof s.style === 'string').map(s => ({
-        style: String(s.style),
+        styleName: String(s.style),
         totalUsed: Number(s.totalUsed) || 0,
         uniqueLooks: Number(s.uniqueLooks) || 1,
         reuseRate: Number(s.reuseRate) || 0,
@@ -126,6 +128,30 @@ export default function StatsPage() {
       const dist = stats?.sceneDistribution;
       if (!dist || !Array.isArray(dist)) return [];
       return dist.filter(s => s && typeof s.count === 'number' && s.count > 0);
+    } catch { return []; }
+  }, [stats]);
+
+  const scoreTrendData = useMemo(() => {
+    try {
+      const data = stats?.reviewStats?.scoreTrend;
+      if (!data || !Array.isArray(data)) return [];
+      return data.filter(d => d && typeof d.averageScore === 'number');
+    } catch { return []; }
+  }, [stats]);
+
+  const lowScoreKeywordsData = useMemo(() => {
+    try {
+      const data = stats?.reviewStats?.lowScoreKeywords;
+      if (!data || !Array.isArray(data)) return [];
+      return data.filter(d => d && typeof d.keyword === 'string' && d.count > 0);
+    } catch { return []; }
+  }, [stats]);
+
+  const upcomingRemindersData = useMemo(() => {
+    try {
+      const data = stats?.reviewStats?.upcomingReminders;
+      if (!data || !Array.isArray(data)) return [];
+      return data.filter(d => d && d.review);
     } catch { return []; }
   }, [stats]);
 
@@ -252,7 +278,7 @@ export default function StatsPage() {
                       <BarChart data={styleReuseData} layout="vertical" margin={{ left: 0, right: 20 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
                         <XAxis type="number" stroke="#9ca3af" fontSize={12} />
-                        <YAxis type="category" dataKey="style" stroke="#9ca3af" fontSize={12} width={80} />
+                        <YAxis type="category" dataKey="styleName" stroke="#9ca3af" fontSize={12} width={80} />
                         <Tooltip
                           formatter={(value: number, name: string) => [
                             value,
@@ -290,6 +316,136 @@ export default function StatsPage() {
                   })}
                 </div>
               )}
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginTop: 20 }}>
+                <div className="chart-card">
+                  <h3>📈 复盘评分趋势</h3>
+                  {scoreTrendData.length > 0 ? (
+                    <ResponsiveContainer width="100%" height={260}>
+                      <LineChart data={scoreTrendData} margin={{ left: 0, right: 20 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+                        <XAxis dataKey="date" stroke="#9ca3af" fontSize={11} />
+                        <YAxis domain={[0, 5]} stroke="#9ca3af" fontSize={12} />
+                        <Tooltip
+                          formatter={(value: number) => [`${value} 分`, '平均评分']}
+                          labelFormatter={(label) => `日期：${label}`}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="averageScore"
+                          stroke="#db2777"
+                          strokeWidth={3}
+                          dot={{ fill: '#db2777', r: 5 }}
+                          activeDot={{ r: 7 }}
+                          name="平均评分"
+                          isAnimationActive={false}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div style={{ textAlign: 'center', color: '#9ca3af', padding: 40 }}>
+                      <div style={{ fontSize: 32, marginBottom: 8 }}>📊</div>
+                      <div>还没有复盘数据</div>
+                      <div style={{ fontSize: 12, marginTop: 4 }}>完成清单后创建复盘即可查看趋势</div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="chart-card">
+                  <h3>⚠️ 低评分原因关键词</h3>
+                  {lowScoreKeywordsData.length > 0 ? (
+                    <div>
+                      {lowScoreKeywordsData.map((item, i) => (
+                        <div
+                          key={`kw-${i}-${item.keyword}`}
+                          className="rank-item"
+                          style={{
+                            background: i < 3 ? 'linear-gradient(90deg, #fef2f2, #fef3c7)' : 'transparent'
+                          }}
+                        >
+                          <div className="rank" style={{
+                            background: i === 0 ? '#ef4444' : i === 1 ? '#f59e0b' : i === 2 ? '#3b82f6' : '#9ca3af',
+                            color: 'white'
+                          }}>
+                            {i + 1}
+                          </div>
+                          <div className="name">
+                            <span style={{ fontWeight: 600 }}>{item.keyword}</span>
+                          </div>
+                          <div className="count">出现 {item.count} 次</div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: 'center', color: '#9ca3af', padding: 40 }}>
+                      <div style={{ fontSize: 32, marginBottom: 8 }}>🎉</div>
+                      <div>暂无低评分记录</div>
+                      <div style={{ fontSize: 12, marginTop: 4 }}>继续保持好状态！</div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="chart-card" style={{ marginTop: 20 }}>
+                <h3>⏰ 下次提醒列表</h3>
+                {upcomingRemindersData.length > 0 ? (
+                  <div>
+                    {upcomingRemindersData.map((item, i) => {
+                      const reviewDate = item.review.nextReminderDate
+                        ? new Date(item.review.nextReminderDate)
+                        : null;
+                      const today = new Date();
+                      const diffDays = reviewDate
+                        ? Math.ceil((reviewDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
+                        : 0;
+                      return (
+                        <div
+                          key={`reminder-${i}-${item.review.id}`}
+                          style={{
+                            padding: '12px 14px',
+                            borderBottom: i < upcomingRemindersData.length - 1 ? '1px solid #f3f4f6' : 'none',
+                            borderRadius: 8,
+                            cursor: 'pointer',
+                            transition: 'background 0.2s',
+                          }}
+                          onClick={() => navigate('/checklist')}
+                          onMouseEnter={(e) => e.currentTarget.style.background = '#fafafa'}
+                          onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                        >
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                            <div style={{ fontWeight: 600, fontSize: 14 }}>
+                              {item.look ? `⭐ ${item.look.name}` : `📋 ${SceneLabels[item.review.scene]}清单`}
+                            </div>
+                            <span style={{
+                              fontSize: 12,
+                              padding: '2px 8px',
+                              borderRadius: 10,
+                              background: diffDays <= 0 ? '#fee2e2' : diffDays <= 3 ? '#fef3c7' : '#d1fae5',
+                              color: diffDays <= 0 ? '#dc2626' : diffDays <= 3 ? '#d97706' : '#059669',
+                            }}>
+                              {diffDays < 0 ? '已过期' : diffDays === 0 ? '今天' : `${diffDays} 天后`}
+                            </span>
+                          </div>
+                          <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 4 }}>
+                            📅 提醒日期：{reviewDate?.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}
+                          </div>
+                          {item.review.notes && (
+                            <div style={{ fontSize: 11, color: '#9ca3af', lineHeight: 1.5 }}>
+                              💬 {item.review.notes}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div style={{ textAlign: 'center', color: '#9ca3af', padding: 40 }}>
+                    <div style={{ fontSize: 32, marginBottom: 8 }}>📅</div>
+                    <div>暂无提醒</div>
+                    <div style={{ fontSize: 12, marginTop: 4 }}>创建复盘时设置下次提醒日期即可</div>
+                  </div>
+                )}
+              </div>
             </>
           )}
         </PageErrorBoundary>

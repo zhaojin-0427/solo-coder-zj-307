@@ -3,7 +3,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import type {
   LensItem, LipstickItem, BlushItem, OutfitItem, MakeupItem,
-  LookSuggestion, SavedLook, GeneratedChecklist, ChecklistItem, UsageRecord
+  LookSuggestion, SavedLook, GeneratedChecklist, ChecklistItem, UsageRecord,
+  Review, LookReviewSummary, ReviewStats
 } from './types';
 
 interface DataStore {
@@ -16,22 +17,35 @@ interface DataStore {
   checklistTemplates: ChecklistItem[];
   checklists: GeneratedChecklist[];
   usageRecords: UsageRecord[];
+  reviews: Review[];
 }
 
 const DATA_FILE = path.join(__dirname, '..', 'data.json');
 
 function loadData(): DataStore {
+  const defaultData = getDefaultData();
   if (fs.existsSync(DATA_FILE)) {
     try {
       const raw = fs.readFileSync(DATA_FILE, 'utf-8');
-      return JSON.parse(raw);
+      const parsed = JSON.parse(raw);
+      return {
+        lenses: parsed.lenses || defaultData.lenses,
+        lipsticks: parsed.lipsticks || defaultData.lipsticks,
+        blushes: parsed.blushes || defaultData.blushes,
+        outfits: parsed.outfits || defaultData.outfits,
+        suggestions: parsed.suggestions || defaultData.suggestions,
+        savedLooks: parsed.savedLooks || defaultData.savedLooks,
+        checklistTemplates: parsed.checklistTemplates || defaultData.checklistTemplates,
+        checklists: parsed.checklists || defaultData.checklists,
+        usageRecords: parsed.usageRecords || defaultData.usageRecords,
+        reviews: parsed.reviews || defaultData.reviews,
+      };
     } catch {
-      return getDefaultData();
+      return defaultData;
     }
   }
-  const data = getDefaultData();
-  saveData(data);
-  return data;
+  saveData(defaultData);
+  return defaultData;
 }
 
 function saveData(data: DataStore) {
@@ -80,6 +94,7 @@ function getDefaultData(): DataStore {
     ],
     checklists: [],
     usageRecords: [],
+    reviews: [],
   };
 }
 
@@ -208,3 +223,172 @@ export function addUsageRecord(record: Omit<UsageRecord, 'id' | 'usedAt'>): Usag
   store.usageRecords.push(newRecord); persist(); return newRecord;
 }
 export function getUsageRecords(): UsageRecord[] { return store.usageRecords; }
+
+// Reviews
+export function getReviews(): Review[] { return store.reviews; }
+
+export function getReviewById(id: string): Review | undefined {
+  return store.reviews.find(r => r.id === id);
+}
+
+export function getReviewByChecklistId(checklistId: string): Review | undefined {
+  return store.reviews.find(r => r.checklistId === checklistId);
+}
+
+export function getReviewsByLookId(lookId: string): Review[] {
+  return store.reviews.filter(r => r.lookId === lookId);
+}
+
+export function getReviewsByScene(scene: string): Review[] {
+  return store.reviews.filter(r => r.scene === scene);
+}
+
+function validateScore(score: number): boolean {
+  return Number.isInteger(score) && score >= 1 && score <= 5;
+}
+
+export function createReview(data: Omit<Review, 'id' | 'createdAt' | 'updatedAt'>): Review | { error: string } {
+  const checklist = getChecklistById(data.checklistId);
+  if (!checklist) return { error: '清单不存在' };
+  if (!checklist.completedAt) return { error: '未完成的清单不能创建复盘' };
+
+  if (!validateScore(data.comfortScore)) return { error: '佩戴舒适度评分必须为 1-5 分' };
+  if (!validateScore(data.makeupDurabilityScore)) return { error: '妆容持久度评分必须为 1-5 分' };
+  if (!validateScore(data.sceneFitScore)) return { error: '场景适配度评分必须为 1-5 分' };
+  if (!validateScore(data.photoQualityScore)) return { error: '照片出片度评分必须为 1-5 分' };
+
+  const existing = getReviewByChecklistId(data.checklistId);
+  if (existing) {
+    return updateReview(existing.id, data);
+  }
+
+  const now = new Date().toISOString();
+  const newReview: Review = {
+    id: uuidv4(),
+    ...data,
+    createdAt: now,
+    updatedAt: now,
+  };
+  store.reviews.push(newReview);
+  persist();
+  return newReview;
+}
+
+export function updateReview(id: string, data: Partial<Omit<Review, 'id' | 'createdAt' | 'updatedAt'>>): Review | { error: string } {
+  const idx = store.reviews.findIndex(r => r.id === id);
+  if (idx === -1) return { error: '复盘记录不存在' };
+
+  if (data.comfortScore !== undefined && !validateScore(data.comfortScore)) {
+    return { error: '佩戴舒适度评分必须为 1-5 分' };
+  }
+  if (data.makeupDurabilityScore !== undefined && !validateScore(data.makeupDurabilityScore)) {
+    return { error: '妆容持久度评分必须为 1-5 分' };
+  }
+  if (data.sceneFitScore !== undefined && !validateScore(data.sceneFitScore)) {
+    return { error: '场景适配度评分必须为 1-5 分' };
+  }
+  if (data.photoQualityScore !== undefined && !validateScore(data.photoQualityScore)) {
+    return { error: '照片出片度评分必须为 1-5 分' };
+  }
+
+  store.reviews[idx] = {
+    ...store.reviews[idx],
+    ...data,
+    updatedAt: new Date().toISOString(),
+  };
+  persist();
+  return store.reviews[idx];
+}
+
+export function deleteReview(id: string): boolean {
+  const idx = store.reviews.findIndex(r => r.id === id);
+  if (idx === -1) return false;
+  store.reviews.splice(idx, 1);
+  persist();
+  return true;
+}
+
+export function getLookReviewSummary(lookId: string): LookReviewSummary {
+  const reviews = getReviewsByLookId(lookId);
+  if (reviews.length === 0) {
+    return { lookId, averageScore: 0, reviewCount: 0 };
+  }
+
+  const avg = reviews.reduce((sum, r) => {
+    const avgReview = (r.comfortScore + r.makeupDurabilityScore + r.sceneFitScore + r.photoQualityScore) / 4;
+    return sum + avgReview;
+  }, 0) / reviews.length;
+
+  const latest = reviews.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
+
+  return {
+    lookId,
+    averageScore: Math.round(avg * 10) / 10,
+    reviewCount: reviews.length,
+    latestReview: latest,
+  };
+}
+
+export function getAllLookReviewSummaries(): LookReviewSummary[] {
+  const lookIds = [...new Set(store.reviews.filter(r => r.lookId).map(r => r.lookId!))];
+  return lookIds.map(id => getLookReviewSummary(id));
+}
+
+const LOW_SCORE_KEYWORDS = [
+  '不舒服', '干', '痒', '磨眼', '滑片', '晕妆', '脱妆', '掉色', '卡粉',
+  '浮粉', '不持久', '太浓', '太淡', '不合适', '奇怪', '尴尬', '累',
+  '重', '紧', '闷', '热', '冷', '不方便', '麻烦', '忘带', '坏了',
+  '过时', '老气', '幼稚', '便宜', '劣质', '过敏', '泛红', '刺痛',
+];
+
+export function getReviewStats(): ReviewStats {
+  const reviews = getReviews();
+  const today = new Date();
+
+  const scoreMap = new Map<string, { total: number; count: number }>();
+  reviews.forEach(r => {
+    const date = new Date(r.createdAt).toLocaleDateString('zh-CN');
+    const avg = (r.comfortScore + r.makeupDurabilityScore + r.sceneFitScore + r.photoQualityScore) / 4;
+    const existing = scoreMap.get(date) || { total: 0, count: 0 };
+    scoreMap.set(date, { total: existing.total + avg, count: existing.count + 1 });
+  });
+
+  const scoreTrend = Array.from(scoreMap.entries())
+    .map(([date, data]) => ({
+      date,
+      averageScore: Math.round((data.total / data.count) * 10) / 10,
+      count: data.count,
+    }))
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    .slice(-14);
+
+  const keywordCount = new Map<string, number>();
+  reviews.forEach(r => {
+    const avg = (r.comfortScore + r.makeupDurabilityScore + r.sceneFitScore + r.photoQualityScore) / 4;
+    if (avg <= 2.5 && r.notes) {
+      LOW_SCORE_KEYWORDS.forEach(kw => {
+        if (r.notes!.includes(kw)) {
+          keywordCount.set(kw, (keywordCount.get(kw) || 0) + 1);
+        }
+      });
+    }
+  });
+
+  const lowScoreKeywords = Array.from(keywordCount.entries())
+    .map(([keyword, count]) => ({ keyword, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 10);
+
+  const upcomingReminders = reviews
+    .filter(r => r.nextReminderDate)
+    .filter(r => new Date(r.nextReminderDate!) >= today)
+    .sort((a, b) => new Date(a.nextReminderDate!).getTime() - new Date(b.nextReminderDate!).getTime())
+    .slice(0, 10)
+    .map(r => ({
+      review: r,
+      checklist: getChecklistById(r.checklistId),
+      look: r.lookId ? getSavedLookById(r.lookId) : undefined,
+    }));
+
+  return { scoreTrend, lowScoreKeywords, upcomingReminders };
+}

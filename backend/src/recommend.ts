@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import type { SceneType, LensItem, LipstickItem, BlushItem, OutfitItem, LookSuggestion, OutfitCombination, UsageRecord, Stats } from './types';
+import type { SceneType, LensItem, LipstickItem, BlushItem, OutfitItem, LookSuggestion, OutfitCombination, UsageRecord, Stats, ReviewStats } from './types';
 
 const sceneStyles: Record<SceneType, string[]> = {
   commute: ['通勤', '自然', '职业', '低调'],
@@ -132,7 +132,7 @@ function sceneName(s: SceneType): string {
   return m[s];
 }
 
-export function computeStats(records: UsageRecord[]): Stats {
+export function computeStats(records: UsageRecord[], reviewStats: ReviewStats): Stats {
   const comboCount = new Map<string, { combination: OutfitCombination; count: number }>();
   const sceneCount = new Map<SceneType, number>();
   const missedCount = new Map<string, number>();
@@ -140,24 +140,16 @@ export function computeStats(records: UsageRecord[]): Stats {
   const styleLooks = new Map<string, Set<string>>();
 
   for (const record of records) {
-    // Scene distribution
     sceneCount.set(record.scene, (sceneCount.get(record.scene) || 0) + 1);
 
-    // Combinations (stringify as key)
     const key = JSON.stringify(record.items);
     const existing = comboCount.get(key);
     if (existing) existing.count++;
     else comboCount.set(key, { combination: record.items, count: 1 });
 
-    // Missed items
     for (const m of record.missedItems) {
       missedCount.set(m, (missedCount.get(m) || 0) + 1);
     }
-
-    // Style tracking (use outfit combination metadata via IDs could be empty; but we stored used items)
-    // To track properly we'll store the style tags we appended to record on creation (none in UsageRecord currently)
-    // Instead: store styles on the usage record. For now we'll rely on record.items through look lookup elsewhere.
-    // We'll compute style reuse from savedLookId lookups later if needed. For now return empty style data.
   }
 
   const totalRecords = records.length;
@@ -183,11 +175,12 @@ export function computeStats(records: UsageRecord[]): Stats {
     styleReuseRate: [],
     totalLooks: totalRecords,
     totalChecklists: records.filter(r => r.checklistId).length,
+    reviewStats,
   };
 }
 
-export function computeStatsWithLooks(records: UsageRecord[], lookGetter: (id: string) => { style: string[] } | undefined): Stats {
-  const base = computeStats(records);
+export function computeStatsWithLooks(records: UsageRecord[], lookGetter: (id: string) => { style: string[] } | undefined, reviewStats: ReviewStats): Stats {
+  const base = computeStats(records, reviewStats);
   const styleTotal = new Map<string, number>();
   const styleLooks = new Map<string, Set<string>>();
 

@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import { checklistApi, savedLooksApi, itemsApi } from '../api';
-import type { GeneratedChecklist, ChecklistItem, SceneType, AllItems, SavedLook } from '../types';
+import { checklistApi, savedLooksApi, itemsApi, reviewApi } from '../api';
+import type { GeneratedChecklist, ChecklistItem, SceneType, AllItems, SavedLook, Review } from '../types';
 import { SceneLabels } from '../types';
 
 const CAT_LABEL: Record<string, { name: string; color: string }> = {
@@ -10,6 +10,35 @@ const CAT_LABEL: Record<string, { name: string; color: string }> = {
   accessory: { name: '随身配件', color: 'blue' },
   other: { name: '其他物品', color: 'green' },
 };
+
+const SCORE_LABELS: Record<string, string> = {
+  comfortScore: '佩戴舒适度',
+  makeupDurabilityScore: '妆容持久度',
+  sceneFitScore: '场景适配度',
+  photoQualityScore: '照片出片度',
+};
+
+function StarRating({ value, onChange, disabled }: { value: number; onChange?: (v: number) => void; disabled?: boolean }) {
+  return (
+    <div style={{ display: 'flex', gap: 4 }}>
+      {[1, 2, 3, 4, 5].map(s => (
+        <span
+          key={s}
+          onClick={() => !disabled && onChange && onChange(s)}
+          style={{
+            fontSize: 24,
+            cursor: disabled ? 'default' : 'pointer',
+            color: s <= value ? '#f59e0b' : '#d1d5db',
+            transition: 'all 0.2s',
+            transform: !disabled && s <= value ? 'scale(1.1)' : 'none',
+          }}
+        >
+          ★
+        </span>
+      ))}
+    </div>
+  );
+}
 
 export default function ChecklistPage() {
   const location = useLocation();
@@ -25,20 +54,35 @@ export default function ChecklistPage() {
   const [loading, setLoading] = useState(false);
   const hasInitialLoaded = useRef(false);
   const lastLocationKey = useRef<string>('');
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [editingReview, setEditingReview] = useState<Review | null>(null);
+  const [reviewForm, setReviewForm] = useState({
+    comfortScore: 5,
+    makeupDurabilityScore: 5,
+    sceneFitScore: 5,
+    photoQualityScore: 5,
+    notes: '',
+    nextReminderDate: '',
+  });
+  const [reviewSubmitting, setReviewSubmitting] = useState(false);
+  const [reviewLoading, setReviewLoading] = useState(false);
 
   const load = async (highlightId?: string) => {
     setLoading(true);
     try {
-      const [c, t, l, i] = await Promise.all([
+      const [c, t, l, i, r] = await Promise.all([
         checklistApi.getAll(),
         checklistApi.getTemplates(),
         savedLooksApi.getAll(),
         itemsApi.getAll(),
+        reviewApi.getAll(),
       ]);
       setChecklists(c);
       setTemplates(t);
       setLooks(l);
       setItems(i);
+      setReviews(r);
 
       const targetId = highlightId || locationState?.newChecklistId;
       if (targetId && c.some(cl => cl.id === targetId)) {
@@ -55,11 +99,105 @@ export default function ChecklistPage() {
     }
   };
 
+  const loadReviewForChecklist = async (checklistId: string) => {
+    setReviewLoading(true);
+    try {
+      const review = await reviewApi.getByChecklistId(checklistId);
+      setReviews(prev => {
+        const idx = prev.findIndex(r => r.id === review.id);
+        if (idx >= 0) {
+          const copy = [...prev];
+          copy[idx] = review;
+          return copy;
+        }
+        return [...prev, review];
+      });
+    } catch (e) {
+      // 404 means no review exists - that's fine
+    } finally {
+      setReviewLoading(false);
+    }
+  };
+
   useEffect(() => {
     load();
     hasInitialLoaded.current = true;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (selectedId) {
+      const selected = checklists.find(c => c.id === selectedId);
+      if (selected?.completedAt) {
+        loadReviewForChecklist(selectedId);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedId]);
+
+  const openReviewForm = (existing?: Review) => {
+    if (existing) {
+      setEditingReview(existing);
+      setReviewForm({
+        comfortScore: existing.comfortScore,
+        makeupDurabilityScore: existing.makeupDurabilityScore,
+        sceneFitScore: existing.sceneFitScore,
+        photoQualityScore: existing.photoQualityScore,
+        notes: existing.notes,
+        nextReminderDate: existing.nextReminderDate ? existing.nextReminderDate.split('T')[0] : '',
+      });
+    } else {
+      setEditingReview(null);
+      setReviewForm({
+        comfortScore: 5,
+        makeupDurabilityScore: 5,
+        sceneFitScore: 5,
+        photoQualityScore: 5,
+        notes: '',
+        nextReminderDate: '',
+      });
+    }
+    setShowReviewModal(true);
+  };
+
+  const handleSubmitReview = async () => {
+    if (!selected) return;
+    setReviewSubmitting(true);
+    try {
+      const payload = {
+        checklistId: selected.id,
+        lookId: selected.lookId,
+        scene: selected.scene,
+        ...reviewForm,
+        nextReminderDate: reviewForm.nextReminderDate || undefined,
+      };
+      let result: Review;
+      if (editingReview) {
+        result = await reviewApi.update(editingReview.id, payload);
+      } else {
+        result = await reviewApi.create(payload);
+      }
+      setReviews(prev => {
+        const idx = prev.findIndex(r => r.id === result.id);
+        if (idx >= 0) {
+          const copy = [...prev];
+          copy[idx] = result;
+          return copy;
+        }
+        return [...prev, result];
+      });
+      setShowReviewModal(false);
+      alert(editingReview ? '✅ 复盘已更新！' : '✅ 复盘已保存！');
+    } catch (e: any) {
+      alert(e?.response?.data?.error || '保存失败，请重试');
+    } finally {
+      setReviewSubmitting(false);
+    }
+  };
+
+  const getAverageScore = (r: Review) => {
+    return ((r.comfortScore + r.makeupDurabilityScore + r.sceneFitScore + r.photoQualityScore) / 4).toFixed(1);
+  };
 
   useEffect(() => {
     if (!hasInitialLoaded.current) return;
@@ -76,6 +214,7 @@ export default function ChecklistPage() {
 
   const selected = checklists.find(c => c.id === selectedId) || null;
   const selectedLook = selected?.lookId ? looks.find(l => l.id === selected.lookId) : undefined;
+  const selectedReview = selected?.id ? reviews.find(r => r.checklistId === selected.id) : undefined;
 
   const getTemplate = (id: string) => templates.find(t => t.id === id);
 
@@ -92,10 +231,15 @@ export default function ChecklistPage() {
     if (!confirm('确认完成出门清单？这将记录你的使用情况和遗漏物品。')) return;
     try {
       const result = await checklistApi.complete(selected.id);
-      alert(result.missedItems.length > 0
+      const message = result.missedItems.length > 0
         ? `✅ 已记录！遗漏物品：${result.missedItems.join('、')}`
-        : '🎉 太棒了！所有物品都已带齐！');
-      load();
+        : '🎉 太棒了！所有物品都已带齐！';
+      if (confirm(`${message}\n\n是否立即为本次搭配创建复盘？`)) {
+        await load();
+        setTimeout(() => openReviewForm(), 300);
+      } else {
+        load();
+      }
     } catch (e) {
       alert('操作失败');
     }
@@ -248,6 +392,56 @@ export default function ChecklistPage() {
                     🎉 本清单已完成于 {new Date(selected.completedAt).toLocaleString('zh-CN')}
                   </div>
                 )}
+                {selected.completedAt && (
+                  <div style={{ marginTop: 16 }}>
+                    {reviewLoading ? (
+                      <div style={{ textAlign: 'center', padding: 20, color: '#9ca3af' }}>加载复盘中...</div>
+                    ) : (
+                      <>
+                        {selectedReview ? (
+                          <div style={{ padding: 16, background: 'linear-gradient(135deg, #fef3c7, #fce7f3)', borderRadius: 10 }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                              <div style={{ fontSize: 14, fontWeight: 700, color: '#92400e' }}>📝 本次复盘</div>
+                              <button className="btn btn-secondary btn-sm" onClick={() => openReviewForm(selectedReview)}>
+                                ✏️ 编辑复盘
+                              </button>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-around', marginBottom: 12, padding: '10px 0', background: 'rgba(255,255,255,0.5)', borderRadius: 8 }}>
+                              <div style={{ textAlign: 'center' }}>
+                                <div style={{ fontSize: 20, fontWeight: 700, color: '#db2777' }}>⭐ {getAverageScore(selectedReview)}</div>
+                                <div style={{ fontSize: 11, color: '#6b7280' }}>综合评分</div>
+                              </div>
+                              {(['comfortScore', 'makeupDurabilityScore', 'sceneFitScore', 'photoQualityScore'] as const).map(key => (
+                                <div key={key} style={{ textAlign: 'center' }}>
+                                  <StarRating value={(selectedReview as any)[key]} disabled />
+                                  <div style={{ fontSize: 11, color: '#6b7280', marginTop: 2 }}>{SCORE_LABELS[key]}</div>
+                                </div>
+                              ))}
+                            </div>
+                            {selectedReview.notes && (
+                              <div style={{ fontSize: 12, color: '#78350f', marginBottom: 8, lineHeight: 1.6 }}>
+                                <span style={{ fontWeight: 600 }}>备注：</span>{selectedReview.notes}
+                              </div>
+                            )}
+                            {selectedReview.nextReminderDate && (
+                              <div style={{ fontSize: 12, color: '#047857' }}>
+                                <span style={{ fontWeight: 600 }}>⏰ 下次提醒：</span>
+                                {new Date(selectedReview.nextReminderDate).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}
+                              </div>
+                            )}
+                            <div style={{ fontSize: 11, color: '#9ca3af', marginTop: 8, textAlign: 'right' }}>
+                              创建于 {new Date(selectedReview.createdAt).toLocaleString('zh-CN')}
+                            </div>
+                          </div>
+                        ) : (
+                          <button className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} onClick={() => openReviewForm()}>
+                            📝 为本次搭配创建复盘
+                          </button>
+                        )}
+                      </>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* 分类清单 */}
@@ -326,6 +520,60 @@ export default function ChecklistPage() {
             <div className="btn-group" style={{ justifyContent: 'flex-end', marginTop: 20 }}>
               <button className="btn btn-secondary" onClick={() => setShowCreate(false)}>取消</button>
               <button className="btn btn-primary" onClick={handleCreate}>创建清单</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 复盘弹窗 */}
+      {showReviewModal && selected && (
+        <div className="modal-backdrop" onClick={() => setShowReviewModal(false)}>
+          <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 520 }}>
+            <h2>{editingReview ? '编辑复盘' : '创建复盘'}</h2>
+            <div style={{ marginBottom: 12, padding: 10, background: '#fafafa', borderRadius: 8, fontSize: 12, color: '#6b7280' }}>
+              📋 清单场景：{SceneLabels[selected.scene]}
+              {selectedLook && <span style={{ marginLeft: 10 }}>⭐ 方案：{selectedLook.name}</span>}
+            </div>
+
+            {(['comfortScore', 'makeupDurabilityScore', 'sceneFitScore', 'photoQualityScore'] as const).map(key => (
+              <div className="form-group" key={key}>
+                <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span>{SCORE_LABELS[key]}</span>
+                  <span style={{ fontSize: 13, color: '#db2777', fontWeight: 600 }}>
+                    {reviewForm[key]} 分
+                  </span>
+                </label>
+                <StarRating
+                  value={reviewForm[key]}
+                  onChange={v => setReviewForm(f => ({ ...f, [key]: v }))}
+                />
+              </div>
+            ))}
+
+            <div className="form-group">
+              <label>备注（可记录感受、问题、改进建议等）</label>
+              <textarea
+                rows={3}
+                value={reviewForm.notes}
+                onChange={e => setReviewForm(f => ({ ...f, notes: e.target.value }))}
+                placeholder="今天的搭配感觉怎么样？有什么想改进的地方吗？"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>下次提醒日期（可选）</label>
+              <input
+                type="date"
+                value={reviewForm.nextReminderDate}
+                onChange={e => setReviewForm(f => ({ ...f, nextReminderDate: e.target.value }))}
+              />
+            </div>
+
+            <div className="btn-group" style={{ justifyContent: 'flex-end' }}>
+              <button className="btn btn-secondary" onClick={() => setShowReviewModal(false)}>取消</button>
+              <button className="btn btn-primary" onClick={handleSubmitReview} disabled={reviewSubmitting}>
+                {reviewSubmitting ? '保存中...' : (editingReview ? '更新复盘' : '保存复盘')}
+              </button>
             </div>
           </div>
         </div>
